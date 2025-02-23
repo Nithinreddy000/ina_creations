@@ -9,7 +9,7 @@ const Footer = () => {
         <div className="grid md:grid-cols-4 gap-8">
           {/* Logo and About */}
           <div className="col-span-1">
-            <img src={logo} alt="Ina Creations Logo" className="h-12 mb-4" />
+            <img src={logo} alt="Ina Creations Logo" className="h-24 mb-6" />
             <p className="text-gray-400 text-sm">
               Capturing moments, creating memories, and telling stories through professional event photography and videography.
             </p>

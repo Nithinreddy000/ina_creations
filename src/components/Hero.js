@@ -48,7 +48,7 @@ const Hero = () => {
           >
             Capturing Your Events,
             <br />
-            <span className="text-blue-400">Creating Memories</span>
+            <span className="text-[#ff6d6d]">Creating Memories</span>
           </motion.h1>
           <motion.p 
             className="text-lg md:text-xl text-gray-200 max-w-[800px] mx-auto mb-12"
@@ -66,7 +66,7 @@ const Hero = () => {
             transition={{ delay: 1.6 }}
           >
             <Link to="contact" smooth={true} duration={500}>
-              <button className="px-8 py-4 bg-blue-600 text-white rounded-full font-bold text-lg hover:bg-blue-700 transition-all hover:scale-105 duration-300">
+              <button className="px-8 py-4 bg-[#ff6d6d] text-white rounded-full font-bold text-lg hover:bg-[#ff5555] transition-all hover:scale-105 duration-300">
                 Get Started
               </button>
             </Link>

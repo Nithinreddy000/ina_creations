@@ -46,7 +46,7 @@ const Contact = () => {
   };
 
   return (
-    <div id="contact" className="w-full min-h-screen bg-gray-50 py-20">
+    <div id="contact" className="w-full min-h-screen bg-gray-900 py-20">
       <div className="max-w-[1200px] mx-auto p-4">
         <div className="text-center mb-16">
           <motion.div
@@ -55,8 +55,8 @@ const Contact = () => {
             transition={{ duration: 0.5 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-4xl font-bold text-gray-800 mb-4">Get In Touch</h2>
-            <p className="text-gray-600 max-w-[600px] mx-auto text-lg">
+            <h2 className="text-4xl font-bold text-white mb-4">Get In Touch</h2>
+            <p className="text-gray-400 max-w-[600px] mx-auto text-lg">
               Let's create memories together.
             </p>
           </motion.div>
@@ -69,38 +69,38 @@ const Contact = () => {
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}
             viewport={{ once: true }}
-            className="bg-white p-8 rounded-xl shadow-lg"
+            className="bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700"
           >
-            <h3 className="text-2xl font-bold text-gray-800 mb-8">Contact Information</h3>
+            <h3 className="text-2xl font-bold text-white mb-8">Contact Information</h3>
             <div className="space-y-8">
               <div className="flex items-start space-x-4">
-                <div className="bg-blue-100 p-3 rounded-full">
-                  <FaPhone className="text-blue-600 text-xl" />
+                <div className="bg-[#ff6d6d]/10 p-3 rounded-full">
+                  <FaPhone className="text-[#ff6d6d] text-xl" />
                 </div>
                 <div>
-                  <p className="font-semibold text-gray-800">Phone</p>
-                  <p className="text-gray-600">+91 7013120347</p>
+                  <p className="font-semibold text-white">Phone</p>
+                  <p className="text-gray-400">+91 7013120347</p>
                   <p className="text-sm text-gray-500 mt-1">Available Mon-Sat, 9am-6pm</p>
                 </div>
               </div>
               <div className="flex items-start space-x-4">
-                <div className="bg-blue-100 p-3 rounded-full">
-                  <FaEnvelope className="text-blue-600 text-xl" />
+                <div className="bg-[#ff6d6d]/10 p-3 rounded-full">
+                  <FaEnvelope className="text-[#ff6d6d] text-xl" />
                 </div>
                 <div>
-                  <p className="font-semibold text-gray-800">Email</p>
-                  <p className="text-gray-600">ina.creations1002@gmail.com</p>
+                  <p className="font-semibold text-white">Email</p>
+                  <p className="text-gray-400">ina.creations1002@gmail.com</p>
                   <p className="text-sm text-gray-500 mt-1">We'll respond within 24 hours</p>
                 </div>
               </div>
               <div className="flex items-start space-x-4">
-                <div className="bg-blue-100 p-3 rounded-full">
-                  <FaMapMarkerAlt className="text-blue-600 text-xl" />
+                <div className="bg-[#ff6d6d]/10 p-3 rounded-full">
+                  <FaMapMarkerAlt className="text-[#ff6d6d] text-xl" />
                 </div>
                 <div>
-                  <p className="font-semibold text-gray-800">Location</p>
-                  <p className="text-gray-600">Hyderabad</p>
-                  <p className="text-gray-600">Telangana</p>
+                  <p className="font-semibold text-white">Location</p>
+                  <p className="text-gray-400">Hyderabad</p>
+                  <p className="text-gray-400">Telangana</p>
                 </div>
               </div>
             </div>
@@ -112,15 +112,15 @@ const Contact = () => {
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}
             viewport={{ once: true }}
-            className="bg-white p-8 rounded-xl shadow-lg"
+            className="bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700"
           >
             <form ref={formRef} onSubmit={handleSubmit} className="space-y-6">
               <div>
-                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
+                <label className="block text-gray-300 text-sm font-bold mb-2" htmlFor="name">
                   Full Name
                 </label>
                 <input
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                  className="w-full px-4 py-3 rounded-lg bg-gray-700 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#ff6d6d] focus:border-transparent transition-all"
                   type="text"
                   name="user_name"
                   placeholder="John Doe"
@@ -128,11 +128,11 @@ const Contact = () => {
                 />
               </div>
               <div>
-                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
+                <label className="block text-gray-300 text-sm font-bold mb-2" htmlFor="email">
                   Email Address
                 </label>
                 <input
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                  className="w-full px-4 py-3 rounded-lg bg-gray-700 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#ff6d6d] focus:border-transparent transition-all"
                   type="email"
                   name="user_email"
                   placeholder="john@example.com"
@@ -140,11 +140,11 @@ const Contact = () => {
                 />
               </div>
               <div>
-                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="phone">
+                <label className="block text-gray-300 text-sm font-bold mb-2" htmlFor="phone">
                   Phone Number
                 </label>
                 <input
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                  className="w-full px-4 py-3 rounded-lg bg-gray-700 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#ff6d6d] focus:border-transparent transition-all"
                   type="tel"
                   name="user_phone"
                   placeholder="+91 1234567890"
@@ -152,11 +152,11 @@ const Contact = () => {
                 />
               </div>
               <div>
-                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="event_type">
+                <label className="block text-gray-300 text-sm font-bold mb-2" htmlFor="event_type">
                   Event Type
                 </label>
                 <select
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                  className="w-full px-4 py-3 rounded-lg bg-gray-700 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#ff6d6d] focus:border-transparent transition-all"
                   name="event_type"
                   required
                 >
@@ -169,11 +169,11 @@ const Contact = () => {
                 </select>
               </div>
               <div>
-                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="message">
+                <label className="block text-gray-300 text-sm font-bold mb-2" htmlFor="message">
                   Message
                 </label>
                 <textarea
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                  className="w-full px-4 py-3 rounded-lg bg-gray-700 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#ff6d6d] focus:border-transparent transition-all"
                   name="message"
                   rows="4"
                   placeholder="Tell us about your event..."
@@ -185,8 +185,8 @@ const Contact = () => {
                 disabled={loading}
                 className={`w-full py-4 rounded-lg font-bold text-white transition-all ${
                   loading 
-                    ? 'bg-gray-400 cursor-not-allowed' 
-                    : 'bg-blue-600 hover:bg-blue-700 hover:shadow-lg'
+                    ? 'bg-gray-600 cursor-not-allowed' 
+                    : 'bg-[#ff6d6d] hover:bg-[#ff5555] hover:shadow-lg'
                 }`}
               >
                 {loading ? 'Sending...' : 'Send Message'}
@@ -194,14 +194,14 @@ const Contact = () => {
               
               {/* Success Message */}
               {success && (
-                <div className="mt-4 p-4 bg-green-100 text-green-700 rounded-lg">
+                <div className="mt-4 p-4 bg-green-900/50 text-green-400 rounded-lg border border-green-700">
                   Thank you! Your message has been sent successfully. We'll get back to you soon.
                 </div>
               )}
               
               {/* Error Message */}
               {error && (
-                <div className="mt-4 p-4 bg-red-100 text-red-700 rounded-lg">
+                <div className="mt-4 p-4 bg-red-900/50 text-red-400 rounded-lg border border-red-700">
                   Oops! Something went wrong. Please try again later.
                 </div>
               )}

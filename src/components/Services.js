@@ -1,28 +1,28 @@
 import React from 'react';
-import { FaCamera, FaVideo, FaEdit } from 'react-icons/fa';
 import { motion } from 'framer-motion';
+import { FaCamera, FaVideo, FaEdit } from 'react-icons/fa';
 
 const Services = () => {
   const services = [
     {
-      icon: <FaCamera size={40} />,
-      title: 'Event Photography',
-      description: 'Professional photography services for corporate events, weddings, parties, and more.',
+      icon: <FaCamera className="text-5xl text-[#ff6d6d]" />,
+      title: "Event Photography",
+      description: "Professional photography services for corporate events, weddings, parties, and more."
     },
     {
-      icon: <FaVideo size={40} />,
-      title: 'Videography',
-      description: 'High-quality video production to capture the essence and energy of your events.',
+      icon: <FaVideo className="text-5xl text-[#ff6d6d]" />,
+      title: "Videography",
+      description: "High-quality video production to capture the essence and energy of your events."
     },
     {
-      icon: <FaEdit size={40} />,
-      title: 'Professional Editing',
-      description: 'Expert post-production editing to deliver polished and engaging content.',
-    },
+      icon: <FaEdit className="text-5xl text-[#ff6d6d]" />,
+      title: "Professional Editing",
+      description: "Expert post-production editing to deliver polished and engaging content."
+    }
   ];
 
   return (
-    <div id="services" className="w-full py-20 bg-white">
+    <div id="services" className="w-full py-20 bg-gray-900">
       <div className="max-w-[1200px] mx-auto px-4">
         <div className="text-center mb-16">
           <motion.div
@@ -31,10 +31,9 @@ const Services = () => {
             transition={{ duration: 0.5 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-4xl font-bold text-gray-800 mb-4">What We Offer</h2>
-            <p className="text-gray-600 max-w-[600px] mx-auto text-lg">
-              We provide comprehensive event coverage solutions tailored to your needs.
-              Our team of professionals ensures every moment is captured perfectly.
+            <h2 className="text-4xl font-bold text-white mb-4">Our Services</h2>
+            <p className="text-gray-400 max-w-[600px] mx-auto text-lg">
+              Comprehensive photography and videography solutions for all your event needs.
             </p>
           </motion.div>
         </div>
@@ -47,15 +46,13 @@ const Services = () => {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
               viewport={{ once: true }}
-              className="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow"
+              className="bg-gray-800 p-8 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 group border border-gray-700 hover:border-[#ff6d6d]/30"
             >
-              <div className="text-blue-600 mb-4">
+              <div className="mb-6 transform group-hover:scale-110 transition-transform duration-300">
                 {service.icon}
               </div>
-              <h3 className="text-2xl font-bold text-gray-800 mb-3">{service.title}</h3>
-              <p className="text-gray-600">
-                {service.description}
-              </p>
+              <h3 className="text-2xl font-bold text-white mb-4">{service.title}</h3>
+              <p className="text-gray-400">{service.description}</p>
             </motion.div>
           ))}
         </div>

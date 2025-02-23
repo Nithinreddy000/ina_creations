@@ -20,9 +20,9 @@ const Navbar = () => {
   const handleClick = () => setNav(!nav);
 
   return (
-    <nav className={`fixed w-full h-[80px] flex justify-between items-center px-8 z-50 transition-all duration-300 ${scrolled ? 'bg-black/80 backdrop-blur-md' : 'bg-transparent'}`}>
-      <div className="logo">
-        <img src={logo} alt="Ina Creations Logo" className="h-16" />
+    <nav className={`fixed w-full h-[100px] flex justify-between items-center px-6 z-50 transition-all duration-300 ${scrolled ? 'bg-black/90 backdrop-blur-lg' : 'bg-transparent'}`}>
+      <div className="logo -ml-10">
+        <img src={logo} alt="Ina Creations Logo" className="h-48 -ml-4" />
       </div>
 
       {/* Desktop Menu */}
@@ -32,7 +32,7 @@ const Navbar = () => {
             to="home" 
             smooth={true} 
             duration={500} 
-            className="text-white hover:text-blue-400 cursor-pointer transition-colors text-sm uppercase tracking-wider font-medium"
+            className="text-white hover:text-[#ff6d6d] cursor-pointer transition-colors text-sm uppercase tracking-wider font-medium"
           >
             Home
           </Link>
@@ -42,7 +42,7 @@ const Navbar = () => {
             to="services" 
             smooth={true} 
             duration={500} 
-            className="text-white hover:text-blue-400 cursor-pointer transition-colors text-sm uppercase tracking-wider font-medium"
+            className="text-white hover:text-[#ff6d6d] cursor-pointer transition-colors text-sm uppercase tracking-wider font-medium"
           >
             Services
           </Link>
@@ -52,7 +52,7 @@ const Navbar = () => {
             to="portfolio" 
             smooth={true} 
             duration={500} 
-            className="text-white hover:text-blue-400 cursor-pointer transition-colors text-sm uppercase tracking-wider font-medium"
+            className="text-white hover:text-[#ff6d6d] cursor-pointer transition-colors text-sm uppercase tracking-wider font-medium"
           >
             Portfolio
           </Link>
@@ -62,7 +62,7 @@ const Navbar = () => {
             to="about" 
             smooth={true} 
             duration={500} 
-            className="text-white hover:text-blue-400 cursor-pointer transition-colors text-sm uppercase tracking-wider font-medium"
+            className="text-white hover:text-[#ff6d6d] cursor-pointer transition-colors text-sm uppercase tracking-wider font-medium"
           >
             About
           </Link>
@@ -72,7 +72,7 @@ const Navbar = () => {
             to="contact" 
             smooth={true} 
             duration={500} 
-            className="px-6 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-all hover:scale-105 text-sm uppercase tracking-wider font-medium"
+            className="px-6 py-2 bg-[#ff6d6d] text-white rounded-full hover:bg-[#ff5555] transition-all hover:scale-105 text-sm uppercase tracking-wider font-medium"
           >
             Contact
           </Link>
@@ -99,7 +99,7 @@ const Navbar = () => {
                 to="home" 
                 smooth={true} 
                 duration={500}
-                className="relative text-3xl font-extralight text-white hover:text-blue-400 cursor-pointer transition-all duration-300 hover:scale-110 group"
+                className="relative text-3xl font-extralight text-white hover:text-[#ff6d6d] cursor-pointer transition-all duration-300 hover:scale-110 group"
               >
                 <span className="absolute -left-8 opacity-0 group-hover:opacity-100 transition-opacity duration-300">•</span>
                 Home
@@ -112,7 +112,7 @@ const Navbar = () => {
                 to="services" 
                 smooth={true} 
                 duration={500}
-                className="relative text-3xl font-extralight text-white hover:text-blue-400 cursor-pointer transition-all duration-300 hover:scale-110 group"
+                className="relative text-3xl font-extralight text-white hover:text-[#ff6d6d] cursor-pointer transition-all duration-300 hover:scale-110 group"
               >
                 <span className="absolute -left-8 opacity-0 group-hover:opacity-100 transition-opacity duration-300">•</span>
                 Services
@@ -125,7 +125,7 @@ const Navbar = () => {
                 to="portfolio" 
                 smooth={true} 
                 duration={500}
-                className="relative text-3xl font-extralight text-white hover:text-blue-400 cursor-pointer transition-all duration-300 hover:scale-110 group"
+                className="relative text-3xl font-extralight text-white hover:text-[#ff6d6d] cursor-pointer transition-all duration-300 hover:scale-110 group"
               >
                 <span className="absolute -left-8 opacity-0 group-hover:opacity-100 transition-opacity duration-300">•</span>
                 Portfolio
@@ -138,7 +138,7 @@ const Navbar = () => {
                 to="about" 
                 smooth={true} 
                 duration={500}
-                className="relative text-3xl font-extralight text-white hover:text-blue-400 cursor-pointer transition-all duration-300 hover:scale-110 group"
+                className="relative text-3xl font-extralight text-white hover:text-[#ff6d6d] cursor-pointer transition-all duration-300 hover:scale-110 group"
               >
                 <span className="absolute -left-8 opacity-0 group-hover:opacity-100 transition-opacity duration-300">•</span>
                 About
@@ -151,7 +151,7 @@ const Navbar = () => {
                 to="contact" 
                 smooth={true} 
                 duration={500}
-                className="relative text-3xl font-extralight text-white hover:text-blue-400 cursor-pointer transition-all duration-300 hover:scale-110 group"
+                className="relative text-3xl font-extralight text-white hover:text-[#ff6d6d] cursor-pointer transition-all duration-300 hover:scale-110 group"
               >
                 <span className="absolute -left-8 opacity-0 group-hover:opacity-100 transition-opacity duration-300">•</span>
                 Contact
@@ -161,13 +161,13 @@ const Navbar = () => {
           </ul>
           
           {/* Decorative elements */}
-          <div className="absolute inset-0 bg-gradient-radial from-blue-500/10 via-transparent to-transparent pointer-events-none"></div>
+          <div className="absolute inset-0 bg-gradient-radial from-[#ff6d6d]/10 via-transparent to-transparent pointer-events-none"></div>
           <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-black/50 to-transparent"></div>
           <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-black/50 to-transparent"></div>
           
           {/* Animated circles */}
-          <div className="absolute top-1/4 left-1/4 w-32 h-32 bg-blue-500/20 rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute bottom-1/4 right-1/4 w-32 h-32 bg-purple-500/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
+          <div className="absolute top-1/4 left-1/4 w-32 h-32 bg-[#ff6d6d]/20 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute bottom-1/4 right-1/4 w-32 h-32 bg-[#ff6d6d]/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
         </div>
       </div>
     </nav>
