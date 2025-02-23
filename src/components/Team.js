@@ -51,14 +51,6 @@ const Team = () => {
       linkedin: null
     },
     {
-      name: "Sahasra",
-      title: "Treasurer",
-      description: "Financial management expert ensuring operational excellence.",
-      image: require('../assets/our_team/Sahasra.png'),
-      instagram: "https://www.instagram.com/sahasra_reddyy_03?igsh=MTY0eXpwMTN5M281MQ==",
-      linkedin: "https://www.linkedin.com/in/sahasra-reddy-86705a348"
-    },
-    {
       name: "Manish",
       title: "Treasurer",
       description: "Strategic financial planning and management specialist.",
