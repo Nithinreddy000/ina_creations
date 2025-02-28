@@ -1,176 +1,250 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-scroll';
+import { Link as RouterLink } from 'react-router-dom';
 import { FaBars, FaTimes } from 'react-icons/fa';
+import { motion, AnimatePresence } from 'framer-motion';
 import logo from '../assets/logo/logo.png';
 
 const Navbar = () => {
-  const [nav, setNav] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  
+  const [scrollingDown, setScrollingDown] = useState(false);
+  const [activeSection, setActiveSection] = useState('home');
+
+  // Handle scroll effect with debounce
   useEffect(() => {
+    let timeoutId;
+    let lastScrollY = window.scrollY;
+
     const handleScroll = () => {
-      const isScrolled = window.scrollY > 10;
-      setScrolled(isScrolled);
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+      timeoutId = setTimeout(() => {
+        const scrollPosition = window.scrollY;
+        const isScrollingDown = scrollPosition > lastScrollY;
+        
+        if (scrollPosition > 5) {
+          if (!scrolled) setScrolled(true);
+        } else {
+          if (scrolled) setScrolled(false);
+        }
+        
+        setScrollingDown(isScrollingDown);
+        lastScrollY = scrollPosition;
+      }, 10);
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+    };
+  }, [scrolled]);
 
-  const handleClick = () => setNav(!nav);
+  // Handle menu item click with smooth transition
+  const handleMenuClick = (section) => {
+    setActiveSection(section);
+    if (isOpen) {
+      setTimeout(() => {
+        setIsOpen(false);
+      }, 800);
+    }
+  };
+
+  // Navigation items
+  const navItems = [
+    { to: "home", label: "Home", offset: 0 },
+    { to: "services", label: "Services", offset: -100 },
+    { to: "portfolio", label: "Portfolio", offset: -100 },
+    { to: "team", label: "Team", offset: -100 },
+    { to: "about", label: "About", offset: -100 },
+    { to: "contact", label: "Contact", isButton: true, offset: -100 }
+  ];
 
   return (
-    <nav className={`fixed w-full h-[100px] flex justify-between items-center px-6 z-50 transition-all duration-300 ${scrolled ? 'bg-black/90 backdrop-blur-lg' : 'bg-transparent'}`}>
-      <div className="logo -ml-10">
-        <img src={logo} alt="Ina Creations Logo" className="h-48 -ml-4" />
+    <>
+      {/* Mobile Menu Button - Moved outside nav for highest z-index */}
+      <div className={`fixed right-6 md:hidden z-[9999] transition-all duration-300 ${scrolled ? (scrollingDown ? 'top-11' : 'top-7') : 'top-7'}`}>
+        <motion.button
+          className="w-10 h-10 flex items-center justify-center"
+          onClick={() => setIsOpen(!isOpen)}
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+        >
+          <AnimatePresence mode="wait">
+            {isOpen ? (
+              <motion.div
+                key="close"
+                initial={{ opacity: 0, rotate: 180 }}
+                animate={{ opacity: 1, rotate: 0 }}
+                exit={{ opacity: 0, rotate: -180 }}
+                transition={{ duration: 0.3 }}
+                className="text-white absolute inset-0 flex items-center justify-center"
+              >
+                <FaTimes size={28} />
+              </motion.div>
+            ) : (
+              <motion.div
+                key="menu"
+                initial={{ opacity: 0, rotate: -180 }}
+                animate={{ opacity: 1, rotate: 0 }}
+                exit={{ opacity: 0, rotate: 180 }}
+                transition={{ duration: 0.3 }}
+                className="text-white absolute inset-0 flex items-center justify-center"
+              >
+                <FaBars size={28} />
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </motion.button>
       </div>
 
-      {/* Desktop Menu */}
-      <ul className="hidden md:flex gap-8">
-        <li>
-          <Link 
-            to="home" 
-            smooth={true} 
-            duration={500} 
-            className="text-white hover:text-[#ff6d6d] cursor-pointer transition-colors text-sm uppercase tracking-wider font-medium"
+      <nav className={`fixed w-full flex justify-between items-center px-6 z-[1001] transition-all duration-300 
+        ${scrolled 
+          ? `bg-black/90 backdrop-blur-lg ${scrollingDown ? 'h-[100px]' : 'h-[100px]'}` 
+          : 'bg-transparent h-[100px]'}`}>
+        <div className={`logo transition-all duration-300 ${scrolled ? (scrollingDown ? '-ml-9 mt-5' : '-ml-10') : '-ml-10'}`}>
+          <Link
+            to="home"
+            spy={true}
+            smooth={true}
+            duration={800}
+            offset={0}
+            className="cursor-pointer"
+            onClick={() => handleMenuClick('home')}
           >
-            Home
+            <img 
+              src={logo} 
+              alt="Ina Creations Logo" 
+              className={`transition-all duration-300 ${scrolled ? (scrollingDown ? 'h-40' : 'h-48') : 'h-48'} -ml-4`} 
+            />
           </Link>
-        </li>
-        <li>
-          <Link 
-            to="services" 
-            smooth={true} 
-            duration={500} 
-            className="text-white hover:text-[#ff6d6d] cursor-pointer transition-colors text-sm uppercase tracking-wider font-medium"
-          >
-            Services
-          </Link>
-        </li>
-        <li>
-          <Link 
-            to="portfolio" 
-            smooth={true} 
-            duration={500} 
-            className="text-white hover:text-[#ff6d6d] cursor-pointer transition-colors text-sm uppercase tracking-wider font-medium"
-          >
-            Portfolio
-          </Link>
-        </li>
-        <li>
-          <Link 
-            to="about" 
-            smooth={true} 
-            duration={500} 
-            className="text-white hover:text-[#ff6d6d] cursor-pointer transition-colors text-sm uppercase tracking-wider font-medium"
-          >
-            About
-          </Link>
-        </li>
-        <li>
-          <Link 
-            to="contact" 
-            smooth={true} 
-            duration={500} 
-            className="px-6 py-2 bg-[#ff6d6d] text-white rounded-full hover:bg-[#ff5555] transition-all hover:scale-105 text-sm uppercase tracking-wider font-medium"
-          >
-            Contact
-          </Link>
-        </li>
-      </ul>
-
-      {/* Hamburger */}
-      <div onClick={handleClick} className="md:hidden z-50 cursor-pointer text-white fixed right-6 top-7">
-        {!nav ? <FaBars size={25} /> : <FaTimes size={25} className="rotate-180 transition-transform duration-300" />}
-      </div>
-
-      {/* Mobile Menu */}
-      <div className={`${nav ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'} fixed top-0 right-0 w-full h-screen bg-black/30 backdrop-blur-lg transition-all duration-500 ease-in-out md:hidden`}>
-        <div className="flex flex-col h-full justify-center items-center relative">
-          {/* Logo in mobile menu */}
-          <div className="absolute top-8 left-1/2 transform -translate-x-1/2">
-            <img src={logo} alt="Ina Creations Logo" className="h-16 animate-fade-in" />
-          </div>
-          
-          <ul className="flex flex-col items-center gap-10">
-            <li className="w-full text-center">
-              <Link 
-                onClick={handleClick} 
-                to="home" 
-                smooth={true} 
-                duration={500}
-                className="relative text-3xl font-extralight text-white hover:text-[#ff6d6d] cursor-pointer transition-all duration-300 hover:scale-110 group"
-              >
-                <span className="absolute -left-8 opacity-0 group-hover:opacity-100 transition-opacity duration-300">•</span>
-                Home
-                <span className="absolute -right-8 opacity-0 group-hover:opacity-100 transition-opacity duration-300">•</span>
-              </Link>
-            </li>
-            <li className="w-full text-center">
-              <Link 
-                onClick={handleClick} 
-                to="services" 
-                smooth={true} 
-                duration={500}
-                className="relative text-3xl font-extralight text-white hover:text-[#ff6d6d] cursor-pointer transition-all duration-300 hover:scale-110 group"
-              >
-                <span className="absolute -left-8 opacity-0 group-hover:opacity-100 transition-opacity duration-300">•</span>
-                Services
-                <span className="absolute -right-8 opacity-0 group-hover:opacity-100 transition-opacity duration-300">•</span>
-              </Link>
-            </li>
-            <li className="w-full text-center">
-              <Link 
-                onClick={handleClick} 
-                to="portfolio" 
-                smooth={true} 
-                duration={500}
-                className="relative text-3xl font-extralight text-white hover:text-[#ff6d6d] cursor-pointer transition-all duration-300 hover:scale-110 group"
-              >
-                <span className="absolute -left-8 opacity-0 group-hover:opacity-100 transition-opacity duration-300">•</span>
-                Portfolio
-                <span className="absolute -right-8 opacity-0 group-hover:opacity-100 transition-opacity duration-300">•</span>
-              </Link>
-            </li>
-            <li className="w-full text-center">
-              <Link 
-                onClick={handleClick} 
-                to="about" 
-                smooth={true} 
-                duration={500}
-                className="relative text-3xl font-extralight text-white hover:text-[#ff6d6d] cursor-pointer transition-all duration-300 hover:scale-110 group"
-              >
-                <span className="absolute -left-8 opacity-0 group-hover:opacity-100 transition-opacity duration-300">•</span>
-                About
-                <span className="absolute -right-8 opacity-0 group-hover:opacity-100 transition-opacity duration-300">•</span>
-              </Link>
-            </li>
-            <li className="w-full text-center">
-              <Link 
-                onClick={handleClick} 
-                to="contact" 
-                smooth={true} 
-                duration={500}
-                className="relative text-3xl font-extralight text-white hover:text-[#ff6d6d] cursor-pointer transition-all duration-300 hover:scale-110 group"
-              >
-                <span className="absolute -left-8 opacity-0 group-hover:opacity-100 transition-opacity duration-300">•</span>
-                Contact
-                <span className="absolute -right-8 opacity-0 group-hover:opacity-100 transition-opacity duration-300">•</span>
-              </Link>
-            </li>
-          </ul>
-          
-          {/* Decorative elements */}
-          <div className="absolute inset-0 bg-gradient-radial from-[#ff6d6d]/10 via-transparent to-transparent pointer-events-none"></div>
-          <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-black/50 to-transparent"></div>
-          <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-black/50 to-transparent"></div>
-          
-          {/* Animated circles */}
-          <div className="absolute top-1/4 left-1/4 w-32 h-32 bg-[#ff6d6d]/20 rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute bottom-1/4 right-1/4 w-32 h-32 bg-[#ff6d6d]/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
         </div>
-      </div>
-    </nav>
+
+        {/* Desktop Navigation */}
+        <div className="hidden md:flex items-center space-x-1">
+          {navItems.map((item, index) => (
+            <motion.div
+              key={item.to}
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+            >
+              <Link
+                to={item.to}
+                spy={true}
+                smooth={true}
+                duration={1000}
+                offset={item.offset}
+                className={`
+                  relative px-4 py-2 cursor-pointer transition-all duration-500
+                  ${item.isButton 
+                    ? "ml-4 bg-[#ff6d6d] text-white rounded-full hover:bg-[#ff5555] hover:scale-105 shadow-lg shadow-[#ff6d6d]/20"
+                    : "text-white hover:text-[#ff6d6d] group"}
+                `}
+                onClick={() => handleMenuClick(item.to)}
+              >
+                <span className="relative z-10">{item.label}</span>
+                {!item.isButton && (
+                  <motion.span
+                    className="absolute bottom-0 left-0 w-full h-[2px] bg-[#ff6d6d] origin-left transform scale-x-0 transition-transform duration-300 group-hover:scale-x-100"
+                    initial={false}
+                    animate={activeSection === item.to ? { scaleX: 1 } : { scaleX: 0 }}
+                  />
+                )}
+              </Link>
+            </motion.div>
+          ))}
+
+          {/* Admin Login Button */}
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: navItems.length * 0.1 }}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <RouterLink
+              to="/admin"
+              className="ml-4 px-6 py-2.5 text-gray-300 bg-gray-800/50 hover:text-white border border-gray-700/50 hover:border-[#ff6d6d] rounded-full transition-all duration-300 hover:bg-[#ff6d6d]/10 hover:shadow-lg hover:shadow-[#ff6d6d]/10 backdrop-blur-sm flex items-center gap-2"
+            >
+              <span className="text-sm font-medium">Login</span>
+            </RouterLink>
+          </motion.div>
+        </div>
+      </nav>
+
+      {/* Mobile Menu Overlay */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            className="fixed inset-0 bg-black/95 backdrop-blur-lg md:hidden z-[9998]"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <motion.div 
+              className="h-screen flex flex-col items-center justify-center gap-6 pt-10"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 20 }}
+              transition={{ duration: 0.3, delay: 0.1 }}
+            >
+              {navItems.map((item, index) => (
+                <motion.div
+                  key={item.to}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 20 }}
+                  transition={{ duration: 0.3, delay: index * 0.1 }}
+                  className="w-full max-w-[250px] px-6"
+                >
+                  <Link
+                    to={item.to}
+                    spy={true}
+                    smooth={true}
+                    duration={800}
+                    offset={item.offset}
+                    onClick={() => handleMenuClick(item.to)}
+                    className={`
+                      block text-center py-3 px-8
+                      ${item.isButton
+                        ? "bg-[#ff6d6d] text-white text-xl rounded-full hover:bg-[#ff5555] transform hover:scale-105 transition-all duration-300 shadow-lg shadow-[#ff6d6d]/20"
+                        : "text-3xl font-light text-white hover:text-[#ff6d6d] transition-colors duration-300"}
+                    `}
+                  >
+                    {item.label}
+                  </Link>
+                </motion.div>
+              ))}
+
+              {/* Admin Login Button in Mobile Menu */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 20 }}
+                transition={{ duration: 0.3, delay: navItems.length * 0.1 }}
+                className="w-full max-w-[250px] px-6"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <RouterLink
+                  to="/admin"
+                  className="block text-center py-3.5 px-8 text-xl font-light text-gray-300 bg-gray-800/50 hover:text-white border border-gray-700/50 hover:border-[#ff6d6d] rounded-full transition-all duration-300 hover:bg-[#ff6d6d]/10 hover:shadow-lg hover:shadow-[#ff6d6d]/10 backdrop-blur-sm"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Login
+                </RouterLink>
+              </motion.div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 };
 

@@ -1,12 +1,36 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { FaInstagram, FaLinkedin } from 'react-icons/fa';
 
 const Team = () => {
   const [activeMember, setActiveMember] = useState(null);
+  const [hoveredMember, setHoveredMember] = useState(null);
 
   const handleMemberClick = (name) => {
     setActiveMember(activeMember === name ? null : name);
+  };
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2
+      }
+    }
+  };
+
+  const memberVariants = {
+    hidden: { y: 50, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        type: "spring",
+        stiffness: 100,
+        damping: 12
+      }
+    }
   };
 
   const teamMembers = [
@@ -68,93 +92,157 @@ const Team = () => {
   ];
 
   return (
-    <div id="team" className="w-full py-20 bg-gray-900">
-      <div className="max-w-[1200px] mx-auto px-4">
-        <div className="text-center mb-16">
+    <div id="team" className="w-full py-32 bg-gray-900 relative overflow-hidden">
+      {/* Enhanced Background Elements */}
+      <div className="absolute inset-0">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-[#ff6d6d]/5 via-transparent to-transparent opacity-50" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,_var(--tw-gradient-stops))] from-black/10 via-transparent to-black/10" />
+      </div>
+
+      <div className="max-w-[1200px] mx-auto px-4 relative">
+        <div className="text-center mb-24">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.7 }}
             viewport={{ once: true }}
+            className="relative"
           >
-            <h2 className="text-4xl font-bold text-white mb-4">Meet Our Team</h2>
-            <p className="text-gray-400 max-w-[600px] mx-auto text-lg">
-              The talented individuals behind INA Creations, dedicated to excellence.
+            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 relative">
+              <span className="absolute -top-8 left-1/2 transform -translate-x-1/2 text-[#ff6d6d]/5 text-7xl md:text-8xl font-bold whitespace-nowrap">
+                Meet Our Team
+              </span>
+              Meet Our Team
+            </h2>
+            <div className="w-24 h-1 bg-[#ff6d6d] mx-auto mb-6" />
+            <p className="text-xl text-gray-400 max-w-[600px] mx-auto">
+              The talented individuals behind INA Creations
             </p>
           </motion.div>
         </div>
 
-        <div className="grid md:grid-cols-4 gap-8">
+        <motion.div 
+          className="grid md:grid-cols-4 gap-8"
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+        >
           {teamMembers.map((member, index) => (
             <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              viewport={{ once: true }}
+              key={member.name}
+              variants={memberVariants}
               className="group relative"
               onClick={() => handleMemberClick(member.name)}
+              onHoverStart={() => setHoveredMember(member.name)}
+              onHoverEnd={() => setHoveredMember(null)}
+              whileHover={{ y: -10 }}
+              transition={{ duration: 0.3 }}
             >
-              <div className="relative overflow-hidden rounded-xl shadow-lg bg-gray-800 border border-gray-700 cursor-pointer md:cursor-default">
+              <div className="relative overflow-hidden rounded-xl shadow-lg bg-gray-800/50 backdrop-blur-sm border border-gray-700/50 cursor-pointer md:cursor-default group-hover:border-[#ff6d6d]/30 transition-all duration-500">
                 {/* Image Container */}
                 <div className="h-[300px] overflow-hidden">
-                  <img 
+                  <motion.img 
                     src={member.image} 
                     alt={member.name}
-                    className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
+                    className="w-full h-full object-cover"
+                    whileHover={{ scale: 1.1 }}
+                    transition={{ duration: 0.6 }}
                   />
+                  {/* Gradient Overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 </div>
 
                 {/* Content Overlay */}
-                <div className={`absolute inset-0 bg-gradient-to-t from-black/95 via-black/70 to-transparent transition-all duration-500
-                  md:opacity-0 md:group-hover:opacity-100
-                  ${activeMember === member.name ? 'opacity-100' : 'opacity-0'}`}
-                >
-                  <div className="absolute bottom-0 left-0 right-0 p-6">
-                    <h3 className="text-xl font-bold text-white mb-2">{member.name}</h3>
-                    <p className="text-[#ff6d6d] font-medium mb-3">{member.title}</p>
-                    <p className="text-gray-300 mb-4 text-sm">{member.description}</p>
-                    
-                    {/* Social Links */}
-                    <div className="flex space-x-4">
-                      {member.instagram && (
-                        <a 
-                          href={member.instagram} 
-                          target="_blank" 
-                          rel="noopener noreferrer"
-                          className="text-gray-300 hover:text-[#ff6d6d] transition-colors"
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          <FaInstagram size={20} />
-                        </a>
-                      )}
-                      {member.linkedin && (
-                        <a 
-                          href={member.linkedin} 
-                          target="_blank" 
-                          rel="noopener noreferrer"
-                          className="text-gray-300 hover:text-[#ff6d6d] transition-colors"
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          <FaLinkedin size={20} />
-                        </a>
-                      )}
-                    </div>
-                  </div>
-                </div>
+                <AnimatePresence>
+                  {(hoveredMember === member.name || activeMember === member.name) && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 20 }}
+                      transition={{ duration: 0.3 }}
+                      className="absolute inset-0 flex flex-col justify-end p-6 bg-gradient-to-t from-black/95 via-black/70 to-transparent"
+                    >
+                      <motion.h3 
+                        className="text-xl font-bold text-white mb-2"
+                        initial={{ y: 20, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        transition={{ delay: 0.1 }}
+                      >
+                        {member.name}
+                      </motion.h3>
+                      <motion.p 
+                        className="text-[#ff6d6d] font-medium mb-3"
+                        initial={{ y: 20, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        transition={{ delay: 0.2 }}
+                      >
+                        {member.title}
+                      </motion.p>
+                      <motion.p 
+                        className="text-gray-300 mb-4 text-sm"
+                        initial={{ y: 20, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        transition={{ delay: 0.3 }}
+                      >
+                        {member.description}
+                      </motion.p>
+                      
+                      {/* Social Links */}
+                      <motion.div 
+                        className="flex space-x-4"
+                        initial={{ y: 20, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        transition={{ delay: 0.4 }}
+                      >
+                        {member.instagram && (
+                          <motion.a 
+                            href={member.instagram} 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="text-gray-300 hover:text-[#ff6d6d] transition-colors"
+                            onClick={(e) => e.stopPropagation()}
+                            whileHover={{ scale: 1.2, rotate: 5 }}
+                            whileTap={{ scale: 0.9 }}
+                          >
+                            <FaInstagram size={20} />
+                          </motion.a>
+                        )}
+                        {member.linkedin && (
+                          <motion.a 
+                            href={member.linkedin} 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="text-gray-300 hover:text-[#ff6d6d] transition-colors"
+                            onClick={(e) => e.stopPropagation()}
+                            whileHover={{ scale: 1.2, rotate: 5 }}
+                            whileTap={{ scale: 0.9 }}
+                          >
+                            <FaLinkedin size={20} />
+                          </motion.a>
+                        )}
+                      </motion.div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
 
                 {/* Quick Info (Visible by default) */}
-                <div className={`absolute bottom-0 left-0 right-0 p-4 bg-gray-800/90 backdrop-blur-sm transition-transform duration-500 border-t border-gray-700
-                  md:transform md:translate-y-0 md:group-hover:translate-y-full
-                  ${activeMember === member.name ? 'transform translate-y-full' : 'transform translate-y-0'}`}
-                >
-                  <h3 className="text-lg font-bold text-white">{member.name}</h3>
-                  <p className="text-[#ff6d6d] text-sm">{member.title}</p>
-                </div>
+                <AnimatePresence>
+                  {hoveredMember !== member.name && activeMember !== member.name && (
+                    <motion.div
+                      initial={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 20 }}
+                      className="absolute bottom-0 left-0 right-0 p-4 bg-gray-800/90 backdrop-blur-sm border-t border-gray-700/50"
+                    >
+                      <h3 className="text-lg font-bold text-white">{member.name}</h3>
+                      <p className="text-[#ff6d6d] text-sm">{member.title}</p>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
             </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </div>
   );

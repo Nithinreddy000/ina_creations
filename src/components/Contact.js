@@ -80,7 +80,7 @@ const Contact = () => {
                 <div>
                   <p className="font-semibold text-white">Phone</p>
                   <p className="text-gray-400">+91 7013120347</p>
-                  <p className="text-sm text-gray-500 mt-1">Available Mon-Sat, 9am-6pm</p>
+                  <p className="text-sm text-gray-500 mt-1">Available Sat-Sun, 9am-6pm</p>
                 </div>
               </div>
               <div className="flex items-start space-x-4">

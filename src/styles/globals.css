@@ -1,0 +1,40 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-[#0a192f] text-gray-300;
+}
+
+.section-content {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.8s ease-out;
+}
+
+.section-content.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Smooth transitions for interactive elements */
+button,
+a,
+.transition-element {
+  transition: all 0.3s ease-in-out;
+}
+
+/* Prevent content overlap */
+section {
+  position: relative;
+  z-index: 1;
+}
+
+/* Add spacing between sections */
+section + section {
+  margin-top: 2rem;
+} 
