@@ -1,10 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaInstagram, FaLinkedin } from 'react-icons/fa';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
+import 'react-lazy-load-image-component/src/effects/blur.css';
+
+// Preload team images function
+const preloadImages = (images) => {
+  images.forEach(imageObj => {
+    const img = new Image();
+    img.src = imageObj.image;
+  });
+};
 
 const Team = () => {
   const [activeMember, setActiveMember] = useState(null);
   const [hoveredMember, setHoveredMember] = useState(null);
+  const [imagesLoaded, setImagesLoaded] = useState(false);
+  const [loadedImagesCount, setLoadedImagesCount] = useState(0);
 
   const handleMemberClick = (name) => {
     setActiveMember(activeMember === name ? null : name);
@@ -37,8 +49,9 @@ const Team = () => {
     {
       name: "Nagendra Hemanth",
       title: "Founder",
-      description: "Visionary leader driving innovation in event photography , videography and Editing.",
+      description: "Visionary leader driving innovation in event photography, videography and Editing.",
       image: require('../assets/our_team/Hemanth.png'),
+      placeholder: require('../assets/our_team/Hemanth.png'), // You'll need to create these placeholder images
       instagram: "https://www.instagram.com/nagendra_hemanth?igsh=bGg3N2o3NTQ3cWw2",
       linkedin: "https://www.linkedin.com/in/nagendra-hemanth-71b5b3348"
     },
@@ -47,6 +60,7 @@ const Team = () => {
       title: "Co-Founder",
       description: "Strategic leader shaping the creative direction of INA Creations.",
       image: require('../assets/our_team/Yashasri.png'),
+      placeholder: require('../assets/our_team/Yashasri.png'), // Using same image as placeholder until optimized versions created
       instagram: "https://www.instagram.com/yashasri_g?igsh=a3owZnUxNzZ0cTRx",
       linkedin: "https://www.linkedin.com/in/gyashasri341"
     },
@@ -55,6 +69,7 @@ const Team = () => {
       title: "Cinematography Lead",
       description: "Expert cinematographer crafting compelling visual narratives.",
       image: require('../assets/our_team/Chandhan.png'),
+      placeholder: require('../assets/our_team/Chandhan.png'),
       instagram: "https://www.instagram.com/chandanvarma247?igsh=Y3djZWY0c3IxN2kx",
       linkedin: "https://www.linkedin.com/in/chiranjeevi-chandan-varma-928175346"
     },
@@ -63,6 +78,7 @@ const Team = () => {
       title: "Photography & Videography",
       description: "Skilled visual artist capturing moments with unique perspective.",
       image: require('../assets/our_team/Thanuja.png'),
+      placeholder: require('../assets/our_team/Thanuja.png'),
       instagram: "https://www.instagram.com/__tanu__7572?igsh=bDJ3NHAxdGducTl5",
       linkedin: "https://www.linkedin.com/in/thanuja-chintham-0951b929a"
     },
@@ -71,6 +87,7 @@ const Team = () => {
       title: "Photography & Videography",
       description: "Creative professional specializing in visual storytelling.",
       image: require('../assets/our_team/Bhuvana.png'),
+      placeholder: require('../assets/our_team/Bhuvana.png'),
       instagram: "https://www.instagram.com/_.thehoneybadger?igsh=aXVtbTA4b2xpeWRm",
       linkedin: null
     },
@@ -79,6 +96,7 @@ const Team = () => {
       title: "Treasurer",
       description: "Strategic financial planning and management specialist.",
       image: require('../assets/our_team/Manish.png'),
+      placeholder: require('../assets/our_team/Manish.png'),
       instagram: "https://www.instagram.com/yama__0512?igsh=NmNiaTIxeHhvdHEx",
     },
     {
@@ -86,10 +104,46 @@ const Team = () => {
       title: "Technical Lead",
       description: "Technical expert ensuring cutting-edge solutions and innovation.",
       image: require('../assets/our_team/Nithin.png'),
+      placeholder: require('../assets/our_team/Nithin.png'),
       instagram: "https://www.instagram.com/nithin____reddy___?igsh=Z2V4eXoycGpmcXQ4",
       linkedin: "https://www.linkedin.com/in/nithin-reddy1/"
     }
   ];
+
+  // Preload team images on component mount
+  useEffect(() => {
+    // Start preloading images
+    preloadImages(teamMembers);
+    
+    // Add link preload tags for each image
+    teamMembers.forEach(member => {
+      const link = document.createElement('link');
+      link.rel = 'preload';
+      link.as = 'image';
+      link.href = member.image;
+      link.className = 'team-image-preload';
+      document.head.appendChild(link);
+    });
+    
+    // Cleanup function
+    return () => {
+      const preloadLinks = document.querySelectorAll('.team-image-preload');
+      preloadLinks.forEach(link => {
+        document.head.removeChild(link);
+      });
+    };
+  }, []);
+
+  // Handle image load completion
+  const handleImageLoaded = () => {
+    setLoadedImagesCount(prevCount => {
+      const newCount = prevCount + 1;
+      if (newCount >= teamMembers.length) {
+        setImagesLoaded(true);
+      }
+      return newCount;
+    });
+  };
 
   return (
     <div id="team" className="w-full py-32 bg-secondary-100 relative overflow-hidden">
@@ -142,13 +196,34 @@ const Team = () => {
               <div className="relative overflow-hidden rounded-xl shadow-lg bg-secondary-200/50 backdrop-blur-sm border border-secondary-300/50 cursor-pointer md:cursor-default group-hover:border-primary-700/30 transition-all duration-500">
                 {/* Image Container */}
                 <div className="h-[300px] overflow-hidden">
-                  <motion.img 
-                    src={member.image} 
-                    alt={member.name}
-                    className="w-full h-full object-cover"
-                    whileHover={{ scale: 1.1 }}
-                    transition={{ duration: 0.6 }}
-                  />
+                  {/* Enhanced image loading with blur effect placeholders */}
+                  <div className="relative w-full h-full">
+                    {/* Background placeholder - always visible */}
+                    <div className="absolute inset-0 bg-secondary-300/50 animate-pulse" />
+                    
+                    {/* Lazy loaded image with blur effect */}
+                    <LazyLoadImage
+                      src={member.image}
+                      alt={member.name}
+                      className="w-full h-full object-cover"
+                      effect="blur"
+                      afterLoad={handleImageLoaded}
+                      wrapperClassName="w-full h-full"
+                      placeholder={
+                        <div className="w-full h-full flex items-center justify-center bg-secondary-200/70">
+                          <div className="w-12 h-12 border-2 border-primary-700 border-t-transparent rounded-full animate-spin" />
+                        </div>
+                      }
+                    />
+                    
+                    {/* Motion wrapper for hover effects */}
+                    <motion.div 
+                      className="absolute inset-0 pointer-events-none"
+                      whileHover={{ scale: 1.1 }}
+                      transition={{ duration: 0.6 }}
+                    />
+                  </div>
+                  
                   {/* Gradient Overlay */}
                   <div className="absolute inset-0 bg-gradient-to-t from-secondary-100/90 via-secondary-100/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 </div>
