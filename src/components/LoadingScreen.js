@@ -72,7 +72,7 @@ const LoadingScreen = () => {
               transition={{ delay: 0.2, ...fadeTransition }}
               className="text-4xl font-bold text-primary-900 mb-4"
             >
-              Loading Experience
+              Loading
             </motion.h1>
 
             {/* Progress Bar */}
@@ -110,7 +110,7 @@ const LoadingScreen = () => {
                   ? 'Loading media assets...' 
                   : loadingProgress < 95 
                     ? 'Finalizing...' 
-                    : 'Entering the experience...'}
+                    : 'Entering the World of Camera...'}
             </motion.p>
             
             {/* Floating elements for visual interest */}
