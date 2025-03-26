@@ -46,7 +46,7 @@ const Contact = () => {
   };
 
   return (
-    <div id="contact" className="w-full min-h-screen bg-gray-900 py-20">
+    <div id="contact" className="w-full min-h-screen bg-secondary-100 py-20">
       <div className="max-w-[1200px] mx-auto p-4">
         <div className="text-center mb-16">
           <motion.div
@@ -55,8 +55,8 @@ const Contact = () => {
             transition={{ duration: 0.5 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-4xl font-bold text-white mb-4">Get In Touch</h2>
-            <p className="text-gray-400 max-w-[600px] mx-auto text-lg">
+            <h2 className="text-4xl font-bold text-primary-900 mb-4">Get In Touch</h2>
+            <p className="text-primary-800 max-w-[600px] mx-auto text-lg">
               Let's create memories together.
             </p>
           </motion.div>
@@ -69,38 +69,38 @@ const Contact = () => {
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}
             viewport={{ once: true }}
-            className="bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700"
+            className="bg-secondary-200 p-8 rounded-xl shadow-lg border border-secondary-300"
           >
-            <h3 className="text-2xl font-bold text-white mb-8">Contact Information</h3>
+            <h3 className="text-2xl font-bold text-primary-900 mb-8">Contact Information</h3>
             <div className="space-y-8">
               <div className="flex items-start space-x-4">
-                <div className="bg-[#ff6d6d]/10 p-3 rounded-full">
-                  <FaPhone className="text-[#ff6d6d] text-xl" />
+                <div className="bg-primary-700/10 p-3 rounded-full">
+                  <FaPhone className="text-primary-700 text-xl" />
                 </div>
                 <div>
-                  <p className="font-semibold text-white">Phone</p>
-                  <p className="text-gray-400">+91 7013120347</p>
-                  <p className="text-sm text-gray-500 mt-1">Available Sat-Sun, 9am-6pm</p>
+                  <p className="font-semibold text-primary-900">Phone</p>
+                  <p className="text-primary-800">+91 7013120347</p>
+                  <p className="text-sm text-primary-700 mt-1">Available Sat-Sun, 9am-6pm</p>
                 </div>
               </div>
               <div className="flex items-start space-x-4">
-                <div className="bg-[#ff6d6d]/10 p-3 rounded-full">
-                  <FaEnvelope className="text-[#ff6d6d] text-xl" />
+                <div className="bg-primary-700/10 p-3 rounded-full">
+                  <FaEnvelope className="text-primary-700 text-xl" />
                 </div>
                 <div>
-                  <p className="font-semibold text-white">Email</p>
-                  <p className="text-gray-400">ina.creations1002@gmail.com</p>
-                  <p className="text-sm text-gray-500 mt-1">We'll respond within 24 hours</p>
+                  <p className="font-semibold text-primary-900">Email</p>
+                  <p className="text-primary-800">ina.creations1002@gmail.com</p>
+                  <p className="text-sm text-primary-700 mt-1">We'll respond within 24 hours</p>
                 </div>
               </div>
               <div className="flex items-start space-x-4">
-                <div className="bg-[#ff6d6d]/10 p-3 rounded-full">
-                  <FaMapMarkerAlt className="text-[#ff6d6d] text-xl" />
+                <div className="bg-primary-700/10 p-3 rounded-full">
+                  <FaMapMarkerAlt className="text-primary-700 text-xl" />
                 </div>
                 <div>
-                  <p className="font-semibold text-white">Location</p>
-                  <p className="text-gray-400">Hyderabad</p>
-                  <p className="text-gray-400">Telangana</p>
+                  <p className="font-semibold text-primary-900">Location</p>
+                  <p className="text-primary-800">Hyderabad</p>
+                  <p className="text-primary-800">Telangana</p>
                 </div>
               </div>
             </div>
@@ -112,15 +112,15 @@ const Contact = () => {
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}
             viewport={{ once: true }}
-            className="bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700"
+            className="bg-secondary-200 p-8 rounded-xl shadow-lg border border-secondary-300"
           >
             <form ref={formRef} onSubmit={handleSubmit} className="space-y-6">
               <div>
-                <label className="block text-gray-300 text-sm font-bold mb-2" htmlFor="name">
+                <label className="block text-primary-900 text-sm font-bold mb-2" htmlFor="name">
                   Full Name
                 </label>
                 <input
-                  className="w-full px-4 py-3 rounded-lg bg-gray-700 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#ff6d6d] focus:border-transparent transition-all"
+                  className="w-full px-4 py-3 rounded-lg bg-white border border-secondary-300 text-primary-900 placeholder-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-700 focus:border-transparent transition-all"
                   type="text"
                   name="user_name"
                   placeholder="John Doe"
@@ -128,11 +128,11 @@ const Contact = () => {
                 />
               </div>
               <div>
-                <label className="block text-gray-300 text-sm font-bold mb-2" htmlFor="email">
+                <label className="block text-primary-900 text-sm font-bold mb-2" htmlFor="email">
                   Email Address
                 </label>
                 <input
-                  className="w-full px-4 py-3 rounded-lg bg-gray-700 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#ff6d6d] focus:border-transparent transition-all"
+                  className="w-full px-4 py-3 rounded-lg bg-white border border-secondary-300 text-primary-900 placeholder-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-700 focus:border-transparent transition-all"
                   type="email"
                   name="user_email"
                   placeholder="john@example.com"
@@ -140,11 +140,11 @@ const Contact = () => {
                 />
               </div>
               <div>
-                <label className="block text-gray-300 text-sm font-bold mb-2" htmlFor="phone">
+                <label className="block text-primary-900 text-sm font-bold mb-2" htmlFor="phone">
                   Phone Number
                 </label>
                 <input
-                  className="w-full px-4 py-3 rounded-lg bg-gray-700 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#ff6d6d] focus:border-transparent transition-all"
+                  className="w-full px-4 py-3 rounded-lg bg-white border border-secondary-300 text-primary-900 placeholder-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-700 focus:border-transparent transition-all"
                   type="tel"
                   name="user_phone"
                   placeholder="+91 1234567890"
@@ -152,11 +152,11 @@ const Contact = () => {
                 />
               </div>
               <div>
-                <label className="block text-gray-300 text-sm font-bold mb-2" htmlFor="event_type">
+                <label className="block text-primary-900 text-sm font-bold mb-2" htmlFor="event_type">
                   Event Type
                 </label>
                 <select
-                  className="w-full px-4 py-3 rounded-lg bg-gray-700 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#ff6d6d] focus:border-transparent transition-all"
+                  className="w-full px-4 py-3 rounded-lg bg-white border border-secondary-300 text-primary-900 placeholder-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-700 focus:border-transparent transition-all"
                   name="event_type"
                   required
                 >
@@ -169,11 +169,11 @@ const Contact = () => {
                 </select>
               </div>
               <div>
-                <label className="block text-gray-300 text-sm font-bold mb-2" htmlFor="message">
+                <label className="block text-primary-900 text-sm font-bold mb-2" htmlFor="message">
                   Message
                 </label>
                 <textarea
-                  className="w-full px-4 py-3 rounded-lg bg-gray-700 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#ff6d6d] focus:border-transparent transition-all"
+                  className="w-full px-4 py-3 rounded-lg bg-white border border-secondary-300 text-primary-900 placeholder-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-700 focus:border-transparent transition-all"
                   name="message"
                   rows="4"
                   placeholder="Tell us about your event..."
@@ -185,8 +185,8 @@ const Contact = () => {
                 disabled={loading}
                 className={`w-full py-4 rounded-lg font-bold text-white transition-all ${
                   loading 
-                    ? 'bg-gray-600 cursor-not-allowed' 
-                    : 'bg-[#ff6d6d] hover:bg-[#ff5555] hover:shadow-lg'
+                    ? 'bg-primary-400 cursor-not-allowed' 
+                    : 'bg-primary-700 hover:bg-primary-800 hover:shadow-lg'
                 }`}
               >
                 {loading ? 'Sending...' : 'Send Message'}
@@ -194,14 +194,14 @@ const Contact = () => {
               
               {/* Success Message */}
               {success && (
-                <div className="mt-4 p-4 bg-green-900/50 text-green-400 rounded-lg border border-green-700">
+                <div className="mt-4 p-4 bg-green-100 text-green-800 rounded-lg border border-green-300">
                   Thank you! Your message has been sent successfully. We'll get back to you soon.
                 </div>
               )}
               
               {/* Error Message */}
               {error && (
-                <div className="mt-4 p-4 bg-red-900/50 text-red-400 rounded-lg border border-red-700">
+                <div className="mt-4 p-4 bg-red-100 text-red-800 rounded-lg border border-red-300">
                   Oops! Something went wrong. Please try again later.
                 </div>
               )}

@@ -92,11 +92,11 @@ const Team = () => {
   ];
 
   return (
-    <div id="team" className="w-full py-32 bg-gray-900 relative overflow-hidden">
+    <div id="team" className="w-full py-32 bg-secondary-100 relative overflow-hidden">
       {/* Enhanced Background Elements */}
       <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-[#ff6d6d]/5 via-transparent to-transparent opacity-50" />
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,_var(--tw-gradient-stops))] from-black/10 via-transparent to-black/10" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-primary-700/5 via-transparent to-transparent opacity-50" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,_var(--tw-gradient-stops))] from-secondary-200/10 via-transparent to-secondary-200/10" />
       </div>
 
       <div className="max-w-[1200px] mx-auto px-4 relative">
@@ -108,14 +108,14 @@ const Team = () => {
             viewport={{ once: true }}
             className="relative"
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 relative">
-              <span className="absolute -top-8 left-1/2 transform -translate-x-1/2 text-[#ff6d6d]/5 text-7xl md:text-8xl font-bold whitespace-nowrap">
+            <h2 className="text-4xl md:text-5xl font-bold text-primary-900 mb-6 relative">
+              <span className="absolute -top-8 left-1/2 transform -translate-x-1/2 text-primary-700/5 text-7xl md:text-8xl font-bold whitespace-nowrap">
                 Meet Our Team
               </span>
               Meet Our Team
             </h2>
-            <div className="w-24 h-1 bg-[#ff6d6d] mx-auto mb-6" />
-            <p className="text-xl text-gray-400 max-w-[600px] mx-auto">
+            <div className="w-24 h-1 bg-primary-700 mx-auto mb-6" />
+            <p className="text-xl text-primary-800 max-w-[600px] mx-auto">
               The talented individuals behind INA Creations
             </p>
           </motion.div>
@@ -139,7 +139,7 @@ const Team = () => {
               whileHover={{ y: -10 }}
               transition={{ duration: 0.3 }}
             >
-              <div className="relative overflow-hidden rounded-xl shadow-lg bg-gray-800/50 backdrop-blur-sm border border-gray-700/50 cursor-pointer md:cursor-default group-hover:border-[#ff6d6d]/30 transition-all duration-500">
+              <div className="relative overflow-hidden rounded-xl shadow-lg bg-secondary-200/50 backdrop-blur-sm border border-secondary-300/50 cursor-pointer md:cursor-default group-hover:border-primary-700/30 transition-all duration-500">
                 {/* Image Container */}
                 <div className="h-[300px] overflow-hidden">
                   <motion.img 
@@ -150,7 +150,7 @@ const Team = () => {
                     transition={{ duration: 0.6 }}
                   />
                   {/* Gradient Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-secondary-100/90 via-secondary-100/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 </div>
 
                 {/* Content Overlay */}
@@ -161,10 +161,10 @@ const Team = () => {
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: 20 }}
                       transition={{ duration: 0.3 }}
-                      className="absolute inset-0 flex flex-col justify-end p-6 bg-gradient-to-t from-black/95 via-black/70 to-transparent"
+                      className="absolute inset-0 flex flex-col justify-end p-6 bg-gradient-to-t from-secondary-100/95 via-secondary-100/70 to-transparent"
                     >
                       <motion.h3 
-                        className="text-xl font-bold text-white mb-2"
+                        className="text-xl font-bold text-primary-900 mb-2"
                         initial={{ y: 20, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
                         transition={{ delay: 0.1 }}
@@ -172,7 +172,7 @@ const Team = () => {
                         {member.name}
                       </motion.h3>
                       <motion.p 
-                        className="text-[#ff6d6d] font-medium mb-3"
+                        className="text-primary-700 font-medium mb-3"
                         initial={{ y: 20, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
                         transition={{ delay: 0.2 }}
@@ -180,7 +180,7 @@ const Team = () => {
                         {member.title}
                       </motion.p>
                       <motion.p 
-                        className="text-gray-300 mb-4 text-sm"
+                        className="text-primary-800 mb-4 text-sm"
                         initial={{ y: 20, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
                         transition={{ delay: 0.3 }}
@@ -200,7 +200,7 @@ const Team = () => {
                             href={member.instagram} 
                             target="_blank" 
                             rel="noopener noreferrer"
-                            className="text-gray-300 hover:text-[#ff6d6d] transition-colors"
+                            className="text-primary-800 hover:text-primary-700 transition-colors"
                             onClick={(e) => e.stopPropagation()}
                             whileHover={{ scale: 1.2, rotate: 5 }}
                             whileTap={{ scale: 0.9 }}
@@ -213,7 +213,7 @@ const Team = () => {
                             href={member.linkedin} 
                             target="_blank" 
                             rel="noopener noreferrer"
-                            className="text-gray-300 hover:text-[#ff6d6d] transition-colors"
+                            className="text-primary-800 hover:text-primary-700 transition-colors"
                             onClick={(e) => e.stopPropagation()}
                             whileHover={{ scale: 1.2, rotate: 5 }}
                             whileTap={{ scale: 0.9 }}
@@ -232,10 +232,10 @@ const Team = () => {
                     <motion.div
                       initial={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: 20 }}
-                      className="absolute bottom-0 left-0 right-0 p-4 bg-gray-800/90 backdrop-blur-sm border-t border-gray-700/50"
+                      className="absolute bottom-0 left-0 right-0 p-4 bg-secondary-200/90 backdrop-blur-sm border-t border-secondary-300/50"
                     >
-                      <h3 className="text-lg font-bold text-white">{member.name}</h3>
-                      <p className="text-[#ff6d6d] text-sm">{member.title}</p>
+                      <h3 className="text-lg font-bold text-primary-900">{member.name}</h3>
+                      <p className="text-primary-700 text-sm">{member.title}</p>
                     </motion.div>
                   )}
                 </AnimatePresence>

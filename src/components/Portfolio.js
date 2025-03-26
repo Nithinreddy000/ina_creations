@@ -319,7 +319,7 @@ const Portfolio = () => {
   };
 
   return (
-    <div id="portfolio" className="w-full min-h-screen pt-28 pb-20 bg-gray-900">
+    <div id="portfolio" className="w-full min-h-screen pt-28 pb-20 bg-secondary-100">
       <div className="max-w-[1200px] mx-auto px-4">
         <div className="text-center mb-16">
           <motion.div
@@ -328,14 +328,14 @@ const Portfolio = () => {
             transition={{ duration: 0.5 }}
             viewport={{ once: true, margin: "-100px" }}
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 relative">
-              <span className="absolute -top-2 left-1/2 transform -translate-x-1/2 text-[#ff6d6d]/5 text-7xl md:text-8xl font-bold whitespace-nowrap">
+            <h2 className="text-4xl md:text-5xl font-bold text-primary-900 mb-6 relative">
+              <span className="absolute -top-2 left-1/2 transform -translate-x-1/2 text-primary-700/5 text-7xl md:text-8xl font-bold whitespace-nowrap">
                 Our Work
               </span>
               Our Work
             </h2>
-            <div className="w-24 h-1 bg-[#ff6d6d] mx-auto mb-6" />
-            <p className="text-gray-400 max-w-[600px] mx-auto text-lg">
+            <div className="w-24 h-1 bg-primary-700 mx-auto mb-6" />
+            <p className="text-primary-800 max-w-[600px] mx-auto text-lg">
               Featured events we've captured.
             </p>
           </motion.div>
@@ -343,14 +343,14 @@ const Portfolio = () => {
 
         {loading ? (
           <div className="flex items-center justify-center py-20">
-            <div className="w-10 h-10 border-2 border-[#ff6d6d] border-t-transparent rounded-full animate-spin" />
+            <div className="w-10 h-10 border-2 border-primary-700 border-t-transparent rounded-full animate-spin" />
           </div>
         ) : error ? (
-          <div className="text-red-400 text-center py-20">
+          <div className="text-red-600 text-center py-20">
             {error}
           </div>
         ) : portfolioItems.length === 0 ? (
-          <div className="text-gray-400 text-center py-20">
+          <div className="text-primary-800 text-center py-20">
             No portfolio items available yet.
           </div>
         ) : (
@@ -362,7 +362,7 @@ const Portfolio = () => {
               whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
                 viewport={{ once: true, margin: "-100px" }}
-                className="group relative overflow-hidden rounded-xl shadow-lg border border-gray-700/50 bg-gray-800/30 backdrop-blur-sm"
+                className="group relative overflow-hidden rounded-xl shadow-lg border border-secondary-300/50 bg-secondary-200/30 backdrop-blur-sm"
                 onMouseEnter={() => {
                   !isMobile && setHoveredVideo(item.id);
                 }}
@@ -417,7 +417,7 @@ const Portfolio = () => {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -10 }}
                         transition={{ duration: 0.2 }}
-                        className="absolute top-4 right-4 bg-black/50 p-2.5 rounded-full text-white hover:bg-black/70 transition-all z-20 backdrop-blur-sm"
+                        className="absolute top-4 right-4 bg-secondary-100/50 p-2.5 rounded-full text-primary-900 hover:bg-secondary-200/70 transition-all z-20 backdrop-blur-sm"
                         onClick={(e) => {
                           e.stopPropagation();
                           toggleMute(e, item.id);
@@ -436,10 +436,10 @@ const Portfolio = () => {
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       transition={{ duration: 0.3 }}
-                      className="absolute inset-0 flex items-center justify-center bg-black/50"
+                      className="absolute inset-0 flex items-center justify-center bg-secondary-100/50"
                     >
                       <motion.button
-                        className="bg-[#ff6d6d] text-white px-6 py-3 rounded-lg flex items-center space-x-2 hover:bg-[#ff5555] transition-colors z-10 transform hover:scale-105"
+                        className="bg-primary-700 text-white px-6 py-3 rounded-lg flex items-center space-x-2 hover:bg-primary-800 transition-colors z-10 transform hover:scale-105"
                         onClick={(e) => {
                           e.stopPropagation();
                           openFullscreenVideo(e, item.videoUrl);
@@ -453,7 +453,7 @@ const Portfolio = () => {
                     </motion.div>
                   )}
                   <motion.div
-                    className={`absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent transition-all duration-300`}
+                    className={`absolute inset-0 bg-gradient-to-t from-secondary-100/90 via-secondary-100/50 to-transparent transition-all duration-300`}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: isMobile ? (showDetails[item.id] ? 1 : 0) : (hoveredVideo === item.id ? 1 : 0) }}
                     transition={{ duration: 0.3 }}
@@ -467,9 +467,9 @@ const Portfolio = () => {
                       }}
                       transition={{ duration: 0.3, delay: 0.1 }}
                     >
-                      <p className="text-[#ff6d6d] text-sm font-semibold mb-2">{item.category}</p>
-                  <h3 className="text-xl font-bold text-white mb-2">{item.title}</h3>
-                  <p className="text-gray-300">{item.description}</p>
+                      <p className="text-primary-700 text-sm font-semibold mb-2">{item.category}</p>
+                      <h3 className="text-xl font-bold text-primary-900 mb-2">{item.title}</h3>
+                      <p className="text-primary-800">{item.description}</p>
                     </motion.div>
                   </motion.div>
                 </motion.div>
