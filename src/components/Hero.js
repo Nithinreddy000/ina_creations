@@ -6,51 +6,22 @@ import { useIsVisible } from '../hooks/useIsVisible';
 import backgroundVideo from '../assets/mainbackgroundvideo/main.mp4';
 import { OptimizedVideo } from '../utils/videoOptimization';
 import { useOptimizedAnimations, animationVariants } from '../utils/animationOptimization';
+import { useLoading } from '../utils/loadingManager';
 
-// Add a separate video preloader component
-const VideoPreloader = ({ src, onLoaded }) => {
-  useEffect(() => {
-    // Create a new video element for preloading
-    const videoEl = document.createElement('video');
-    
-    // Set up event listeners
-    videoEl.addEventListener('canplaythrough', () => {
-      if (onLoaded) onLoaded();
-    });
-    
-    videoEl.addEventListener('error', (error) => {
-      console.error('Error preloading video:', error);
-      // Still trigger loaded in case of error to avoid blocking the UI
-      if (onLoaded) onLoaded();
-    });
-    
-    // Configure the video element
-    videoEl.preload = 'auto';
-    videoEl.src = src;
-    videoEl.load();
-    
-    // Clean up
-    return () => {
-      videoEl.removeEventListener('canplaythrough', onLoaded);
-      videoEl.removeEventListener('error', onLoaded);
-      videoEl.src = '';
-    };
-  }, [src, onLoaded]);
-  
-  return null; // This component doesn't render anything
-};
+// Get the placeholder image for the video background
+const placeholderImage = require('../assets/mainbackgroundvideo/placeholder.jpg');
 
 const Hero = () => {
   const [isVideoLoaded, setIsVideoLoaded] = useState(false);
-  const [isVideoPreloaded, setIsVideoPreloaded] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
   const [videoError, setVideoError] = useState(false);
-  const [loadingProgress, setLoadingProgress] = useState(0);
   const videoRef = useRef(null);
   const { isVisible, targetRef } = useIsVisible({
     rootMargin: '100px',
     threshold: 0.1
   }, true);
+  
+  // Get the global loading state
+  const { resourceLoaded, isAppLoaded } = useLoading();
   
   // Get optimized animation settings based on device performance
   const { 
@@ -60,147 +31,19 @@ const Hero = () => {
     getStaggerAmount
   } = useOptimizedAnimations();
 
-  // Start preloading the video immediately
-  useEffect(() => {
-    // Begin preloading as soon as the component renders
-    const videoPreloader = document.createElement('link');
-    videoPreloader.rel = 'preload';
-    videoPreloader.href = backgroundVideo;
-    videoPreloader.as = 'video';
-    document.head.appendChild(videoPreloader);
-    
-    return () => {
-      document.head.removeChild(videoPreloader);
-    };
-  }, []);
-
-  // Handle preloaded video
-  const handleVideoPreloaded = () => {
-    setIsVideoPreloaded(true);
-    // Increase loading progress substantially when video is preloaded
-    setLoadingProgress(prev => Math.max(prev, 70));
-  };
-
-  // Handle loading animation and timing
-  useEffect(() => {
-    if (!isLoading) return;
-
-    // Faster loading for high performance devices, slower for others
-    const loadingTime = devicePerformance === 'high' ? 1500 : 2000;
-    
-    // Progressive loading indicators
-    let initialProgress = 0;
-    const interval = setInterval(() => {
-      initialProgress += devicePerformance === 'high' ? 10 : 8;
-      
-      // Cap at 70% until video is preloaded
-      if (initialProgress >= 70 && !isVideoPreloaded) {
-        clearInterval(interval);
-        setLoadingProgress(70);
-      } else if (initialProgress >= 95) {
-        clearInterval(interval);
-        setLoadingProgress(95);
-      } else {
-        setLoadingProgress(initialProgress);
-      }
-    }, devicePerformance === 'high' ? 150 : 200);
-
-    // Force complete loading after loadingTime
-    const forceCompleteTimeout = setTimeout(() => {
-      clearInterval(interval);
-      setLoadingProgress(100);
-      setTimeout(() => setIsLoading(false), 200);
-    }, loadingTime);
-
-    return () => {
-      clearTimeout(forceCompleteTimeout);
-      clearInterval(interval);
-    };
-  }, [isLoading, devicePerformance, isVideoPreloaded]);
-
   // Handle video loading
   const handleVideoLoaded = () => {
     setIsVideoLoaded(true);
-    // When main video is loaded, ensure we're at 100%
-    setLoadingProgress(100);
-    
-    // Slight delay to ensure smooth transition
-    if (isLoading) {
-      setTimeout(() => {
-        setIsLoading(false);
-      }, 200);
-    }
+    // Notify the global loading system that this critical resource is loaded
+    resourceLoaded('hero_video');
   };
 
   const handleVideoError = () => {
     console.error('Error loading video');
     setVideoError(true);
-    
-    // Still continue loading experience even if video fails
-    setLoadingProgress(100);
-    setTimeout(() => setIsLoading(false), 200);
+    // Still notify the loading system to avoid blocking the app
+    resourceLoaded('hero_video');
   };
-
-  // Loading Screen
-  if (isLoading) {
-    const loadingAnimation = shouldReduceMotion 
-      ? animationVariants.lowPerformance.fadeIn
-      : animationVariants.fadeIn;
-      
-    return (
-      <>
-        {/* Preload video while showing loading screen */}
-        <VideoPreloader src={backgroundVideo} onLoaded={handleVideoPreloaded} />
-        
-        <motion.div 
-          ref={targetRef}
-          className="fixed inset-0 bg-secondary-100 z-50 flex items-center justify-center"
-          exit={{ opacity: 0 }}
-          transition={{ duration: shouldReduceMotion ? 0.1 : 0.2 }}
-        >
-          <motion.div
-            initial={loadingAnimation.hidden}
-            animate={loadingAnimation.visible}
-            transition={{ duration: shouldReduceMotion ? 0.2 : 0.3 }}
-            className="text-center"
-          >
-            <motion.h1 
-              className="text-4xl md:text-6xl font-bold text-primary-700 mb-4"
-              animate={shouldReduceMotion ? { opacity: 1 } : { 
-                opacity: [0.5, 1, 0.5],
-                scale: [0.98, 1, 0.98]
-              }}
-              transition={{ 
-                duration: 1,
-                repeat: Infinity,
-                ease: "easeInOut"
-              }}
-            >
-              INA Creations
-            </motion.h1>
-            <motion.div className="w-48 h-1 bg-secondary-200 rounded-full mx-auto overflow-hidden">
-              <motion.div 
-                className="h-full bg-primary-700"
-                initial={{ width: "0%" }}
-                animate={{ width: `${loadingProgress}%` }}
-                transition={{ duration: 0.3 }}
-              />
-            </motion.div>
-            <motion.p
-              className="text-primary-900 mt-4"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.2 }}
-            >
-              {loadingProgress < 95 
-                ? `Loading ${Math.round(loadingProgress)}%` 
-                : 'Welcome...'}
-            </motion.p>
-          </motion.div>
-        </motion.div>
-      </>
-    );
-  }
 
   return (
     <div id="home" ref={targetRef} className="relative w-full h-screen overflow-hidden">
@@ -212,11 +55,18 @@ const Hero = () => {
         {/* Static background placeholder (always visible until video loads) */}
         <div className="absolute top-0 left-0 w-full h-full bg-secondary-900/90" />
         
+        {/* Placeholder image that shows immediately */}
+        <img 
+          src={placeholderImage}
+          alt="Background"
+          className={`absolute top-0 left-0 w-full h-full object-cover transition-opacity duration-1000 ${isVideoLoaded ? 'opacity-0' : 'opacity-100'}`}
+        />
+        
         <AnimatePresence>
           {!videoError && (
             <OptimizedVideo
               src={backgroundVideo}
-              className="absolute top-0 left-0 w-full h-full object-cover"
+              className={`absolute top-0 left-0 w-full h-full object-cover transition-opacity duration-1000 ${isVideoLoaded ? 'opacity-100' : 'opacity-0'}`}
               autoPlay
               loop
               muted

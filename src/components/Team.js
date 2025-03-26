@@ -1,22 +1,49 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaInstagram, FaLinkedin } from 'react-icons/fa';
-import { LazyLoadImage } from 'react-lazy-load-image-component';
-import 'react-lazy-load-image-component/src/effects/blur.css';
 
-// Preload team images function
-const preloadImages = (images) => {
-  images.forEach(imageObj => {
-    const img = new Image();
-    img.src = imageObj.image;
-  });
+// Native image preloading that works without external dependencies
+const ImageWithPreload = ({ src, alt, className, onLoad }) => {
+  const [loaded, setLoaded] = useState(false);
+  const imgRef = useRef(null);
+
+  useEffect(() => {
+    // Check if image is already cached
+    if (imgRef.current && imgRef.current.complete) {
+      setLoaded(true);
+      if (onLoad) onLoad();
+    }
+  }, [onLoad]);
+
+  return (
+    <div className="relative w-full h-full">
+      {/* Placeholder/loading state */}
+      {!loaded && (
+        <div className="absolute inset-0 bg-secondary-300/50 animate-pulse flex items-center justify-center">
+          <div className="w-12 h-12 border-2 border-primary-700 border-t-transparent rounded-full animate-spin" />
+        </div>
+      )}
+      
+      {/* Actual image */}
+      <img
+        ref={imgRef}
+        src={src}
+        alt={alt}
+        className={`${className} ${loaded ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300`}
+        onLoad={() => {
+          setLoaded(true);
+          if (onLoad) onLoad();
+        }}
+      />
+    </div>
+  );
 };
 
 const Team = () => {
   const [activeMember, setActiveMember] = useState(null);
   const [hoveredMember, setHoveredMember] = useState(null);
-  const [imagesLoaded, setImagesLoaded] = useState(false);
-  const [loadedImagesCount, setLoadedImagesCount] = useState(0);
+  const [imagesLoaded, setImagesLoaded] = useState(0);
+  const [allImagesLoaded, setAllImagesLoaded] = useState(false);
 
   const handleMemberClick = (name) => {
     setActiveMember(activeMember === name ? null : name);
@@ -51,7 +78,6 @@ const Team = () => {
       title: "Founder",
       description: "Visionary leader driving innovation in event photography, videography and Editing.",
       image: require('../assets/our_team/Hemanth.png'),
-      placeholder: require('../assets/our_team/Hemanth.png'), // You'll need to create these placeholder images
       instagram: "https://www.instagram.com/nagendra_hemanth?igsh=bGg3N2o3NTQ3cWw2",
       linkedin: "https://www.linkedin.com/in/nagendra-hemanth-71b5b3348"
     },
@@ -60,7 +86,6 @@ const Team = () => {
       title: "Co-Founder",
       description: "Strategic leader shaping the creative direction of INA Creations.",
       image: require('../assets/our_team/Yashasri.png'),
-      placeholder: require('../assets/our_team/Yashasri.png'), // Using same image as placeholder until optimized versions created
       instagram: "https://www.instagram.com/yashasri_g?igsh=a3owZnUxNzZ0cTRx",
       linkedin: "https://www.linkedin.com/in/gyashasri341"
     },
@@ -69,7 +94,6 @@ const Team = () => {
       title: "Cinematography Lead",
       description: "Expert cinematographer crafting compelling visual narratives.",
       image: require('../assets/our_team/Chandhan.png'),
-      placeholder: require('../assets/our_team/Chandhan.png'),
       instagram: "https://www.instagram.com/chandanvarma247?igsh=Y3djZWY0c3IxN2kx",
       linkedin: "https://www.linkedin.com/in/chiranjeevi-chandan-varma-928175346"
     },
@@ -78,7 +102,6 @@ const Team = () => {
       title: "Photography & Videography",
       description: "Skilled visual artist capturing moments with unique perspective.",
       image: require('../assets/our_team/Thanuja.png'),
-      placeholder: require('../assets/our_team/Thanuja.png'),
       instagram: "https://www.instagram.com/__tanu__7572?igsh=bDJ3NHAxdGducTl5",
       linkedin: "https://www.linkedin.com/in/thanuja-chintham-0951b929a"
     },
@@ -87,7 +110,6 @@ const Team = () => {
       title: "Photography & Videography",
       description: "Creative professional specializing in visual storytelling.",
       image: require('../assets/our_team/Bhuvana.png'),
-      placeholder: require('../assets/our_team/Bhuvana.png'),
       instagram: "https://www.instagram.com/_.thehoneybadger?igsh=aXVtbTA4b2xpeWRm",
       linkedin: null
     },
@@ -96,7 +118,6 @@ const Team = () => {
       title: "Treasurer",
       description: "Strategic financial planning and management specialist.",
       image: require('../assets/our_team/Manish.png'),
-      placeholder: require('../assets/our_team/Manish.png'),
       instagram: "https://www.instagram.com/yama__0512?igsh=NmNiaTIxeHhvdHEx",
     },
     {
@@ -104,18 +125,29 @@ const Team = () => {
       title: "Technical Lead",
       description: "Technical expert ensuring cutting-edge solutions and innovation.",
       image: require('../assets/our_team/Nithin.png'),
-      placeholder: require('../assets/our_team/Nithin.png'),
       instagram: "https://www.instagram.com/nithin____reddy___?igsh=Z2V4eXoycGpmcXQ4",
       linkedin: "https://www.linkedin.com/in/nithin-reddy1/"
     }
   ];
 
-  // Preload team images on component mount
+  // Advanced preloading strategy
   useEffect(() => {
-    // Start preloading images
-    preloadImages(teamMembers);
-    
-    // Add link preload tags for each image
+    // Create image objects to preload
+    const imagePromises = teamMembers.map(member => {
+      return new Promise((resolve) => {
+        const img = new Image();
+        img.onload = () => resolve();
+        img.onerror = () => resolve(); // Resolve even on error to prevent blocking
+        img.src = member.image;
+      });
+    });
+
+    // Preload all images at once with Promise.all
+    Promise.all(imagePromises).then(() => {
+      setAllImagesLoaded(true);
+    });
+
+    // Add preload hints to document head
     teamMembers.forEach(member => {
       const link = document.createElement('link');
       link.rel = 'preload';
@@ -125,24 +157,17 @@ const Team = () => {
       document.head.appendChild(link);
     });
     
-    // Cleanup function
+    // Cleanup
     return () => {
-      const preloadLinks = document.querySelectorAll('.team-image-preload');
-      preloadLinks.forEach(link => {
+      document.querySelectorAll('.team-image-preload').forEach(link => {
         document.head.removeChild(link);
       });
     };
   }, []);
 
-  // Handle image load completion
+  // Handle individual image load
   const handleImageLoaded = () => {
-    setLoadedImagesCount(prevCount => {
-      const newCount = prevCount + 1;
-      if (newCount >= teamMembers.length) {
-        setImagesLoaded(true);
-      }
-      return newCount;
-    });
+    setImagesLoaded(prev => prev + 1);
   };
 
   return (
@@ -196,24 +221,13 @@ const Team = () => {
               <div className="relative overflow-hidden rounded-xl shadow-lg bg-secondary-200/50 backdrop-blur-sm border border-secondary-300/50 cursor-pointer md:cursor-default group-hover:border-primary-700/30 transition-all duration-500">
                 {/* Image Container */}
                 <div className="h-[300px] overflow-hidden">
-                  {/* Enhanced image loading with blur effect placeholders */}
+                  {/* Enhanced image loading with built-in blur effect */}
                   <div className="relative w-full h-full">
-                    {/* Background placeholder - always visible */}
-                    <div className="absolute inset-0 bg-secondary-300/50 animate-pulse" />
-                    
-                    {/* Lazy loaded image with blur effect */}
-                    <LazyLoadImage
+                    <ImageWithPreload
                       src={member.image}
                       alt={member.name}
                       className="w-full h-full object-cover"
-                      effect="blur"
-                      afterLoad={handleImageLoaded}
-                      wrapperClassName="w-full h-full"
-                      placeholder={
-                        <div className="w-full h-full flex items-center justify-center bg-secondary-200/70">
-                          <div className="w-12 h-12 border-2 border-primary-700 border-t-transparent rounded-full animate-spin" />
-                        </div>
-                      }
+                      onLoad={handleImageLoaded}
                     />
                     
                     {/* Motion wrapper for hover effects */}
