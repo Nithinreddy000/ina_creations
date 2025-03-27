@@ -1,12 +1,13 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { usePerformance } from '../utils/performanceOptimization';
 
 // Create a context for performance settings
 const PerformanceContext = createContext();
 
-export const usePerformance = () => {
+export const usePerformanceContext = () => {
   const context = useContext(PerformanceContext);
   if (!context) {
-    throw new Error('usePerformance must be used within a PerformanceProvider');
+    throw new Error('usePerformanceContext must be used within a PerformanceProvider');
   }
   return context;
 };

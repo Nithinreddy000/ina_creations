@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { getPortfolioItems } from '../utils/firebase';
 import { FaExpand, FaVolumeMute, FaVolumeUp, FaChevronDown, FaChevronUp } from 'react-icons/fa';
+import OptimizedVideo from './OptimizedVideo';
 
 const Portfolio = () => {
   const [portfolioItems, setPortfolioItems] = useState([]);
@@ -16,8 +17,7 @@ const Portfolio = () => {
   const observerRefs = useRef({});
   const isMobile = window.innerWidth <= 768;
   const [showAll, setShowAll] = useState(false);
-  const initialVideos = portfolioItems.slice(0, 4);
-  const remainingVideos = portfolioItems.slice(4);
+  const [selectedVideo, setSelectedVideo] = useState(null);
 
   // Prevent right-click context menu
   useEffect(() => {
@@ -293,19 +293,12 @@ const Portfolio = () => {
     });
 };
 
-  const handleVideoClick = (id) => {
-    if (stoppedVideos[id]) {
-      const video = videoRefs.current[id];
-      if (video) {
-        video.currentTime = 0;
-        const playPromise = video.play();
-        if (playPromise !== undefined) {
-          playPromise.catch(error => {
-            console.log("Play prevented:", error);
-          });
-        }
-      }
-    }
+  const handleVideoClick = (video) => {
+    setSelectedVideo(video);
+  };
+
+  const handleCloseModal = () => {
+    setSelectedVideo(null);
   };
 
   const handleItemClick = (id) => {
@@ -320,6 +313,11 @@ const Portfolio = () => {
       }));
     }
   };
+
+  // Sort videos by date (newest first) and split into initial and remaining
+  const sortedVideos = [...portfolioItems].sort((a, b) => new Date(b.createdAt.toDate()) - new Date(a.createdAt.toDate()));
+  const initialVideos = sortedVideos.slice(0, 4);
+  const remainingVideos = sortedVideos.slice(4);
 
   return (
     <div id="portfolio" className="w-full min-h-screen pt-28 pb-20 bg-secondary-100">
@@ -381,36 +379,11 @@ const Portfolio = () => {
                   transition={{ duration: 0.4 }}
                   data-video-container={item.id}
                 >
-                  <video
-                    ref={el => videoRefs.current[item.id] = el}
-                    className="w-full h-full object-cover cursor-pointer"
+                  <OptimizedVideo
                     src={item.videoUrl}
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
-                    webkit-playsinline="true"
-                    preload="auto"
-                    data-video-id={item.id}
-                    controlsList="nodownload nopictureinpicture"
-                    disablePictureInPicture
-                    onContextMenu={() => false}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleVideoClick(item.id);
-                    }}
-                    onTimeUpdate={() => handleTimeUpdate(item.id)}
-                    onLoadedData={(e) => {
-                      const video = e.target;
-                      video.muted = true;
-                      const playPromise = video.play();
-                      if (playPromise !== undefined) {
-                        playPromise.catch(error => {
-                          console.log("Initial play prevented:", error);
-                          video.play().catch(e => console.log("Couldn't play:", e));
-                        });
-                      }
-                    }}
+                    posterSrc={item.thumbnail}
+                    className="w-full h-full"
+                    priority={index < 2}
                   />
                   
                   {/* Sound Control Button - Shows on hover for desktop and on click for mobile */}
@@ -535,36 +508,10 @@ const Portfolio = () => {
                     transition={{ duration: 0.4 }}
                     data-video-container={item.id}
                   >
-                    <video
-                      ref={el => videoRefs.current[item.id] = el}
-                      className="w-full h-full object-cover cursor-pointer"
+                    <OptimizedVideo
                       src={item.videoUrl}
-                      autoPlay
-                      muted
-                      loop
-                      playsInline
-                      webkit-playsinline="true"
-                      preload="auto"
-                      data-video-id={item.id}
-                      controlsList="nodownload nopictureinpicture"
-                      disablePictureInPicture
-                      onContextMenu={() => false}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleVideoClick(item.id);
-                      }}
-                      onTimeUpdate={() => handleTimeUpdate(item.id)}
-                      onLoadedData={(e) => {
-                        const video = e.target;
-                        video.muted = true;
-                        const playPromise = video.play();
-                        if (playPromise !== undefined) {
-                          playPromise.catch(error => {
-                            console.log("Initial play prevented:", error);
-                            video.play().catch(e => console.log("Couldn't play:", e));
-                          });
-                        }
-                      }}
+                      posterSrc={item.thumbnail}
+                      className="w-full h-full"
                     />
                     
                     {/* Sound Control Button - Shows on hover for desktop and on click for mobile */}
@@ -637,6 +584,42 @@ const Portfolio = () => {
           )}
         </AnimatePresence>
       </div>
+
+      {/* Video Modal */}
+      <AnimatePresence>
+        {selectedVideo && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black bg-opacity-75 z-50 flex items-center justify-center p-4"
+            onClick={handleCloseModal}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="relative w-full max-w-4xl aspect-video bg-black rounded-lg overflow-hidden"
+            >
+              <button
+                className="absolute top-4 right-4 text-white text-2xl hover:text-copper-400 transition-colors duration-300"
+                onClick={handleCloseModal}
+              >
+                ×
+              </button>
+              <OptimizedVideo
+                src={selectedVideo.videoUrl}
+                posterSrc={selectedVideo.thumbnail}
+                className="w-full h-full"
+                priority={true}
+                autoPlay={true}
+                controls={true}
+                muted={false}
+              />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

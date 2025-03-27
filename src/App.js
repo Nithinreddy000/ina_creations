@@ -16,6 +16,7 @@ import { PerformanceProvider } from './components/PerformanceProvider';
 import { LoadingProvider, useLoading } from './utils/loadingManager';
 import LoadingScreen from './components/LoadingScreen';
 import { initializeAssetLoading } from './utils/assetRegistry';
+import './App.css';
 
 // Protected Route component
 const ProtectedRoute = ({ children }) => {
