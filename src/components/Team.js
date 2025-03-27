@@ -75,7 +75,7 @@ const Team = () => {
   const teamMembers = [
     {
       name: "Nagendra Hemanth",
-      title: "Founder",
+      title: "Founder and Editing Lead",
       description: "Visionary leader driving innovation in event photography, videography and Editing.",
       image: require('../assets/our_team/Hemanth.png'),
       instagram: "https://www.instagram.com/nagendra_hemanth?igsh=bGg3N2o3NTQ3cWw2",
