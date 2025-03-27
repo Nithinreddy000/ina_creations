@@ -127,6 +127,30 @@ const Team = () => {
       image: require('../assets/our_team/Nithin.png'),
       instagram: "https://www.instagram.com/nithin____reddy___?igsh=Z2V4eXoycGpmcXQ4",
       linkedin: "https://www.linkedin.com/in/nithin-reddy1/"
+    },
+    {
+      name: "Gnan Sahith",
+      title: "Editor",
+      description: "Skilled editor specializing in technical content, ensuring accuracy, clarity, and innovation.",
+      image: require('../assets/our_team/Gnan.png'),
+      instagram: "https://www.instagram.com/itsmegnan?igsh=MWwxMG9mZ25idThpag%3D%3D&utm_source=qr",
+      linkedin: "https://www.linkedin.com/in/gnan-sahith-92414127b?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app"
+    },
+    {
+      name: "Balaram Chowdary",
+      title: "Treasurer",
+      description: "Expert in strategic financial planning and effective management.",
+      image: require('../assets/our_team/Balaram.png'),
+      instagram: "https://www.instagram.com/balaram_kalluri?igsh=MXAxbjI1bWt2MjlhMA==",
+      linkedin: "https://www.linkedin.com/in/balaram-chowdary-4b5422307?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app"
+    },
+    {
+      name: "Sahasra",
+      title: "Treasurer",
+      description: "Specialist in optimizing financial strategies and management.",
+      image: require('../assets/our_team/Sahasra.png'),
+      instagram: "https://www.instagram.com/sahasra_reddyy_03?igsh=aGx0YWtzdWRvamNy&utm_source=qr",
+      linkedin: "https://www.linkedin.com/in/sahasra-reddy-86705a348?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app"
     }
   ];
 

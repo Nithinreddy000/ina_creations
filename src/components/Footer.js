@@ -117,7 +117,7 @@ const Footer = () => {
                  className="text-primary-800 hover:text-primary-700 transition-colors">
                 <FaInstagram size={24} />
               </a>
-              <a href="#" className="text-primary-800 hover:text-primary-700 transition-colors">
+              <a href="www.linkedin.com/in/ina-creations-b4ba85352" className="text-primary-800 hover:text-primary-700 transition-colors">
                 <FaLinkedin size={24} />
               </a>
             </div>

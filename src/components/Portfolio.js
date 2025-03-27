@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { getPortfolioItems } from '../utils/firebase';
-import { FaExpand, FaVolumeMute, FaVolumeUp } from 'react-icons/fa';
+import { FaExpand, FaVolumeMute, FaVolumeUp, FaChevronDown, FaChevronUp } from 'react-icons/fa';
 
 const Portfolio = () => {
   const [portfolioItems, setPortfolioItems] = useState([]);
@@ -15,6 +15,9 @@ const Portfolio = () => {
   const videoRefs = useRef({});
   const observerRefs = useRef({});
   const isMobile = window.innerWidth <= 768;
+  const [showAll, setShowAll] = useState(false);
+  const initialVideos = portfolioItems.slice(0, 4);
+  const remainingVideos = portfolioItems.slice(4);
 
   // Prevent right-click context menu
   useEffect(() => {
@@ -355,12 +358,13 @@ const Portfolio = () => {
           </div>
         ) : (
         <div className="grid md:grid-cols-2 gap-8">
-            {portfolioItems.map((item) => (
+            {/* Initial Videos */}
+            {initialVideos.map((item, index) => (
             <motion.div
                 key={item.id}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
                 viewport={{ once: true, margin: "-100px" }}
                 className="group relative overflow-hidden rounded-xl shadow-lg border border-secondary-300/50 bg-secondary-200/30 backdrop-blur-sm"
                 onMouseEnter={() => {
@@ -477,6 +481,161 @@ const Portfolio = () => {
           ))}
         </div>
         )}
+
+        {/* View More Section */}
+        {remainingVideos.length > 0 && (
+          <div className="mt-12 text-center">
+            <motion.button
+              onClick={() => setShowAll(!showAll)}
+              className="group flex items-center justify-center gap-2 mx-auto px-8 py-3 bg-secondary-100 hover:bg-secondary-200 text-primary-900 rounded-full transition-all duration-300 shadow-lg hover:shadow-xl"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <span className="font-medium">
+                {showAll ? 'Show Less' : `View ${remainingVideos.length} More`}
+              </span>
+              <motion.div
+                animate={{ rotate: showAll ? 180 : 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                {showAll ? <FaChevronUp /> : <FaChevronDown />}
+              </motion.div>
+            </motion.button>
+          </div>
+        )}
+
+        {/* Expanded Videos */}
+        <AnimatePresence>
+          {showAll && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.5 }}
+              className="grid md:grid-cols-2 gap-8 mt-12 overflow-hidden"
+            >
+              {remainingVideos.map((item, index) => (
+                <motion.div
+                  key={item.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  className="group relative overflow-hidden rounded-xl shadow-lg border border-secondary-300/50 bg-secondary-200/30 backdrop-blur-sm"
+                  onMouseEnter={() => {
+                    !isMobile && setHoveredVideo(item.id);
+                  }}
+                  onMouseLeave={() => {
+                    !isMobile && setHoveredVideo(null);
+                  }}
+                  onClick={() => handleItemClick(item.id)}
+                >
+                  <motion.div
+                    className="relative w-full h-[300px]"
+                    whileHover={{ scale: isMobile ? 1 : 1.05 }}
+                    transition={{ duration: 0.4 }}
+                    data-video-container={item.id}
+                  >
+                    <video
+                      ref={el => videoRefs.current[item.id] = el}
+                      className="w-full h-full object-cover cursor-pointer"
+                      src={item.videoUrl}
+                      autoPlay
+                      muted
+                      loop
+                      playsInline
+                      webkit-playsinline="true"
+                      preload="auto"
+                      data-video-id={item.id}
+                      controlsList="nodownload nopictureinpicture"
+                      disablePictureInPicture
+                      onContextMenu={() => false}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleVideoClick(item.id);
+                      }}
+                      onTimeUpdate={() => handleTimeUpdate(item.id)}
+                      onLoadedData={(e) => {
+                        const video = e.target;
+                        video.muted = true;
+                        const playPromise = video.play();
+                        if (playPromise !== undefined) {
+                          playPromise.catch(error => {
+                            console.log("Initial play prevented:", error);
+                            video.play().catch(e => console.log("Couldn't play:", e));
+                          });
+                        }
+                      }}
+                    />
+                    
+                    {/* Sound Control Button - Shows on hover for desktop and on click for mobile */}
+                    <AnimatePresence>
+                      {(hoveredVideo === item.id || (isMobile && showControls[item.id])) && (
+                        <motion.button
+                          initial={{ opacity: 0, y: -10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -10 }}
+                          transition={{ duration: 0.2 }}
+                          className="absolute top-4 right-4 bg-secondary-100/50 p-2.5 rounded-full text-primary-900 hover:bg-secondary-200/70 transition-all z-20 backdrop-blur-sm"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            toggleMute(e, item.id);
+                          }}
+                        >
+                          {videoRefs.current[item.id]?.muted ? 
+                            <FaVolumeMute size={20} /> : 
+                            <FaVolumeUp size={20} />
+                          }
+                        </motion.button>
+                      )}
+                    </AnimatePresence>
+
+                    {stoppedVideos[item.id] && (
+                      <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.3 }}
+                        className="absolute inset-0 flex items-center justify-center bg-secondary-100/50"
+                      >
+                        <motion.button
+                          className="bg-primary-700 text-white px-6 py-3 rounded-lg flex items-center space-x-2 hover:bg-primary-800 transition-colors z-10 transform hover:scale-105"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            openFullscreenVideo(e, item.videoUrl);
+                          }}
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                        >
+                          <FaExpand className="mr-2" />
+                          View Full Video
+                        </motion.button>
+                      </motion.div>
+                    )}
+                    <motion.div
+                      className={`absolute inset-0 bg-gradient-to-t from-secondary-100/90 via-secondary-100/50 to-transparent transition-all duration-300`}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: isMobile ? (showDetails[item.id] ? 1 : 0) : (hoveredVideo === item.id ? 1 : 0) }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      <motion.div 
+                        className="absolute bottom-0 left-0 right-0 p-6"
+                        initial={{ y: 20, opacity: 0 }}
+                        animate={{ 
+                          y: isMobile ? (showDetails[item.id] ? 0 : 20) : (hoveredVideo === item.id ? 0 : 20),
+                          opacity: isMobile ? (showDetails[item.id] ? 1 : 0) : (hoveredVideo === item.id ? 1 : 0)
+                        }}
+                        transition={{ duration: 0.3, delay: 0.1 }}
+                      >
+                        <p className="text-primary-700 text-sm font-semibold mb-2">{item.category}</p>
+                        <h3 className="text-xl font-bold text-primary-900 mb-2">{item.title}</h3>
+                        <p className="text-primary-800">{item.description}</p>
+                      </motion.div>
+                    </motion.div>
+                  </motion.div>
+                </motion.div>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </div>
   );
