@@ -1,8 +1,32 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { getPortfolioItems } from '../utils/firebase';
 import { FaExpand, FaVolumeMute, FaVolumeUp, FaChevronDown, FaChevronUp } from 'react-icons/fa';
 import OptimizedVideo from './OptimizedVideo';
+
+// Custom hook for checking if element is visible
+const useIsVisible = (options = {}, defaultValue = false) => {
+  const [isVisible, setIsVisible] = useState(defaultValue);
+  const targetRef = useRef(null);
+
+  useEffect(() => {
+    if (!targetRef.current) return;
+
+    const observer = new IntersectionObserver(([entry]) => {
+      setIsVisible(entry.isIntersecting);
+    }, options);
+
+    observer.observe(targetRef.current);
+
+    return () => {
+      if (targetRef.current) {
+        observer.unobserve(targetRef.current);
+      }
+    };
+  }, [options]);
+
+  return { isVisible, targetRef };
+};
 
 const Portfolio = () => {
   const [portfolioItems, setPortfolioItems] = useState([]);
@@ -13,11 +37,13 @@ const Portfolio = () => {
   const [stoppedVideos, setStoppedVideos] = useState({});
   const [hoveredVideo, setHoveredVideo] = useState(null);
   const [showControls, setShowControls] = useState({});
+  const [showFullVideoOption, setShowFullVideoOption] = useState({});
   const videoRefs = useRef({});
   const observerRefs = useRef({});
   const isMobile = window.innerWidth <= 768;
   const [showAll, setShowAll] = useState(false);
   const [selectedVideo, setSelectedVideo] = useState(null);
+  const [videoStates, setVideoStates] = useState({});
 
   // Prevent right-click context menu
   useEffect(() => {
@@ -60,17 +86,145 @@ const Portfolio = () => {
     loadPortfolioItems();
   }, []);
 
-  // Initialize video times and stopped states
+  // Initialize video states
   useEffect(() => {
-    const initialTimes = {};
-    const initialStoppedState = {};
+    const initialStates = {};
     portfolioItems.forEach(item => {
-      initialTimes[item.id] = 0;
-      initialStoppedState[item.id] = false;
+      initialStates[item.id] = {
+        time: 0,
+        stopped: false,
+        showFullOption: false,
+        muted: true,
+        isPlaying: false,
+        isLoaded: false
+      };
     });
-    setVideoTimes(initialTimes);
-    setStoppedVideos(initialStoppedState);
+    setVideoStates(initialStates);
   }, [portfolioItems]);
+
+  // Optimized video playback handler
+  const handleVideoPlayback = useCallback((id, isVisible) => {
+    const videoElement = videoRefs.current[id];
+    if (!videoElement) return;
+
+    if (isVisible) {
+      // Only start loading when visible
+      if (!videoStates[id]?.isLoaded) {
+        videoElement.load();
+        setVideoStates(prev => ({
+          ...prev,
+          [id]: { ...prev[id], isLoaded: true }
+        }));
+      }
+
+      // Play video with error handling
+      const playPromise = videoElement.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(error => {
+          console.log("Playback prevented:", error);
+          // Retry with muted state if autoplay was blocked
+          if (error.name === "NotAllowedError") {
+            videoElement.muted = true;
+            videoElement.play().catch(e => console.log("Couldn't play even muted:", e));
+          }
+        });
+      }
+    } else {
+      // Pause and reset when not visible
+      if (!videoElement.paused) {
+        videoElement.pause();
+      }
+    }
+  }, [videoStates]);
+
+  // Optimized video time update handler
+  const handleTimeUpdate = useCallback((id) => {
+    const videoElement = videoRefs.current[id];
+    if (!videoElement) return;
+
+    const currentTime = videoElement.currentTime;
+    
+    setVideoStates(prev => {
+      const currentState = prev[id] || {};
+      
+      // Check if we need to stop at 15 seconds
+      if (currentTime >= 15 && !currentState.stopped) {
+        videoElement.pause();
+        return {
+          ...prev,
+          [id]: {
+            ...currentState,
+            time: currentTime,
+            stopped: true,
+            showFullOption: true
+          }
+        };
+      }
+      
+      return {
+        ...prev,
+        [id]: {
+          ...currentState,
+          time: currentTime
+        }
+      };
+    });
+
+    // Update showFullVideoOption state after 15 seconds
+    if (currentTime >= 15) {
+      setShowFullVideoOption(prev => ({
+        ...prev,
+        [id]: true
+      }));
+      setStoppedVideos(prev => ({
+        ...prev,
+        [id]: true
+      }));
+    }
+  }, []);
+
+  // Optimized mute toggle
+  const toggleMute = useCallback((e, id) => {
+    e.stopPropagation();
+    const videoElement = videoRefs.current[id];
+    if (!videoElement) return;
+
+    try {
+      const newMutedState = !videoElement.muted;
+      videoElement.muted = newMutedState;
+      
+      // Update volume and ensure it's audible when unmuted
+      if (!newMutedState) {
+        videoElement.volume = 1.0;
+      }
+
+      setVideoStates(prev => ({
+        ...prev,
+        [id]: {
+          ...prev[id],
+          muted: newMutedState
+        }
+      }));
+
+      // Try to play if it was paused
+      if (newMutedState === false && videoElement.paused) {
+        videoElement.play().catch(error => {
+          console.log("Couldn't play after unmuting:", error);
+          // If play fails, revert mute state
+          videoElement.muted = true;
+          setVideoStates(prev => ({
+            ...prev,
+            [id]: {
+              ...prev[id],
+              muted: true
+            }
+          }));
+        });
+      }
+    } catch (error) {
+      console.error("Error toggling mute:", error);
+    }
+  }, []);
 
   // Setup Intersection Observer for videos
   useEffect(() => {
@@ -80,12 +234,29 @@ const Portfolio = () => {
       threshold: 0.5,
     };
 
+    // Event handler functions stored per video id
+    const timeUpdateHandlers = {};
+
     const handleIntersection = (entries, observer) => {
       entries.forEach(entry => {
-        const videoId = entry.target.dataset.videoId;
-        const video = videoRefs.current[videoId];
+        const videoId = entry.target.dataset.videoContainer;
+        const video = entry.target.querySelector('video');
         
         if (!video) return;
+        
+        // Store the video element reference
+        videoRefs.current[videoId] = video;
+
+        // Clean up any existing timeupdate handler for this video
+        if (timeUpdateHandlers[videoId]) {
+          video.removeEventListener('timeupdate', timeUpdateHandlers[videoId]);
+        }
+
+        // Create and store a new handler for this video
+        timeUpdateHandlers[videoId] = () => handleTimeUpdate(videoId);
+        
+        // Add timeupdate event listener to track video time
+        video.addEventListener('timeupdate', timeUpdateHandlers[videoId]);
 
         if (entry.isIntersecting) {
           video.muted = true; // Keep muted
@@ -108,47 +279,34 @@ const Portfolio = () => {
     const observer = new IntersectionObserver(handleIntersection, options);
     observerRefs.current = observer;
 
-    // Observe all video elements
-    portfolioItems.forEach(item => {
-      const videoContainer = document.querySelector(`[data-video-container="${item.id}"]`);
-      if (videoContainer) {
-        observer.observe(videoContainer);
-      }
-    });
+    // Clear existing observers
+    observer.disconnect();
+
+    // Observe all video elements - both initial and expanded
+    setTimeout(() => {
+      portfolioItems.forEach(item => {
+        const videoContainer = document.querySelector(`[data-video-container="${item.id}"]`);
+        if (videoContainer) {
+          observer.observe(videoContainer);
+        }
+      });
+    }, 100); // Small delay to ensure DOM is updated
 
     return () => {
+      // Clean up observer
       observer.disconnect();
+      
+      // Clean up timeupdate event listeners
+      Object.keys(videoRefs.current).forEach(id => {
+        const video = videoRefs.current[id];
+        if (video && timeUpdateHandlers[id]) {
+          video.removeEventListener('timeupdate', timeUpdateHandlers[id]);
+        }
+      });
     };
-  }, [portfolioItems]);
+  }, [portfolioItems, showAll]); // Add showAll dependency to rerun when "View More" is clicked
 
-  const handleTimeUpdate = (id) => {
-    if (videoRefs.current[id]) {
-      const currentTime = videoRefs.current[id].currentTime;
-      
-      setVideoTimes(prev => ({
-        ...prev,
-        [id]: currentTime
-      }));
-      
-      // Stop video after 30 seconds
-      if (currentTime >= 30 && !stoppedVideos[id]) {
-        videoRefs.current[id].pause();
-        setStoppedVideos(prev => ({
-          ...prev,
-          [id]: true
-        }));
-      }
-    }
-  };
-
-  const toggleMute = (e, id) => {
-    e.stopPropagation();
-    if (videoRefs.current[id]) {
-      videoRefs.current[id].muted = !videoRefs.current[id].muted;
-    }
-  };
-
-  const openFullscreenVideo = (e, videoUrl) => {
+  const openFullscreenVideo = (e, videoUrl, id) => {
     e.stopPropagation();
     
     // Create container with dark background
@@ -157,6 +315,20 @@ const Portfolio = () => {
     container.style.opacity = '0';
     container.style.transform = 'scale(0.98)';
     container.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+    
+    // Mark the video as viewed in fullscreen mode if id is provided
+    if (id && videoRefs.current[id]) {
+        // Pause the original video
+        if (!videoRefs.current[id].paused) {
+            videoRefs.current[id].pause();
+        }
+        
+        // Track that this video has been viewed in fullscreen
+        setStoppedVideos(prev => ({
+            ...prev,
+            [id]: true
+        }));
+    }
     
     // Create header with back button
     const header = document.createElement('div');
@@ -311,6 +483,17 @@ const Portfolio = () => {
         ...prev,
         [id]: !prev[id]
       }));
+    } else {
+      // For desktop, toggle video controls and full video option
+      setShowFullVideoOption(prev => ({
+        ...prev,
+        [id]: !prev[id]
+      }));
+      
+      // If the video is already playing, pause it to indicate it's been selected
+      if (videoRefs.current[id] && !videoRefs.current[id].paused && !stoppedVideos[id]) {
+        videoRefs.current[id].pause();
+      }
     }
   };
 
@@ -384,6 +567,32 @@ const Portfolio = () => {
                     posterSrc={item.thumbnail}
                     className="w-full h-full"
                     priority={index < 2}
+                    ref={el => {
+                      if (el) {
+                        videoRefs.current[item.id] = el;
+                        
+                        // Set initial attributes
+                        el.muted = true;
+                        el.playsInline = true;
+                        el.preload = "metadata";
+                        
+                        // Add timeupdate listener
+                        el.addEventListener('timeupdate', () => handleTimeUpdate(item.id));
+                        
+                        // Use Intersection Observer
+                        const observer = new IntersectionObserver(
+                          ([entry]) => handleVideoPlayback(item.id, entry.isIntersecting),
+                          { threshold: 0.5 }
+                        );
+                        observer.observe(el.parentElement);
+                        
+                        // Cleanup on unmount
+                        return () => {
+                          el.removeEventListener('timeupdate', () => handleTimeUpdate(item.id));
+                          observer.disconnect();
+                        };
+                      }
+                    }}
                   />
                   
                   {/* Sound Control Button - Shows on hover for desktop and on click for mobile */}
@@ -407,8 +616,29 @@ const Portfolio = () => {
                       </motion.button>
                     )}
                   </AnimatePresence>
+                  
+                  {/* Full Video Button - Show on hover, when clicked, or after 15 seconds */}
+                  <AnimatePresence>
+                    {(hoveredVideo === item.id || showFullVideoOption[item.id] || videoStates[item.id]?.showFullOption) && (
+                      <motion.button
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 10 }}
+                        transition={{ duration: 0.2 }}
+                        className="absolute top-4 left-4 bg-primary-700/70 px-3 py-2 rounded-md text-white hover:bg-primary-800 transition-all z-20 backdrop-blur-sm flex items-center space-x-1"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          openFullscreenVideo(e, item.videoUrl, item.id);
+                        }}
+                      >
+                        <FaExpand size={16} />
+                        <span className="text-sm font-medium">Full Video</span>
+                      </motion.button>
+                    )}
+                  </AnimatePresence>
 
-                  {stoppedVideos[item.id] && (
+                  {/* Stopped Video Overlay */}
+                  {(stoppedVideos[item.id] || videoStates[item.id]?.stopped) && (
                     <motion.div
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
@@ -419,7 +649,7 @@ const Portfolio = () => {
                         className="bg-primary-700 text-white px-6 py-3 rounded-lg flex items-center space-x-2 hover:bg-primary-800 transition-colors z-10 transform hover:scale-105"
                         onClick={(e) => {
                           e.stopPropagation();
-                          openFullscreenVideo(e, item.videoUrl);
+                          openFullscreenVideo(e, item.videoUrl, item.id);
                         }}
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
@@ -512,6 +742,33 @@ const Portfolio = () => {
                       src={item.videoUrl}
                       posterSrc={item.thumbnail}
                       className="w-full h-full"
+                      priority={index < 2}
+                      ref={el => {
+                        if (el) {
+                          videoRefs.current[item.id] = el;
+                          
+                          // Set initial attributes
+                          el.muted = true;
+                          el.playsInline = true;
+                          el.preload = "metadata";
+                          
+                          // Add timeupdate listener
+                          el.addEventListener('timeupdate', () => handleTimeUpdate(item.id));
+                          
+                          // Use Intersection Observer
+                          const observer = new IntersectionObserver(
+                            ([entry]) => handleVideoPlayback(item.id, entry.isIntersecting),
+                            { threshold: 0.5 }
+                          );
+                          observer.observe(el.parentElement);
+                          
+                          // Cleanup on unmount
+                          return () => {
+                            el.removeEventListener('timeupdate', () => handleTimeUpdate(item.id));
+                            observer.disconnect();
+                          };
+                        }
+                      }}
                     />
                     
                     {/* Sound Control Button - Shows on hover for desktop and on click for mobile */}
@@ -536,7 +793,28 @@ const Portfolio = () => {
                       )}
                     </AnimatePresence>
 
-                    {stoppedVideos[item.id] && (
+                    {/* Full Video Button - Show on hover, when clicked, or after 15 seconds */}
+                    <AnimatePresence>
+                      {(hoveredVideo === item.id || showFullVideoOption[item.id] || videoStates[item.id]?.showFullOption) && (
+                        <motion.button
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: 10 }}
+                          transition={{ duration: 0.2 }}
+                          className="absolute top-4 left-4 bg-primary-700/70 px-3 py-2 rounded-md text-white hover:bg-primary-800 transition-all z-20 backdrop-blur-sm flex items-center space-x-1"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            openFullscreenVideo(e, item.videoUrl, item.id);
+                          }}
+                        >
+                          <FaExpand size={16} />
+                          <span className="text-sm font-medium">Full Video</span>
+                        </motion.button>
+                      )}
+                    </AnimatePresence>
+
+                    {/* Stopped Video Overlay */}
+                    {(stoppedVideos[item.id] || videoStates[item.id]?.stopped) && (
                       <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
@@ -547,7 +825,7 @@ const Portfolio = () => {
                           className="bg-primary-700 text-white px-6 py-3 rounded-lg flex items-center space-x-2 hover:bg-primary-800 transition-colors z-10 transform hover:scale-105"
                           onClick={(e) => {
                             e.stopPropagation();
-                            openFullscreenVideo(e, item.videoUrl);
+                            openFullscreenVideo(e, item.videoUrl, item.id);
                           }}
                           whileHover={{ scale: 1.05 }}
                           whileTap={{ scale: 0.95 }}

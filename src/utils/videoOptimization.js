@@ -67,6 +67,10 @@ export const OptimizedVideo = ({
       if (onError) onError(e);
     };
 
+    // Ensure proper muted state and volume
+    video.muted = muted;
+    video.volume = 1.0; // Set full volume by default
+
     video.addEventListener('loadeddata', handleLoadedData);
     video.addEventListener('error', handleError);
 
@@ -74,7 +78,7 @@ export const OptimizedVideo = ({
       video.removeEventListener('loadeddata', handleLoadedData);
       video.removeEventListener('error', handleError);
     };
-  }, [isVisible, onLoaded, onError]);
+  }, [isVisible, onLoaded, onError, muted]);
 
   // Handle adaptive playback quality based on network conditions
   useEffect(() => {
@@ -92,6 +96,19 @@ export const OptimizedVideo = ({
       }
     }
   }, [isVisible]);
+
+  // Additional effect to handle mute state changes
+  useEffect(() => {
+    if (!videoRef.current) return;
+    
+    const video = videoRef.current;
+    video.muted = muted;
+    
+    // Ensure volume is properly set
+    if (!muted) {
+      video.volume = 1.0;
+    }
+  }, [muted]);
 
   // Determine video source based on the format
   const getVideoSources = () => {

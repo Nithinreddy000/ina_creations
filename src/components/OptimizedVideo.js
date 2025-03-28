@@ -67,6 +67,10 @@ const OptimizedVideo = ({
       if (onError) onError(e);
     };
 
+    // Ensure proper initial muted state and volume
+    video.muted = muted;
+    video.volume = 1.0; // Set full volume by default
+
     video.addEventListener('loadeddata', handleLoadedData);
     video.addEventListener('error', handleError);
 
@@ -74,7 +78,7 @@ const OptimizedVideo = ({
       video.removeEventListener('loadeddata', handleLoadedData);
       video.removeEventListener('error', handleError);
     };
-  }, [isVisible, onLoaded, onError]);
+  }, [isVisible, onLoaded, onError, muted]);
 
   // Determine video quality based on device performance
   const videoQuality = shouldLoadHighQualityMedia() ? 'high' : 'low';

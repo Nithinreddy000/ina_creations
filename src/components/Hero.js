@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaArrowDown } from 'react-icons/fa';
+import { FaArrowDown, FaVolumeMute, FaVolumeUp } from 'react-icons/fa';
 import { Link } from 'react-scroll';
 import { useIsVisible } from '../hooks/useIsVisible';
 import backgroundVideo from '../assets/mainbackgroundvideo/main.mp4';
@@ -14,6 +14,9 @@ const placeholderImage = require('../assets/mainbackgroundvideo/placeholder.jpg'
 const Hero = () => {
   const [isVideoLoaded, setIsVideoLoaded] = useState(false);
   const [videoError, setVideoError] = useState(false);
+  const [shouldReduceMotion, setShouldReduceMotion] = useState(false);
+  const [isMuted, setIsMuted] = useState(true);
+  const [showVolumeControl, setShowVolumeControl] = useState(false);
   const videoRef = useRef(null);
   const { isVisible, targetRef } = useIsVisible({
     rootMargin: '100px',
@@ -25,17 +28,42 @@ const Hero = () => {
   
   // Get optimized animation settings based on device performance
   const { 
-    shouldReduceMotion,
     devicePerformance,
     getAnimationSettings,
     getStaggerAmount
   } = useOptimizedAnimations();
 
+  useEffect(() => {
+    // Check for prefers-reduced-motion
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    setShouldReduceMotion(prefersReducedMotion.matches);
+
+    // Listen for changes
+    const handleMotionPreferenceChange = (event) => {
+      setShouldReduceMotion(event.matches);
+    };
+
+    prefersReducedMotion.addEventListener('change', handleMotionPreferenceChange);
+
+    return () => {
+      prefersReducedMotion.removeEventListener('change', handleMotionPreferenceChange);
+    };
+  }, []);
+
   // Handle video loading
   const handleVideoLoaded = () => {
     setIsVideoLoaded(true);
-    // Notify the global loading system that this critical resource is loaded
-    resourceLoaded('hero_video');
+    
+    // Get the video reference after the component has rendered
+    const videoElement = document.querySelector('.hero-video-element');
+    if (videoElement) {
+      videoRef.current = videoElement;
+    }
+    
+    // Show volume control after video is loaded
+    setTimeout(() => {
+      setShowVolumeControl(true);
+    }, 1000);
   };
 
   const handleVideoError = () => {
@@ -43,6 +71,23 @@ const Hero = () => {
     setVideoError(true);
     // Still notify the loading system to avoid blocking the app
     resourceLoaded('hero_video');
+    setIsVideoLoaded(false);
+  };
+
+  const toggleMute = (e) => {
+    if (e) e.stopPropagation();
+    
+    if (videoRef.current) {
+      const newMutedState = !isMuted;
+      videoRef.current.muted = newMutedState;
+      
+      // Ensure proper volume when unmuting
+      if (!newMutedState) {
+        videoRef.current.volume = 1.0;
+      }
+      
+      setIsMuted(newMutedState);
+    }
   };
 
   return (
@@ -66,16 +111,35 @@ const Hero = () => {
           {!videoError && (
             <OptimizedVideo
               src={backgroundVideo}
-              className={`absolute top-0 left-0 w-full h-full object-cover transition-opacity duration-1000 ${isVideoLoaded ? 'opacity-100' : 'opacity-0'}`}
+              className={`absolute top-0 left-0 w-full h-full object-cover transition-opacity duration-1000 hero-video-element ${isVideoLoaded ? 'opacity-100' : 'opacity-0'}`}
               autoPlay
               loop
-              muted
+              muted={isMuted}
               playsInline
               preload="auto"
               onLoaded={handleVideoLoaded}
               onError={handleVideoError}
               priority={true} // Load video immediately for hero section
             />
+          )}
+        </AnimatePresence>
+
+        {/* Volume Control */}
+        <AnimatePresence>
+          {showVolumeControl && (
+            <motion.button
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="absolute bottom-24 right-8 bg-primary-900/50 p-3 rounded-full text-white hover:bg-primary-800/70 transition-all z-20 backdrop-blur-sm border border-white/10 shadow-lg"
+              onClick={toggleMute}
+            >
+              {isMuted ? 
+                <FaVolumeMute size={22} /> : 
+                <FaVolumeUp size={22} />
+              }
+            </motion.button>
           )}
         </AnimatePresence>
 
