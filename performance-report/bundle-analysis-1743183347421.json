@@ -1,0 +1,2647 @@
+{
+  "results": [
+    {
+      "bundleName": "build/static/js/132.c169fb99.chunk.js",
+      "totalBytes": 9969,
+      "mappedBytes": 9708,
+      "unmappedBytes": 214,
+      "eolBytes": 1,
+      "sourceMapCommentBytes": 46,
+      "files": {
+        "utils/videoOptimization.js": {
+          "size": 1520
+        },
+        "[no source]": {
+          "size": 19
+        },
+        "components/Hero.js": {
+          "size": 4329
+        },
+        "hooks/useIsVisible.js": {
+          "size": 501
+        },
+        "utils/animationOptimization.js": {
+          "size": 3339
+        },
+        "[sourceMappingURL]": {
+          "size": 46
+        },
+        "[unmapped]": {
+          "size": 214
+        },
+        "[EOLs]": {
+          "size": 1
+        }
+      }
+    },
+    {
+      "bundleName": "build/static/js/180.1270ebbc.chunk.js",
+      "totalBytes": 9140,
+      "mappedBytes": 8827,
+      "unmappedBytes": 266,
+      "eolBytes": 1,
+      "sourceMapCommentBytes": 46,
+      "files": {
+        "components/Team.js": {
+          "size": 8669
+        },
+        "[no source]": {
+          "size": 158
+        },
+        "[sourceMappingURL]": {
+          "size": 46
+        },
+        "[unmapped]": {
+          "size": 266
+        },
+        "[EOLs]": {
+          "size": 1
+        }
+      }
+    },
+    {
+      "bundleName": "build/static/js/253.9562f586.chunk.js",
+      "totalBytes": 2845,
+      "mappedBytes": 2620,
+      "unmappedBytes": 178,
+      "eolBytes": 1,
+      "sourceMapCommentBytes": 46,
+      "files": {
+        "components/Services.js": {
+          "size": 2615
+        },
+        "[no source]": {
+          "size": 5
+        },
+        "[sourceMappingURL]": {
+          "size": 46
+        },
+        "[unmapped]": {
+          "size": 178
+        },
+        "[EOLs]": {
+          "size": 1
+        }
+      }
+    },
+    {
+      "bundleName": "build/static/js/284.162aa235.chunk.js",
+      "totalBytes": 3369,
+      "mappedBytes": 3154,
+      "unmappedBytes": 168,
+      "eolBytes": 1,
+      "sourceMapCommentBytes": 46,
+      "files": {
+        "components/About.js": {
+          "size": 3149
+        },
+        "[no source]": {
+          "size": 5
+        },
+        "[sourceMappingURL]": {
+          "size": 46
+        },
+        "[unmapped]": {
+          "size": 168
+        },
+        "[EOLs]": {
+          "size": 1
+        }
+      }
+    },
+    {
+      "bundleName": "build/static/js/293.00eeb041.chunk.js",
+      "totalBytes": 4804,
+      "mappedBytes": 4461,
+      "unmappedBytes": 295,
+      "eolBytes": 2,
+      "sourceMapCommentBytes": 46,
+      "files": {
+        "components/AdminLogin.js": {
+          "size": 4422
+        },
+        "../node_modules/firebase/app/index.ts": {
+          "size": 39
+        },
+        "[sourceMappingURL]": {
+          "size": 46
+        },
+        "[unmapped]": {
+          "size": 295
+        },
+        "[EOLs]": {
+          "size": 2
+        }
+      }
+    },
+    {
+      "bundleName": "build/static/js/296.cfa92efc.chunk.js",
+      "totalBytes": 17257,
+      "mappedBytes": 17019,
+      "unmappedBytes": 191,
+      "eolBytes": 1,
+      "sourceMapCommentBytes": 46,
+      "files": {
+        "utils/cloudinary.js": {
+          "size": 1993
+        },
+        "[no source]": {
+          "size": 135
+        },
+        "components/AdminDashboard.js": {
+          "size": 12824
+        },
+        "utils/firebase.js": {
+          "size": 2067
+        },
+        "[sourceMappingURL]": {
+          "size": 46
+        },
+        "[unmapped]": {
+          "size": 191
+        },
+        "[EOLs]": {
+          "size": 1
+        }
+      }
+    },
+    {
+      "bundleName": "build/static/js/369.e94f094b.chunk.js",
+      "totalBytes": 12252,
+      "mappedBytes": 11846,
+      "unmappedBytes": 359,
+      "eolBytes": 1,
+      "sourceMapCommentBytes": 46,
+      "files": {
+        "../node_modules/react-icons/fa/index.esm.js": {
+          "size": 11841
+        },
+        "[no source]": {
+          "size": 5
+        },
+        "[sourceMappingURL]": {
+          "size": 46
+        },
+        "[unmapped]": {
+          "size": 359
+        },
+        "[EOLs]": {
+          "size": 1
+        }
+      }
+    },
+    {
+      "bundleName": "build/static/js/447.a253ee49.chunk.js",
+      "totalBytes": 22954,
+      "mappedBytes": 22687,
+      "unmappedBytes": 220,
+      "eolBytes": 1,
+      "sourceMapCommentBytes": 46,
+      "files": {
+        "components/OptimizedVideo.js": {
+          "size": 3436
+        },
+        "components/Portfolio.js": {
+          "size": 17092
+        },
+        "[no source]": {
+          "size": 92
+        },
+        "utils/firebase.js": {
+          "size": 2067
+        },
+        "[sourceMappingURL]": {
+          "size": 46
+        },
+        "[unmapped]": {
+          "size": 220
+        },
+        "[EOLs]": {
+          "size": 1
+        }
+      }
+    },
+    {
+      "bundleName": "build/static/js/453.34bc8f3b.chunk.js",
+      "totalBytes": 4525,
+      "mappedBytes": 4289,
+      "unmappedBytes": 189,
+      "eolBytes": 1,
+      "sourceMapCommentBytes": 46,
+      "files": {
+        "../node_modules/web-vitals/dist/web-vitals.js": {
+          "size": 4284
+        },
+        "[no source]": {
+          "size": 5
+        },
+        "[sourceMappingURL]": {
+          "size": 46
+        },
+        "[unmapped]": {
+          "size": 189
+        },
+        "[EOLs]": {
+          "size": 1
+        }
+      }
+    },
+    {
+      "bundleName": "build/static/js/506.5e3501ab.chunk.js",
+      "totalBytes": 9491,
+      "mappedBytes": 9273,
+      "unmappedBytes": 171,
+      "eolBytes": 1,
+      "sourceMapCommentBytes": 46,
+      "files": {
+        "../node_modules/@emailjs/browser/es/models/EmailJSResponseStatus.js": {
+          "size": 185
+        },
+        "../node_modules/@emailjs/browser/es/utils/createWebStorage/createWebStorage.js": {
+          "size": 214
+        },
+        "../node_modules/@emailjs/browser/es/store/store.js": {
+          "size": 73
+        },
+        "../node_modules/@emailjs/browser/es/utils/buildOptions/buildOptions.js": {
+          "size": 82
+        },
+        "../node_modules/@emailjs/browser/es/api/sendPost.js": {
+          "size": 214
+        },
+        "../node_modules/@emailjs/browser/es/utils/validateParams/validateParams.js": {
+          "size": 344
+        },
+        "../node_modules/@emailjs/browser/es/utils/isHeadless/isHeadless.js": {
+          "size": 55
+        },
+        "../node_modules/@emailjs/browser/es/errors/headlessError/headlessError.js": {
+          "size": 52
+        },
+        "../node_modules/@emailjs/browser/es/utils/isBlockedValueInParams/isBlockedValueInParams.js": {
+          "size": 212
+        },
+        "../node_modules/@emailjs/browser/es/utils/validateBlockListParams/validateBlockListParams.js": {
+          "size": 153
+        },
+        "../node_modules/@emailjs/browser/es/errors/blockedEmailError/blockedEmailError.js": {
+          "size": 29
+        },
+        "../node_modules/@emailjs/browser/es/utils/isLimitRateHit/isLimitRateHit.js": {
+          "size": 231
+        },
+        "../node_modules/@emailjs/browser/es/utils/validateLimitRateParams/validateLimitRateParams.js": {
+          "size": 175
+        },
+        "../node_modules/@emailjs/browser/es/errors/limitRateError/limitRateError.js": {
+          "size": 37
+        },
+        "../node_modules/@emailjs/browser/es/index.js": {
+          "size": 2
+        },
+        "../node_modules/@emailjs/browser/es/methods/send/send.js": {
+          "size": 532
+        },
+        "../node_modules/@emailjs/browser/es/utils/validateTemplateParams/validateTemplateParams.js": {
+          "size": 140
+        },
+        "[no source]": {
+          "size": 18
+        },
+        "components/Contact.js": {
+          "size": 6525
+        },
+        "[sourceMappingURL]": {
+          "size": 46
+        },
+        "[unmapped]": {
+          "size": 171
+        },
+        "[EOLs]": {
+          "size": 1
+        }
+      }
+    },
+    {
+      "bundleName": "build/static/js/788.c18ffa58.chunk.js",
+      "totalBytes": 503658,
+      "mappedBytes": 503485,
+      "unmappedBytes": 126,
+      "eolBytes": 1,
+      "sourceMapCommentBytes": 46,
+      "files": {
+        "../node_modules/hls.js/dist/src/polyfills/number.ts": {
+          "size": 200
+        },
+        "../node_modules/hls.js/dist/src/errors.ts": {
+          "size": 2668
+        },
+        "../node_modules/hls.js/dist/src/events.ts": {
+          "size": 3173
+        },
+        "../node_modules/hls.js/dist/src/types/loader.ts": {
+          "size": 92
+        },
+        "../node_modules/hls.js/dist/src/utils/ewma.ts": {
+          "size": 605
+        },
+        "../node_modules/hls.js/dist/src/utils/ewma-bandwidth-estimator.ts": {
+          "size": 1239
+        },
+        "[no source]": {
+          "size": 1720
+        },
+        "../node_modules/hls.js/dist/src/utils/logger.ts": {
+          "size": 882
+        },
+        "../node_modules/hls.js/dist/src/utils/mediasource-helper.ts": {
+          "size": 397
+        },
+        "../node_modules/hls.js/dist/node_modules/@svta/common-media-library/dist/utils/utf8ArrayToStr.js": {
+          "size": 595
+        },
+        "../node_modules/hls.js/dist/src/utils/hex.ts": {
+          "size": 118
+        },
+        "../node_modules/hls.js/dist/node_modules/url-toolkit/src/url-toolkit.js": {
+          "size": 1681
+        },
+        "../node_modules/hls.js/dist/src/loader/load-stats.ts": {
+          "size": 220
+        },
+        "../node_modules/hls.js/dist/src/loader/fragment.ts": {
+          "size": 4912
+        },
+        "../node_modules/hls.js/dist/src/utils/mp4-tools.ts": {
+          "size": 11303
+        },
+        "../node_modules/hls.js/dist/src/utils/codecs.ts": {
+          "size": 2776
+        },
+        "../node_modules/hls.js/dist/src/utils/mediacapabilities-helper.ts": {
+          "size": 2338
+        },
+        "../node_modules/hls.js/dist/src/types/level.ts": {
+          "size": 3043
+        },
+        "../node_modules/hls.js/dist/src/utils/hdr.ts": {
+          "size": 402
+        },
+        "../node_modules/hls.js/dist/src/utils/safe-json-stringify.ts": {
+          "size": 164
+        },
+        "../node_modules/hls.js/dist/src/utils/rendition-helper.ts": {
+          "size": 5124
+        },
+        "../node_modules/hls.js/dist/src/utils/binary-search.ts": {
+          "size": 159
+        },
+        "../node_modules/hls.js/dist/src/controller/fragment-finders.ts": {
+          "size": 1678
+        },
+        "../node_modules/hls.js/dist/src/utils/error-helper.ts": {
+          "size": 630
+        },
+        "../node_modules/hls.js/dist/src/controller/error-controller.ts": {
+          "size": 6412
+        },
+        "../node_modules/hls.js/dist/src/controller/fragment-tracker.ts": {
+          "size": 5671
+        },
+        "../node_modules/hls.js/dist/src/crypt/decrypter-aes-mode.ts": {
+          "size": 14
+        },
+        "../node_modules/hls.js/dist/src/crypt/aes-crypto.ts": {
+          "size": 392
+        },
+        "../node_modules/hls.js/dist/src/crypt/aes-decryptor.ts": {
+          "size": 3092
+        },
+        "../node_modules/hls.js/dist/src/crypt/fast-aes-key.ts": {
+          "size": 371
+        },
+        "../node_modules/hls.js/dist/src/crypt/decrypter.ts": {
+          "size": 2812
+        },
+        "../node_modules/hls.js/dist/src/loader/fragment-loader.ts": {
+          "size": 4218
+        },
+        "../node_modules/hls.js/dist/src/task-loop.ts": {
+          "size": 975
+        },
+        "../node_modules/hls.js/dist/src/types/transmuxer.ts": {
+          "size": 617
+        },
+        "../node_modules/hls.js/dist/src/utils/buffer-helper.ts": {
+          "size": 1188
+        },
+        "../node_modules/hls.js/dist/src/utils/variable-substitution.ts": {
+          "size": 1161
+        },
+        "../node_modules/hls.js/dist/src/utils/attr-list.ts": {
+          "size": 2008
+        },
+        "../node_modules/hls.js/dist/src/loader/date-range.ts": {
+          "size": 2477
+        },
+        "../node_modules/hls.js/dist/src/loader/level-details.ts": {
+          "size": 2801
+        },
+        "../node_modules/hls.js/dist/src/utils/encryption-methods-util.ts": {
+          "size": 221
+        },
+        "../node_modules/hls.js/dist/src/utils/numeric-encoding-utils.ts": {
+          "size": 68
+        },
+        "../node_modules/hls.js/dist/src/utils/utf8-utils.ts": {
+          "size": 92
+        },
+        "../node_modules/hls.js/dist/src/utils/keysystem-util.ts": {
+          "size": 414
+        },
+        "../node_modules/hls.js/dist/src/utils/global.ts": {
+          "size": 47
+        },
+        "../node_modules/hls.js/dist/src/utils/mediakeys-helper.ts": {
+          "size": 2251
+        },
+        "../node_modules/hls.js/dist/src/loader/level-key.ts": {
+          "size": 1883
+        },
+        "../node_modules/hls.js/dist/src/loader/m3u8-parser.ts": {
+          "size": 10072
+        },
+        "../node_modules/hls.js/dist/src/utils/level-helper.ts": {
+          "size": 5496
+        },
+        "../node_modules/hls.js/dist/src/utils/discontinuities.ts": {
+          "size": 1122
+        },
+        "../node_modules/hls.js/dist/src/utils/time-ranges.ts": {
+          "size": 132
+        },
+        "../node_modules/hls.js/dist/src/controller/base-stream-controller.ts": {
+          "size": 26913
+        },
+        "../node_modules/hls.js/dist/src/demux/chunk-cache.ts": {
+          "size": 404
+        },
+        "../node_modules/hls.js/dist/node_modules/eventemitter3/index.js": {
+          "size": 2709
+        },
+        "../node_modules/hls.js/dist/src/version.ts": {
+          "size": 17
+        },
+        "../node_modules/hls.js/dist/src/demux/inject-worker.ts": {
+          "size": 716
+        },
+        "../node_modules/hls.js/dist/node_modules/@svta/common-media-library/dist/id3/util/isId3Footer.js": {
+          "size": 148
+        },
+        "../node_modules/hls.js/dist/node_modules/@svta/common-media-library/dist/id3/util/isId3Header.js": {
+          "size": 148
+        },
+        "../node_modules/hls.js/dist/node_modules/@svta/common-media-library/dist/id3/util/readId3Size.js": {
+          "size": 104
+        },
+        "../node_modules/hls.js/dist/node_modules/@svta/common-media-library/dist/id3/getId3Data.js": {
+          "size": 126
+        },
+        "../node_modules/hls.js/dist/src/demux/audio/adts.ts": {
+          "size": 1726
+        },
+        "../node_modules/hls.js/dist/node_modules/@svta/common-media-library/dist/id3/canParseId3.js": {
+          "size": 58
+        },
+        "../node_modules/hls.js/dist/node_modules/@svta/common-media-library/dist/utils/roundToEven.js": {
+          "size": 174
+        },
+        "../node_modules/hls.js/dist/node_modules/@svta/common-media-library/dist/id3/util/utf8.js": {
+          "size": 546
+        },
+        "../node_modules/hls.js/dist/node_modules/@svta/common-media-library/dist/id3/util/decodeId3ImageFrame.js": {
+          "size": 506
+        },
+        "../node_modules/hls.js/dist/node_modules/@svta/common-media-library/dist/id3/util/toArrayBuffer.js": {
+          "size": 131
+        },
+        "../node_modules/hls.js/dist/node_modules/@svta/common-media-library/dist/id3/util/decodeId3Frame.js": {
+          "size": 87
+        },
+        "../node_modules/hls.js/dist/node_modules/@svta/common-media-library/dist/id3/util/decodeId3PrivFrame.js": {
+          "size": 138
+        },
+        "../node_modules/hls.js/dist/node_modules/@svta/common-media-library/dist/id3/util/decodeId3UrlFrame.js": {
+          "size": 221
+        },
+        "../node_modules/hls.js/dist/node_modules/@svta/common-media-library/dist/id3/util/decodeId3TextFrame.js": {
+          "size": 233
+        },
+        "../node_modules/hls.js/dist/node_modules/@svta/common-media-library/dist/id3/util/getId3FrameData.js": {
+          "size": 121
+        },
+        "../node_modules/hls.js/dist/node_modules/@svta/common-media-library/dist/id3/getId3Frames.js": {
+          "size": 206
+        },
+        "../node_modules/hls.js/dist/node_modules/@svta/common-media-library/dist/id3/isId3TimestampFrame.js": {
+          "size": 97
+        },
+        "../node_modules/hls.js/dist/node_modules/@svta/common-media-library/dist/id3/util/readId3Timestamp.js": {
+          "size": 172
+        },
+        "../node_modules/hls.js/dist/node_modules/@svta/common-media-library/dist/id3/getId3Timestamp.js": {
+          "size": 93
+        },
+        "../node_modules/hls.js/dist/src/types/demuxer.ts": {
+          "size": 166
+        },
+        "../node_modules/hls.js/dist/src/demux/dummy-demuxed-track.ts": {
+          "size": 211
+        },
+        "../node_modules/hls.js/dist/src/demux/audio/base-audio-demuxer.ts": {
+          "size": 1816
+        },
+        "../node_modules/hls.js/dist/src/demux/audio/mpegaudio.ts": {
+          "size": 1546
+        },
+        "../node_modules/hls.js/dist/src/demux/audio/dolby.ts": {
+          "size": 236
+        },
+        "../node_modules/hls.js/dist/src/demux/audio/ac3-demuxer.ts": {
+          "size": 1631
+        },
+        "../node_modules/hls.js/dist/src/demux/mp4demuxer.ts": {
+          "size": 2412
+        },
+        "../node_modules/hls.js/dist/src/demux/sample-aes.ts": {
+          "size": 1543
+        },
+        "../node_modules/hls.js/dist/src/demux/video/base-video-parser.ts": {
+          "size": 1155
+        },
+        "../node_modules/hls.js/dist/src/demux/video/exp-golomb.ts": {
+          "size": 1563
+        },
+        "../node_modules/hls.js/dist/src/demux/video/avc-video-parser.ts": {
+          "size": 2875
+        },
+        "../node_modules/hls.js/dist/src/demux/video/hevc-video-parser.ts": {
+          "size": 6869
+        },
+        "../node_modules/hls.js/dist/src/demux/tsdemuxer.ts": {
+          "size": 9426
+        },
+        "../node_modules/hls.js/dist/src/remux/aac-helper.ts": {
+          "size": 1176
+        },
+        "../node_modules/hls.js/dist/src/remux/mp4-generator.ts": {
+          "size": 9249
+        },
+        "../node_modules/hls.js/dist/src/utils/timescale-conversion.ts": {
+          "size": 497
+        },
+        "../node_modules/hls.js/dist/src/remux/mp4-remuxer.ts": {
+          "size": 10871
+        },
+        "../node_modules/hls.js/dist/src/demux/transmuxer.ts": {
+          "size": 5346
+        },
+        "../node_modules/hls.js/dist/src/remux/passthrough-remuxer.ts": {
+          "size": 2814
+        },
+        "../node_modules/hls.js/dist/src/demux/audio/aacdemuxer.ts": {
+          "size": 697
+        },
+        "../node_modules/hls.js/dist/src/demux/audio/mp3demuxer.ts": {
+          "size": 607
+        },
+        "../node_modules/hls.js/dist/src/demux/transmuxer-interface.ts": {
+          "size": 5421
+        },
+        "../node_modules/hls.js/dist/src/controller/base-playlist-controller.ts": {
+          "size": 4735
+        },
+        "../node_modules/hls.js/dist/src/utils/media-option-attributes.ts": {
+          "size": 473
+        },
+        "../node_modules/hls.js/dist/src/controller/buffer-operation-queue.ts": {
+          "size": 1996
+        },
+        "../node_modules/hls.js/dist/src/controller/buffer-controller.ts": {
+          "size": 25241
+        },
+        "../node_modules/hls.js/dist/src/controller/cap-level-controller.ts": {
+          "size": 4118
+        },
+        "../node_modules/hls.js/dist/node_modules/@svta/common-media-library/dist/cta/CmObjectType.js": {
+          "size": 107
+        },
+        "../node_modules/hls.js/dist/node_modules/@svta/common-media-library/dist/cmcd/CmcdObjectType.js": {
+          "size": 3
+        },
+        "../node_modules/hls.js/dist/node_modules/@svta/common-media-library/dist/cmcd/CmcdStreamingFormat.js": {
+          "size": 3
+        },
+        "../node_modules/hls.js/dist/node_modules/@svta/common-media-library/dist/cta/CmStreamingFormat.js": {
+          "size": 10
+        },
+        "../node_modules/hls.js/dist/node_modules/@svta/common-media-library/dist/cmcd/CmcdHeaderField.js": {
+          "size": 12
+        },
+        "../node_modules/hls.js/dist/node_modules/@svta/common-media-library/dist/cmcd/CMCD_OBJECT.js": {
+          "size": 14
+        },
+        "../node_modules/hls.js/dist/node_modules/@svta/common-media-library/dist/cmcd/CMCD_REQUEST.js": {
+          "size": 15
+        },
+        "../node_modules/hls.js/dist/node_modules/@svta/common-media-library/dist/cmcd/CMCD_SESSION.js": {
+          "size": 15
+        },
+        "../node_modules/hls.js/dist/node_modules/@svta/common-media-library/dist/cmcd/CMCD_STATUS.js": {
+          "size": 14
+        },
+        "../node_modules/hls.js/dist/node_modules/@svta/common-media-library/dist/cmcd/CmcdHeaderMap.js": {
+          "size": 127
+        },
+        "../node_modules/hls.js/dist/node_modules/@svta/common-media-library/dist/structuredfield/SfItem.js": {
+          "size": 116
+        },
+        "../node_modules/hls.js/dist/node_modules/@svta/common-media-library/dist/structuredfield/utils/throwError.js": {
+          "size": 222
+        },
+        "../node_modules/hls.js/dist/node_modules/@svta/common-media-library/dist/structuredfield/serialize/serializeError.js": {
+          "size": 48
+        },
+        "../node_modules/hls.js/dist/node_modules/@svta/common-media-library/dist/structuredfield/SfToken.js": {
+          "size": 44
+        },
+        "../node_modules/hls.js/dist/node_modules/@svta/common-media-library/dist/structuredfield/utils/BARE_ITEM.js": {
+          "size": 21
+        },
+        "../node_modules/hls.js/dist/node_modules/@svta/common-media-library/dist/structuredfield/serialize/serializeByteSequence.js": {
+          "size": 69
+        },
+        "../node_modules/hls.js/dist/node_modules/@svta/common-media-library/dist/structuredfield/utils/BYTES.js": {
+          "size": 17
+        },
+        "../node_modules/hls.js/dist/node_modules/@svta/common-media-library/dist/utils/base64encode.js": {
+          "size": 42
+        },
+        "../node_modules/hls.js/dist/node_modules/@svta/common-media-library/dist/structuredfield/serialize/serializeInteger.js": {
+          "size": 53
+        },
+        "../node_modules/hls.js/dist/node_modules/@svta/common-media-library/dist/structuredfield/utils/isInvalidInt.js": {
+          "size": 57
+        },
+        "../node_modules/hls.js/dist/node_modules/@svta/common-media-library/dist/structuredfield/utils/INTEGER.js": {
+          "size": 11
+        },
+        "../node_modules/hls.js/dist/node_modules/@svta/common-media-library/dist/structuredfield/serialize/serializeDecimal.js": {
+          "size": 145
+        },
+        "../node_modules/hls.js/dist/node_modules/@svta/common-media-library/dist/structuredfield/utils/DECIMAL.js": {
+          "size": 11
+        },
+        "../node_modules/hls.js/dist/node_modules/@svta/common-media-library/dist/structuredfield/utils/STRING.js": {
+          "size": 16
+        },
+        "../node_modules/hls.js/dist/node_modules/@svta/common-media-library/dist/structuredfield/utils/STRING_REGEX.js": {
+          "size": 22
+        },
+        "../node_modules/hls.js/dist/node_modules/@svta/common-media-library/dist/structuredfield/serialize/serializeToken.js": {
+          "size": 104
+        },
+        "../node_modules/hls.js/dist/node_modules/@svta/common-media-library/dist/cta/utils/symbolToStr.js": {
+          "size": 46
+        },
+        "../node_modules/hls.js/dist/node_modules/@svta/common-media-library/dist/structuredfield/utils/TOKEN.js": {
+          "size": 9
+        },
+        "../node_modules/hls.js/dist/node_modules/@svta/common-media-library/dist/structuredfield/serialize/serializeBareItem.js": {
+          "size": 324
+        },
+        "../node_modules/hls.js/dist/node_modules/@svta/common-media-library/dist/structuredfield/serialize/serializeString.js": {
+          "size": 94
+        },
+        "../node_modules/hls.js/dist/node_modules/@svta/common-media-library/dist/structuredfield/serialize/serializeBoolean.js": {
+          "size": 66
+        },
+        "../node_modules/hls.js/dist/node_modules/@svta/common-media-library/dist/structuredfield/utils/BOOLEAN.js": {
+          "size": 11
+        },
+        "../node_modules/hls.js/dist/node_modules/@svta/common-media-library/dist/structuredfield/serialize/serializeDate.js": {
+          "size": 44
+        },
+        "../node_modules/hls.js/dist/node_modules/@svta/common-media-library/dist/structuredfield/serialize/serializeKey.js": {
+          "size": 76
+        },
+        "../node_modules/hls.js/dist/node_modules/@svta/common-media-library/dist/structuredfield/utils/KEY.js": {
+          "size": 7
+        },
+        "../node_modules/hls.js/dist/node_modules/@svta/common-media-library/dist/structuredfield/serialize/serializeParams.js": {
+          "size": 129
+        },
+        "../node_modules/hls.js/dist/node_modules/@svta/common-media-library/dist/structuredfield/serialize/serializeItem.js": {
+          "size": 76
+        },
+        "../node_modules/hls.js/dist/node_modules/@svta/common-media-library/dist/structuredfield/serialize/serializeDict.js": {
+          "size": 423
+        },
+        "../node_modules/hls.js/dist/node_modules/@svta/common-media-library/dist/structuredfield/utils/DICT.js": {
+          "size": 8
+        },
+        "../node_modules/hls.js/dist/node_modules/@svta/common-media-library/dist/structuredfield/serialize/serializeInnerList.js": {
+          "size": 55
+        },
+        "../node_modules/hls.js/dist/node_modules/@svta/common-media-library/dist/cmcd/CmcdFormatters.js": {
+          "size": 188
+        },
+        "../node_modules/hls.js/dist/node_modules/@svta/common-media-library/dist/utils/urlToRelativePath.js": {
+          "size": 251
+        },
+        "../node_modules/hls.js/dist/node_modules/@svta/common-media-library/dist/cmcd/utils/processCmcd.js": {
+          "size": 384
+        },
+        "../node_modules/hls.js/dist/node_modules/@svta/common-media-library/dist/cta/utils/isValid.js": {
+          "size": 67
+        },
+        "../node_modules/hls.js/dist/node_modules/@svta/common-media-library/dist/cta/utils/isTokenField.js": {
+          "size": 47
+        },
+        "../node_modules/hls.js/dist/node_modules/@svta/common-media-library/dist/cmcd/encodeCmcd.js": {
+          "size": 122
+        },
+        "../node_modules/hls.js/dist/node_modules/@svta/common-media-library/dist/structuredfield/encodeSfDict.js": {
+          "size": 29
+        },
+        "../node_modules/hls.js/dist/node_modules/@svta/common-media-library/dist/cmcd/appendCmcdHeaders.js": {
+          "size": 37
+        },
+        "../node_modules/hls.js/dist/node_modules/@svta/common-media-library/dist/cmcd/toCmcdHeaders.js": {
+          "size": 474
+        },
+        "../node_modules/hls.js/dist/node_modules/@svta/common-media-library/dist/cmcd/appendCmcdQuery.js": {
+          "size": 161
+        },
+        "../node_modules/hls.js/dist/node_modules/@svta/common-media-library/dist/cmcd/toCmcdQuery.js": {
+          "size": 137
+        },
+        "../node_modules/hls.js/dist/src/controller/content-steering-controller.ts": {
+          "size": 7839
+        },
+        "../node_modules/hls.js/dist/src/controller/eme-controller.ts": {
+          "size": 19508
+        },
+        "../node_modules/hls.js/dist/src/utils/texttrack-utils.ts": {
+          "size": 1553
+        },
+        "../node_modules/hls.js/dist/src/utils/hash.ts": {
+          "size": 95
+        },
+        "../node_modules/hls.js/dist/src/loader/interstitial-event.ts": {
+          "size": 3898
+        },
+        "../node_modules/hls.js/dist/src/controller/interstitial-player.ts": {
+          "size": 3199
+        },
+        "../node_modules/hls.js/dist/src/controller/interstitials-schedule.ts": {
+          "size": 6618
+        },
+        "../node_modules/hls.js/dist/src/loader/interstitial-asset-list.ts": {
+          "size": 1499
+        },
+        "../node_modules/hls.js/dist/src/utils/event-listener-helper.ts": {
+          "size": 99
+        },
+        "../node_modules/hls.js/dist/src/controller/interstitials-controller.ts": {
+          "size": 35051
+        },
+        "../node_modules/hls.js/dist/src/controller/subtitle-stream-controller.ts": {
+          "size": 6170
+        },
+        "../node_modules/hls.js/dist/src/utils/cea-608-parser.ts": {
+          "size": 14031
+        },
+        "../node_modules/hls.js/dist/src/utils/vttcue.ts": {
+          "size": 3054
+        },
+        "../node_modules/hls.js/dist/src/utils/vttparser.ts": {
+          "size": 4320
+        },
+        "../node_modules/hls.js/dist/src/utils/webvtt-parser.ts": {
+          "size": 1668
+        },
+        "../node_modules/hls.js/dist/src/utils/imsc1-ttml-parser.ts": {
+          "size": 2661
+        },
+        "../node_modules/hls.js/dist/src/utils/output-filter.ts": {
+          "size": 569
+        },
+        "../node_modules/hls.js/dist/src/controller/timeline-controller.ts": {
+          "size": 9859
+        },
+        "../node_modules/hls.js/dist/src/utils/cues.ts": {
+          "size": 655
+        },
+        "../node_modules/hls.js/dist/src/utils/fetch-loader.ts": {
+          "size": 4009
+        },
+        "../node_modules/hls.js/dist/src/utils/xhr-loader.ts": {
+          "size": 4466
+        },
+        "../node_modules/hls.js/dist/src/config.ts": {
+          "size": 6019
+        },
+        "../node_modules/hls.js/dist/src/controller/abr-controller.ts": {
+          "size": 12520
+        },
+        "../node_modules/hls.js/dist/src/controller/fps-controller.ts": {
+          "size": 2015
+        },
+        "../node_modules/hls.js/dist/src/controller/subtitle-track-controller.ts": {
+          "size": 7607
+        },
+        "../node_modules/hls.js/dist/src/controller/audio-stream-controller.ts": {
+          "size": 13680
+        },
+        "../node_modules/hls.js/dist/src/controller/audio-track-controller.ts": {
+          "size": 5526
+        },
+        "../node_modules/hls.js/dist/src/controller/cmcd-controller.ts": {
+          "size": 4532
+        },
+        "../node_modules/hls.js/dist/src/controller/gap-controller.ts": {
+          "size": 7584
+        },
+        "../node_modules/hls.js/dist/src/controller/id3-track-controller.ts": {
+          "size": 5269
+        },
+        "../node_modules/hls.js/dist/src/controller/latency-controller.ts": {
+          "size": 4209
+        },
+        "../node_modules/hls.js/dist/src/controller/level-controller.ts": {
+          "size": 10180
+        },
+        "../node_modules/hls.js/dist/src/is-supported.ts": {
+          "size": 596
+        },
+        "../node_modules/hls.js/dist/src/controller/stream-controller.ts": {
+          "size": 20313
+        },
+        "../node_modules/hls.js/dist/src/loader/key-loader.ts": {
+          "size": 4158
+        },
+        "../node_modules/hls.js/dist/src/loader/playlist-loader.ts": {
+          "size": 8520
+        },
+        "../node_modules/hls.js/dist/src/hls.ts": {
+          "size": 12380
+        },
+        "../node_modules/hls.js/dist/node_modules/@svta/common-media-library/dist/utils/uuid.js": {
+          "size": 363
+        },
+        "[sourceMappingURL]": {
+          "size": 46
+        },
+        "[unmapped]": {
+          "size": 126
+        },
+        "[EOLs]": {
+          "size": 1
+        }
+      }
+    },
+    {
+      "bundleName": "build/static/js/805.b123e2ca.chunk.js",
+      "totalBytes": 602,
+      "mappedBytes": 415,
+      "unmappedBytes": 140,
+      "eolBytes": 1,
+      "sourceMapCommentBytes": 46,
+      "files": {
+        "../node_modules/react-icons/bi/index.esm.js": {
+          "size": 410
+        },
+        "[no source]": {
+          "size": 5
+        },
+        "[sourceMappingURL]": {
+          "size": 46
+        },
+        "[unmapped]": {
+          "size": 140
+        },
+        "[EOLs]": {
+          "size": 1
+        }
+      }
+    },
+    {
+      "bundleName": "build/static/js/834.62efabc4.chunk.js",
+      "totalBytes": 3483,
+      "mappedBytes": 3247,
+      "unmappedBytes": 189,
+      "eolBytes": 1,
+      "sourceMapCommentBytes": 46,
+      "files": {
+        "components/Footer.js": {
+          "size": 3242
+        },
+        "[no source]": {
+          "size": 5
+        },
+        "[sourceMappingURL]": {
+          "size": 46
+        },
+        "[unmapped]": {
+          "size": 189
+        },
+        "[EOLs]": {
+          "size": 1
+        }
+      }
+    },
+    {
+      "bundleName": "build/static/js/977.d7a3a0c7.chunk.js",
+      "totalBytes": 293005,
+      "mappedBytes": 292494,
+      "unmappedBytes": 463,
+      "eolBytes": 2,
+      "sourceMapCommentBytes": 46,
+      "files": {
+        "../node_modules/node_modules/closure-net/firebase/bloom_blob_es2018.js": {
+          "size": 10967
+        },
+        "../node_modules/node_modules/closure-net/firebase/webchannel_blob_es2018.js": {
+          "size": 41074
+        },
+        "../node_modules/@firebase/firestore/src/auth/user.ts": {
+          "size": 334
+        },
+        "../node_modules/@firebase/firestore/src/core/version.ts": {
+          "size": 32
+        },
+        "../node_modules/@firebase/firestore/src/util/log.ts": {
+          "size": 687
+        },
+        "../node_modules/@firebase/firestore/src/platform/browser/format_json.ts": {
+          "size": 38
+        },
+        "../node_modules/@firebase/firestore/src/util/assert.ts": {
+          "size": 216
+        },
+        "../node_modules/@firebase/firestore/src/util/error.ts": {
+          "size": 631
+        },
+        "../node_modules/@firebase/firestore/src/util/promise.ts": {
+          "size": 89
+        },
+        "../node_modules/@firebase/firestore/src/api/credentials.ts": {
+          "size": 4005
+        },
+        "../node_modules/@firebase/firestore/src/platform/browser/random_bytes.ts": {
+          "size": 230
+        },
+        "../node_modules/@firebase/firestore/src/util/misc.ts": {
+          "size": 379
+        },
+        "../node_modules/@firebase/firestore/src/lite-api/timestamp.ts": {
+          "size": 1149
+        },
+        "../node_modules/@firebase/firestore/src/core/snapshot_version.ts": {
+          "size": 473
+        },
+        "../node_modules/@firebase/firestore/src/model/path.ts": {
+          "size": 3308
+        },
+        "../node_modules/@firebase/firestore/src/model/document_key.ts": {
+          "size": 716
+        },
+        "../node_modules/@firebase/firestore/src/model/field_index.ts": {
+          "size": 1149
+        },
+        "../node_modules/@firebase/firestore/src/local/persistence_transaction.ts": {
+          "size": 314
+        },
+        "../node_modules/@firebase/firestore/src/local/local_store.ts": {
+          "size": 129
+        },
+        "../node_modules/@firebase/firestore/src/local/persistence_promise.ts": {
+          "size": 1646
+        },
+        "../node_modules/@firebase/firestore/src/local/simple_db.ts": {
+          "size": 6603
+        },
+        "../node_modules/@firebase/firestore/src/local/index_backfiller.ts": {
+          "size": 1567
+        },
+        "../node_modules/@firebase/firestore/src/core/listen_sequence.ts": {
+          "size": 283
+        },
+        "../node_modules/@firebase/firestore/src/util/types.ts": {
+          "size": 206
+        },
+        "../node_modules/@firebase/firestore/src/local/encoded_resource_path.ts": {
+          "size": 755
+        },
+        "../node_modules/@firebase/firestore/src/local/indexeddb_schema_legacy.ts": {
+          "size": 27
+        },
+        "../node_modules/@firebase/firestore/src/local/indexeddb_sentinels.ts": {
+          "size": 1736
+        },
+        "../node_modules/@firebase/firestore/src/local/indexeddb_transaction.ts": {
+          "size": 135
+        },
+        "../node_modules/@firebase/firestore/src/util/obj.ts": {
+          "size": 278
+        },
+        "../node_modules/@firebase/firestore/src/util/sorted_map.ts": {
+          "size": 5114
+        },
+        "../node_modules/@firebase/firestore/src/util/sorted_set.ts": {
+          "size": 1903
+        },
+        "../node_modules/@firebase/firestore/src/model/field_mask.ts": {
+          "size": 366
+        },
+        "../node_modules/@firebase/firestore/src/util/base64_decode_error.ts": {
+          "size": 88
+        },
+        "../node_modules/@firebase/firestore/src/util/byte_string.ts": {
+          "size": 763
+        },
+        "../node_modules/@firebase/firestore/src/platform/browser/base64.ts": {
+          "size": 160
+        },
+        "../node_modules/@firebase/firestore/src/model/normalize.ts": {
+          "size": 487
+        },
+        "../node_modules/@firebase/firestore/src/model/server_timestamps.ts": {
+          "size": 589
+        },
+        "../node_modules/@firebase/firestore/src/core/database_info.ts": {
+          "size": 687
+        },
+        "../node_modules/@firebase/firestore/src/model/values.ts": {
+          "size": 7744
+        },
+        "../node_modules/@firebase/firestore/src/model/object_value.ts": {
+          "size": 1347
+        },
+        "../node_modules/@firebase/firestore/src/model/document.ts": {
+          "size": 2081
+        },
+        "../node_modules/@firebase/firestore/src/core/bound.ts": {
+          "size": 652
+        },
+        "../node_modules/@firebase/firestore/src/core/order_by.ts": {
+          "size": 293
+        },
+        "../node_modules/@firebase/firestore/src/core/filter.ts": {
+          "size": 3638
+        },
+        "../node_modules/@firebase/firestore/src/core/target.ts": {
+          "size": 4716
+        },
+        "../node_modules/@firebase/firestore/src/core/query.ts": {
+          "size": 3494
+        },
+        "../node_modules/@firebase/firestore/src/util/obj_map.ts": {
+          "size": 799
+        },
+        "../node_modules/@firebase/firestore/src/model/collections.ts": {
+          "size": 674
+        },
+        "../node_modules/@firebase/firestore/src/remote/number_serializer.ts": {
+          "size": 279
+        },
+        "../node_modules/@firebase/firestore/src/model/transform_operation.ts": {
+          "size": 1155
+        },
+        "../node_modules/@firebase/firestore/src/model/mutation.ts": {
+          "size": 4064
+        },
+        "../node_modules/@firebase/firestore/src/model/mutation_batch.ts": {
+          "size": 1236
+        },
+        "../node_modules/@firebase/firestore/src/model/overlay.ts": {
+          "size": 281
+        },
+        "../node_modules/@firebase/firestore/src/remote/existence_filter.ts": {
+          "size": 62
+        },
+        "../node_modules/@firebase/firestore/src/remote/rpc_error.ts": {
+          "size": 2105
+        },
+        "../node_modules/@firebase/firestore/src/util/testing_hooks_spi.ts": {
+          "size": 12
+        },
+        "../node_modules/@firebase/firestore/src/platform/browser/text_serializer.ts": {
+          "size": 37
+        },
+        "../node_modules/@firebase/firestore/src/remote/bloom_filter.ts": {
+          "size": 1440
+        },
+        "../node_modules/@firebase/firestore/src/remote/remote_event.ts": {
+          "size": 571
+        },
+        "../node_modules/@firebase/firestore/src/remote/watch_change.ts": {
+          "size": 5315
+        },
+        "../node_modules/@firebase/firestore/src/remote/serializer.ts": {
+          "size": 10926
+        },
+        "../node_modules/@firebase/firestore/src/local/target_data.ts": {
+          "size": 1116
+        },
+        "../node_modules/@firebase/firestore/src/local/local_serializer.ts": {
+          "size": 4040
+        },
+        "../node_modules/@firebase/firestore/src/local/indexeddb_bundle_cache.ts": {
+          "size": 296
+        },
+        "../node_modules/@firebase/firestore/src/local/indexeddb_document_overlay_cache.ts": {
+          "size": 1340
+        },
+        "../node_modules/@firebase/firestore/src/local/indexeddb_globals_cache.ts": {
+          "size": 273
+        },
+        "../node_modules/@firebase/firestore/src/index/firestore_index_value_writer.ts": {
+          "size": 1531
+        },
+        "../node_modules/@firebase/firestore/src/index/ordered_code_writer.ts": {
+          "size": 2439
+        },
+        "../node_modules/@firebase/firestore/src/index/index_byte_encoder.ts": {
+          "size": 421
+        },
+        "../node_modules/@firebase/firestore/src/index/index_entry.ts": {
+          "size": 688
+        },
+        "../node_modules/@firebase/firestore/src/model/target_index_matcher.ts": {
+          "size": 1599
+        },
+        "../node_modules/@firebase/firestore/src/util/logic_utils.ts": {
+          "size": 1847
+        },
+        "../node_modules/@firebase/firestore/src/local/memory_index_manager.ts": {
+          "size": 1059
+        },
+        "../node_modules/@firebase/firestore/src/local/indexeddb_index_manager.ts": {
+          "size": 6971
+        },
+        "../node_modules/@firebase/firestore/src/local/lru_garbage_collector.ts": {
+          "size": 564
+        },
+        "../node_modules/@firebase/firestore/src/local/indexeddb_mutation_batch_impl.ts": {
+          "size": 511
+        },
+        "../node_modules/@firebase/firestore/src/local/indexeddb_mutation_queue.ts": {
+          "size": 4002
+        },
+        "../node_modules/@firebase/firestore/src/core/target_id_generator.ts": {
+          "size": 127
+        },
+        "../node_modules/@firebase/firestore/src/local/indexeddb_target_cache.ts": {
+          "size": 2928
+        },
+        "../node_modules/@firebase/firestore/src/local/lru_garbage_collector_impl.ts": {
+          "size": 2832
+        },
+        "../node_modules/@firebase/firestore/src/local/indexeddb_lru_delegate_impl.ts": {
+          "size": 1490
+        },
+        "../node_modules/@firebase/firestore/src/local/remote_document_change_buffer.ts": {
+          "size": 545
+        },
+        "../node_modules/@firebase/firestore/src/local/indexeddb_remote_document_cache.ts": {
+          "size": 4223
+        },
+        "../node_modules/@firebase/firestore/src/local/overlayed_document.ts": {
+          "size": 73
+        },
+        "../node_modules/@firebase/firestore/src/local/local_documents_view.ts": {
+          "size": 3969
+        },
+        "../node_modules/@firebase/firestore/src/local/memory_bundle_cache.ts": {
+          "size": 313
+        },
+        "../node_modules/@firebase/firestore/src/local/memory_document_overlay_cache.ts": {
+          "size": 1504
+        },
+        "../node_modules/@firebase/firestore/src/local/memory_globals_cache.ts": {
+          "size": 180
+        },
+        "../node_modules/@firebase/firestore/src/local/reference_set.ts": {
+          "size": 970
+        },
+        "../node_modules/@firebase/firestore/src/local/memory_mutation_queue.ts": {
+          "size": 2338
+        },
+        "../node_modules/@firebase/firestore/src/local/memory_remote_document_cache.ts": {
+          "size": 1563
+        },
+        "../node_modules/@firebase/firestore/src/local/memory_target_cache.ts": {
+          "size": 1795
+        },
+        "../node_modules/@firebase/firestore/src/local/memory_persistence.ts": {
+          "size": 4148
+        },
+        "../node_modules/@firebase/firestore/src/local/indexeddb_schema_converter.ts": {
+          "size": 4836
+        },
+        "../node_modules/@firebase/firestore/src/local/indexeddb_persistence.ts": {
+          "size": 7739
+        },
+        "../node_modules/@firebase/firestore/src/local/indexeddb_schema.ts": {
+          "size": 65
+        },
+        "../node_modules/@firebase/firestore/src/local/local_view_changes.ts": {
+          "size": 251
+        },
+        "../node_modules/@firebase/firestore/src/local/query_context.ts": {
+          "size": 162
+        },
+        "../node_modules/@firebase/firestore/src/local/query_engine.ts": {
+          "size": 2387
+        },
+        "../node_modules/@firebase/firestore/src/local/local_store_impl.ts": {
+          "size": 7838
+        },
+        "../node_modules/@firebase/firestore/src/local/shared_client_state.ts": {
+          "size": 1011
+        },
+        "../node_modules/@firebase/firestore/src/remote/connectivity_monitor_noop.ts": {
+          "size": 29
+        },
+        "../node_modules/@firebase/firestore/src/platform/browser/connectivity_monitor.ts": {
+          "size": 613
+        },
+        "../node_modules/@firebase/firestore/src/util/debug_uid.ts": {
+          "size": 119
+        },
+        "../node_modules/@firebase/firestore/src/remote/rest_connection.ts": {
+          "size": 1202
+        },
+        "../node_modules/@firebase/firestore/src/remote/stream_bridge.ts": {
+          "size": 223
+        },
+        "../node_modules/@firebase/firestore/src/platform/browser/webchannel_connection.ts": {
+          "size": 3250
+        },
+        "../node_modules/@firebase/firestore/src/platform/browser/dom.ts": {
+          "size": 122
+        },
+        "../node_modules/@firebase/firestore/src/platform/browser/serializer.ts": {
+          "size": 35
+        },
+        "../node_modules/@firebase/firestore/src/remote/backoff.ts": {
+          "size": 929
+        },
+        "../node_modules/@firebase/firestore/src/remote/persistent_stream.ts": {
+          "size": 3568
+        },
+        "../node_modules/@firebase/firestore/src/remote/datastore.ts": {
+          "size": 1309
+        },
+        "../node_modules/@firebase/firestore/src/remote/online_state_tracker.ts": {
+          "size": 1016
+        },
+        "../node_modules/@firebase/firestore/src/remote/remote_store.ts": {
+          "size": 4826
+        },
+        "../node_modules/@firebase/firestore/src/util/async_queue.ts": {
+          "size": 1029
+        },
+        "../node_modules/@firebase/firestore/src/model/document_set.ts": {
+          "size": 1271
+        },
+        "../node_modules/@firebase/firestore/src/core/view_snapshot.ts": {
+          "size": 1497
+        },
+        "../node_modules/@firebase/firestore/src/core/event_manager.ts": {
+          "size": 2783
+        },
+        "../node_modules/@firebase/firestore/src/core/view.ts": {
+          "size": 2736
+        },
+        "../node_modules/@firebase/firestore/src/core/sync_engine_impl.ts": {
+          "size": 7166
+        },
+        "../node_modules/@firebase/firestore/src/core/component_provider.ts": {
+          "size": 3317
+        },
+        "../node_modules/@firebase/firestore/src/platform/browser/connection.ts": {
+          "size": 51
+        },
+        "../node_modules/@firebase/firestore/src/util/async_observer.ts": {
+          "size": 320
+        },
+        "../node_modules/@firebase/firestore/src/core/firestore_client.ts": {
+          "size": 3996
+        },
+        "../node_modules/@firebase/firestore/src/api/long_polling_options.ts": {
+          "size": 156
+        },
+        "../node_modules/@firebase/firestore/src/lite-api/components.ts": {
+          "size": 299
+        },
+        "../node_modules/@firebase/firestore/src/util/input_validation.ts": {
+          "size": 1499
+        },
+        "../node_modules/@firebase/firestore/src/lite-api/settings.ts": {
+          "size": 2137
+        },
+        "../node_modules/@firebase/firestore/src/lite-api/database.ts": {
+          "size": 2263
+        },
+        "../node_modules/@firebase/firestore/src/lite-api/reference.ts": {
+          "size": 1932
+        },
+        "../node_modules/@firebase/firestore/src/util/async_queue_impl.ts": {
+          "size": 2107
+        },
+        "../node_modules/@firebase/firestore/src/api/database.ts": {
+          "size": 2073
+        },
+        "../node_modules/@firebase/firestore/src/lite-api/bytes.ts": {
+          "size": 478
+        },
+        "../node_modules/@firebase/firestore/src/lite-api/field_path.ts": {
+          "size": 339
+        },
+        "../node_modules/@firebase/firestore/src/lite-api/field_value.ts": {
+          "size": 44
+        },
+        "../node_modules/@firebase/firestore/src/lite-api/geo_point.ts": {
+          "size": 545
+        },
+        "../node_modules/@firebase/firestore/src/lite-api/vector_value.ts": {
+          "size": 142
+        },
+        "../node_modules/@firebase/firestore/src/util/array.ts": {
+          "size": 107
+        },
+        "../node_modules/@firebase/firestore/src/lite-api/user_data_reader.ts": {
+          "size": 5812
+        },
+        "../node_modules/@firebase/firestore/src/lite-api/snapshot.ts": {
+          "size": 812
+        },
+        "../node_modules/@firebase/firestore/src/lite-api/query.ts": {
+          "size": 168
+        },
+        "../node_modules/@firebase/firestore/src/lite-api/user_data_writer.ts": {
+          "size": 1834
+        },
+        "../node_modules/@firebase/firestore/src/lite-api/reference_impl.ts": {
+          "size": 104
+        },
+        "../node_modules/@firebase/firestore/src/api/snapshot.ts": {
+          "size": 2815
+        },
+        "../node_modules/@firebase/firestore/src/api/reference_impl.ts": {
+          "size": 647
+        },
+        "../node_modules/@firebase/firestore/src/api/persistent_cache_index_manager.ts": {
+          "size": 13
+        },
+        "../node_modules/@firebase/firestore/src/register.ts": {
+          "size": 504
+        },
+        "../node_modules/firebase/app/index.ts": {
+          "size": 39
+        },
+        "[sourceMappingURL]": {
+          "size": 46
+        },
+        "[unmapped]": {
+          "size": 463
+        },
+        "[EOLs]": {
+          "size": 2
+        }
+      }
+    },
+    {
+      "bundleName": "build/static/js/main.8ed2d262.js",
+      "totalBytes": 453750,
+      "mappedBytes": 453566,
+      "unmappedBytes": 141,
+      "eolBytes": 2,
+      "sourceMapCommentBytes": 41,
+      "files": {
+        "../node_modules/framer-motion/dist/es/utils/use-isomorphic-effect.mjs": {
+          "size": 63
+        },
+        "../node_modules/lodash.throttle/index.js": {
+          "size": 1883
+        },
+        "../node_modules/@firebase/logger/src/logger.ts": {
+          "size": 2158
+        },
+        "../node_modules/react/jsx-runtime.js": {
+          "size": 137
+        },
+        "../node_modules/react/cjs/react-jsx-runtime.production.min.js": {
+          "size": 627
+        },
+        "../node_modules/framer-motion/dist/es/context/MotionConfigContext.mjs": {
+          "size": 89
+        },
+        "../node_modules/framer-motion/dist/es/context/MotionContext/index.mjs": {
+          "size": 49
+        },
+        "../node_modules/framer-motion/dist/es/context/LazyContext.mjs": {
+          "size": 41
+        },
+        "../node_modules/framer-motion/dist/es/render/dom/utils/camel-to-dash.mjs": {
+          "size": 56
+        },
+        "../node_modules/framer-motion/dist/es/animation/optimized-appear/data-id.mjs": {
+          "size": 30
+        },
+        "../node_modules/framer-motion/dist/es/utils/is-ref-object.mjs": {
+          "size": 95
+        },
+        "../node_modules/framer-motion/dist/es/render/utils/is-variant-label.mjs": {
+          "size": 58
+        },
+        "../node_modules/framer-motion/dist/es/animation/utils/is-animation-controls.mjs": {
+          "size": 80
+        },
+        "../node_modules/framer-motion/dist/es/render/utils/variant-props.mjs": {
+          "size": 109
+        },
+        "../node_modules/framer-motion/dist/es/render/utils/is-controlling-variants.mjs": {
+          "size": 103
+        },
+        "../node_modules/framer-motion/dist/es/context/MotionContext/create.mjs": {
+          "size": 180
+        },
+        "../node_modules/framer-motion/dist/es/context/MotionContext/utils.mjs": {
+          "size": 138
+        },
+        "../node_modules/framer-motion/dist/es/motion/features/definitions.mjs": {
+          "size": 516
+        },
+        "../node_modules/framer-motion/dist/es/context/SwitchLayoutGroupContext.mjs": {
+          "size": 32
+        },
+        "../node_modules/framer-motion/dist/es/motion/utils/symbol.mjs": {
+          "size": 38
+        },
+        "../node_modules/framer-motion/dist/es/motion/index.mjs": {
+          "size": 683
+        },
+        "../node_modules/framer-motion/dist/es/motion/features/load-features.mjs": {
+          "size": 52
+        },
+        "../node_modules/framer-motion/dist/es/motion/utils/use-visual-element.mjs": {
+          "size": 722
+        },
+        "../node_modules/framer-motion/dist/es/motion/utils/use-motion-ref.mjs": {
+          "size": 157
+        },
+        "../node_modules/framer-motion/dist/es/render/dom/motion-proxy.mjs": {
+          "size": 224
+        },
+        "../node_modules/framer-motion/dist/es/render/svg/lowercase-elements.mjs": {
+          "size": 212
+        },
+        "../node_modules/framer-motion/dist/es/render/dom/utils/is-svg-component.mjs": {
+          "size": 96
+        },
+        "../node_modules/framer-motion/dist/es/projection/styles/scale-correction.mjs": {
+          "size": 38
+        },
+        "../node_modules/framer-motion/dist/es/render/html/utils/transform.mjs": {
+          "size": 185
+        },
+        "../node_modules/framer-motion/dist/es/motion/utils/is-forced-motion-value.mjs": {
+          "size": 125
+        },
+        "../node_modules/framer-motion/dist/es/value/utils/is-motion-value.mjs": {
+          "size": 37
+        },
+        "../node_modules/framer-motion/dist/es/render/html/utils/build-transform.mjs": {
+          "size": 341
+        },
+        "../node_modules/framer-motion/dist/es/render/dom/utils/is-css-variable.mjs": {
+          "size": 155
+        },
+        "../node_modules/framer-motion/dist/es/render/dom/value-types/get-as-type.mjs": {
+          "size": 49
+        },
+        "../node_modules/framer-motion/dist/es/utils/clamp.mjs": {
+          "size": 37
+        },
+        "../node_modules/framer-motion/dist/es/value/types/numbers/index.mjs": {
+          "size": 114
+        },
+        "../node_modules/framer-motion/dist/es/value/types/utils.mjs": {
+          "size": 285
+        },
+        "../node_modules/framer-motion/dist/es/value/types/numbers/units.mjs": {
+          "size": 228
+        },
+        "../node_modules/framer-motion/dist/es/render/dom/value-types/type-int.mjs": {
+          "size": 31
+        },
+        "../node_modules/framer-motion/dist/es/render/dom/value-types/number.mjs": {
+          "size": 753
+        },
+        "../node_modules/framer-motion/dist/es/render/html/utils/build-styles.mjs": {
+          "size": 470
+        },
+        "../node_modules/framer-motion/dist/es/render/html/utils/create-render-state.mjs": {
+          "size": 215
+        },
+        "../node_modules/framer-motion/dist/es/render/html/use-props.mjs": {
+          "size": 657
+        },
+        "../node_modules/framer-motion/dist/es/motion/utils/valid-prop.mjs": {
+          "size": 650
+        },
+        "../node_modules/framer-motion/dist/es/render/dom/utils/filter-props.mjs": {
+          "size": 307
+        },
+        "../node_modules/framer-motion/dist/es/render/svg/utils/transform-origin.mjs": {
+          "size": 134
+        },
+        "../node_modules/framer-motion/dist/es/render/svg/utils/path.mjs": {
+          "size": 440
+        },
+        "../node_modules/framer-motion/dist/es/render/svg/utils/build-attrs.mjs": {
+          "size": 523
+        },
+        "../node_modules/framer-motion/dist/es/render/svg/utils/create-render-state.mjs": {
+          "size": 37
+        },
+        "../node_modules/framer-motion/dist/es/render/svg/utils/is-svg-tag.mjs": {
+          "size": 51
+        },
+        "../node_modules/framer-motion/dist/es/render/svg/use-props.mjs": {
+          "size": 243
+        },
+        "../node_modules/framer-motion/dist/es/render/dom/use-render.mjs": {
+          "size": 301
+        },
+        "../node_modules/framer-motion/dist/es/render/html/utils/render.mjs": {
+          "size": 141
+        },
+        "../node_modules/framer-motion/dist/es/render/svg/utils/camel-case-attrs.mjs": {
+          "size": 361
+        },
+        "../node_modules/framer-motion/dist/es/render/svg/utils/render.mjs": {
+          "size": 105
+        },
+        "../node_modules/framer-motion/dist/es/render/html/utils/scrape-motion-values.mjs": {
+          "size": 120
+        },
+        "../node_modules/framer-motion/dist/es/render/svg/utils/scrape-motion-values.mjs": {
+          "size": 156
+        },
+        "../node_modules/framer-motion/dist/es/render/utils/resolve-variants.mjs": {
+          "size": 329
+        },
+        "../node_modules/framer-motion/dist/es/animation/utils/is-keyframes-target.mjs": {
+          "size": 29
+        },
+        "../node_modules/framer-motion/dist/es/value/utils/resolve-motion-value.mjs": {
+          "size": 62
+        },
+        "../node_modules/framer-motion/dist/es/utils/resolve-value.mjs": {
+          "size": 90
+        },
+        "../node_modules/framer-motion/dist/es/motion/utils/use-visual-state.mjs": {
+          "size": 824
+        },
+        "../node_modules/framer-motion/dist/es/render/svg/config-motion.mjs": {
+          "size": 398
+        },
+        "../node_modules/framer-motion/dist/es/render/html/config-motion.mjs": {
+          "size": 78
+        },
+        "../node_modules/framer-motion/dist/es/events/add-dom-event.mjs": {
+          "size": 157
+        },
+        "../node_modules/framer-motion/dist/es/events/utils/is-primary-pointer.mjs": {
+          "size": 93
+        },
+        "../node_modules/framer-motion/dist/es/events/event-info.mjs": {
+          "size": 146
+        },
+        "../node_modules/framer-motion/dist/es/events/add-pointer-event.mjs": {
+          "size": 42
+        },
+        "../node_modules/framer-motion/dist/es/utils/pipe.mjs": {
+          "size": 134
+        },
+        "../node_modules/framer-motion/dist/es/gestures/drag/utils/lock.mjs": {
+          "size": 320
+        },
+        "../node_modules/framer-motion/dist/es/motion/features/Feature.mjs": {
+          "size": 65
+        },
+        "../node_modules/framer-motion/dist/es/gestures/hover.mjs": {
+          "size": 409
+        },
+        "../node_modules/framer-motion/dist/es/gestures/utils/is-node-or-child.mjs": {
+          "size": 67
+        },
+        "../node_modules/framer-motion/dist/es/gestures/press.mjs": {
+          "size": 2119
+        },
+        "../node_modules/framer-motion/dist/es/motion/features/viewport/observers.mjs": {
+          "size": 377
+        },
+        "../node_modules/framer-motion/dist/es/motion/features/viewport/index.mjs": {
+          "size": 976
+        },
+        "../node_modules/framer-motion/dist/es/motion/features/gestures.mjs": {
+          "size": 69
+        },
+        "../node_modules/framer-motion/dist/es/gestures/focus.mjs": {
+          "size": 511
+        },
+        "../node_modules/framer-motion/dist/es/utils/shallow-compare.mjs": {
+          "size": 142
+        },
+        "../node_modules/framer-motion/dist/es/render/utils/resolve-dynamic-variants.mjs": {
+          "size": 252
+        },
+        "../node_modules/framer-motion/dist/es/utils/time-conversion.mjs": {
+          "size": 30
+        },
+        "../node_modules/framer-motion/dist/es/utils/use-instant-transition-state.mjs": {
+          "size": 6
+        },
+        "../node_modules/framer-motion/dist/es/easing/utils/is-bezier-definition.mjs": {
+          "size": 47
+        },
+        "../node_modules/framer-motion/dist/es/animation/animators/waapi/easing.mjs": {
+          "size": 451
+        },
+        "../node_modules/framer-motion/dist/es/easing/cubic-bezier.mjs": {
+          "size": 278
+        },
+        "../node_modules/framer-motion/dist/es/easing/ease.mjs": {
+          "size": 59
+        },
+        "../node_modules/framer-motion/dist/es/easing/modifiers/mirror.mjs": {
+          "size": 41
+        },
+        "../node_modules/framer-motion/dist/es/easing/modifiers/reverse.mjs": {
+          "size": 18
+        },
+        "../node_modules/framer-motion/dist/es/easing/circ.mjs": {
+          "size": 51
+        },
+        "../node_modules/framer-motion/dist/es/easing/back.mjs": {
+          "size": 44
+        },
+        "../node_modules/framer-motion/dist/es/easing/utils/map.mjs": {
+          "size": 365
+        },
+        "../node_modules/framer-motion/dist/es/easing/anticipate.mjs": {
+          "size": 51
+        },
+        "../node_modules/framer-motion/dist/es/value/types/color/utils.mjs": {
+          "size": 257
+        },
+        "../node_modules/framer-motion/dist/es/value/types/color/rgba.mjs": {
+          "size": 263
+        },
+        "../node_modules/framer-motion/dist/es/value/types/color/hex.mjs": {
+          "size": 375
+        },
+        "../node_modules/framer-motion/dist/es/value/types/color/hsla.mjs": {
+          "size": 231
+        },
+        "../node_modules/framer-motion/dist/es/value/types/color/index.mjs": {
+          "size": 191
+        },
+        "../node_modules/framer-motion/dist/es/utils/mix.mjs": {
+          "size": 23
+        },
+        "../node_modules/framer-motion/dist/es/utils/hsla-to-rgba.mjs": {
+          "size": 381
+        },
+        "../node_modules/framer-motion/dist/es/utils/mix-color.mjs": {
+          "size": 474
+        },
+        "../node_modules/framer-motion/dist/es/value/types/complex/index.mjs": {
+          "size": 1102
+        },
+        "../node_modules/framer-motion/dist/es/utils/mix-complex.mjs": {
+          "size": 818
+        },
+        "../node_modules/framer-motion/dist/es/utils/progress.mjs": {
+          "size": 49
+        },
+        "../node_modules/framer-motion/dist/es/utils/interpolate.mjs": {
+          "size": 752
+        },
+        "../node_modules/framer-motion/dist/es/utils/offsets/default.mjs": {
+          "size": 51
+        },
+        "../node_modules/framer-motion/dist/es/utils/offsets/fill.mjs": {
+          "size": 95
+        },
+        "../node_modules/framer-motion/dist/es/animation/generators/keyframes.mjs": {
+          "size": 324
+        },
+        "../node_modules/framer-motion/dist/es/easing/utils/is-easing-array.mjs": {
+          "size": 45
+        },
+        "../node_modules/framer-motion/dist/es/utils/offsets/time.mjs": {
+          "size": 37
+        },
+        "../node_modules/framer-motion/dist/es/utils/velocity-per-second.mjs": {
+          "size": 38
+        },
+        "../node_modules/framer-motion/dist/es/animation/generators/utils/velocity.mjs": {
+          "size": 65
+        },
+        "../node_modules/framer-motion/dist/es/animation/generators/spring/find.mjs": {
+          "size": 768
+        },
+        "../node_modules/framer-motion/dist/es/animation/generators/spring/index.mjs": {
+          "size": 1144
+        },
+        "../node_modules/framer-motion/dist/es/animation/generators/inertia.mjs": {
+          "size": 759
+        },
+        "../node_modules/framer-motion/dist/es/animation/animators/js/driver-frameloop.mjs": {
+          "size": 178
+        },
+        "../node_modules/framer-motion/dist/es/animation/generators/utils/calc-duration.mjs": {
+          "size": 98
+        },
+        "../node_modules/framer-motion/dist/es/animation/animators/js/index.mjs": {
+          "size": 2023
+        },
+        "../node_modules/framer-motion/dist/es/animation/animators/waapi/create-accelerated-animation.mjs": {
+          "size": 1354
+        },
+        "../node_modules/framer-motion/dist/es/utils/memo.mjs": {
+          "size": 52
+        },
+        "../node_modules/framer-motion/dist/es/animation/animators/waapi/index.mjs": {
+          "size": 371
+        },
+        "../node_modules/framer-motion/dist/es/animation/animators/waapi/utils/get-final-keyframe.mjs": {
+          "size": 96
+        },
+        "../node_modules/framer-motion/dist/es/animation/utils/default-transitions.mjs": {
+          "size": 320
+        },
+        "../node_modules/framer-motion/dist/es/animation/utils/is-animatable.mjs": {
+          "size": 136
+        },
+        "../node_modules/framer-motion/dist/es/value/types/complex/filter.mjs": {
+          "size": 374
+        },
+        "../node_modules/framer-motion/dist/es/render/dom/value-types/defaults.mjs": {
+          "size": 204
+        },
+        "../node_modules/framer-motion/dist/es/render/dom/value-types/animatable-none.mjs": {
+          "size": 101
+        },
+        "../node_modules/framer-motion/dist/es/utils/is-zero-value-string.mjs": {
+          "size": 33
+        },
+        "../node_modules/framer-motion/dist/es/animation/utils/is-none.mjs": {
+          "size": 90
+        },
+        "../node_modules/framer-motion/dist/es/animation/utils/transitions.mjs": {
+          "size": 218
+        },
+        "../node_modules/framer-motion/dist/es/utils/GlobalConfig.mjs": {
+          "size": 12
+        },
+        "../node_modules/framer-motion/dist/es/animation/interfaces/motion-value.mjs": {
+          "size": 915
+        },
+        "../node_modules/framer-motion/dist/es/animation/utils/keyframes.mjs": {
+          "size": 343
+        },
+        "../node_modules/framer-motion/dist/es/animation/animators/instant.mjs": {
+          "size": 288
+        },
+        "../node_modules/framer-motion/dist/es/value/use-will-change/is.mjs": {
+          "size": 43
+        },
+        "../node_modules/framer-motion/dist/es/utils/is-numerical-string.mjs": {
+          "size": 37
+        },
+        "../node_modules/framer-motion/dist/es/utils/array.mjs": {
+          "size": 104
+        },
+        "../node_modules/framer-motion/dist/es/utils/subscription-manager.mjs": {
+          "size": 353
+        },
+        "../node_modules/framer-motion/dist/es/value/index.mjs": {
+          "size": 2529
+        },
+        "../node_modules/framer-motion/dist/es/render/dom/value-types/test.mjs": {
+          "size": 25
+        },
+        "../node_modules/framer-motion/dist/es/render/dom/value-types/dimensions.mjs": {
+          "size": 40
+        },
+        "../node_modules/framer-motion/dist/es/render/dom/value-types/type-auto.mjs": {
+          "size": 33
+        },
+        "../node_modules/framer-motion/dist/es/render/dom/value-types/find.mjs": {
+          "size": 41
+        },
+        "../node_modules/framer-motion/dist/es/render/utils/setters.mjs": {
+          "size": 882
+        },
+        "../node_modules/framer-motion/dist/es/animation/interfaces/visual-element-target.mjs": {
+          "size": 1134
+        },
+        "../node_modules/framer-motion/dist/es/animation/interfaces/visual-element-variant.mjs": {
+          "size": 1301
+        },
+        "../node_modules/framer-motion/dist/es/render/utils/animation-state.mjs": {
+          "size": 2210
+        },
+        "../node_modules/framer-motion/dist/es/animation/interfaces/visual-element.mjs": {
+          "size": 349
+        },
+        "../node_modules/framer-motion/dist/es/motion/features/animation/exit.mjs": {
+          "size": 527
+        },
+        "../node_modules/framer-motion/dist/es/motion/features/animations.mjs": {
+          "size": 43
+        },
+        "../node_modules/framer-motion/dist/es/motion/features/animation/index.mjs": {
+          "size": 417
+        },
+        "../node_modules/framer-motion/dist/es/utils/distance.mjs": {
+          "size": 100
+        },
+        "../node_modules/framer-motion/dist/es/gestures/pan/PanSession.mjs": {
+          "size": 2292
+        },
+        "../node_modules/framer-motion/dist/es/projection/geometry/delta-calc.mjs": {
+          "size": 807
+        },
+        "../node_modules/framer-motion/dist/es/gestures/drag/utils/constraints.mjs": {
+          "size": 992
+        },
+        "../node_modules/framer-motion/dist/es/projection/utils/each-axis.mjs": {
+          "size": 37
+        },
+        "../node_modules/framer-motion/dist/es/projection/geometry/conversion.mjs": {
+          "size": 306
+        },
+        "../node_modules/framer-motion/dist/es/projection/utils/has-transform.mjs": {
+          "size": 262
+        },
+        "../node_modules/framer-motion/dist/es/projection/geometry/delta-apply.mjs": {
+          "size": 1274
+        },
+        "../node_modules/framer-motion/dist/es/projection/utils/measure.mjs": {
+          "size": 155
+        },
+        "../node_modules/framer-motion/dist/es/utils/get-context-window.mjs": {
+          "size": 73
+        },
+        "../node_modules/framer-motion/dist/es/gestures/drag/VisualElementDragControls.mjs": {
+          "size": 7018
+        },
+        "../node_modules/framer-motion/dist/es/projection/geometry/models.mjs": {
+          "size": 1257
+        },
+        "../node_modules/framer-motion/dist/es/gestures/pan/index.mjs": {
+          "size": 761
+        },
+        "../node_modules/framer-motion/dist/es/projection/node/state.mjs": {
+          "size": 55
+        },
+        "../node_modules/framer-motion/dist/es/projection/styles/scale-border-radius.mjs": {
+          "size": 224
+        },
+        "../node_modules/framer-motion/dist/es/projection/styles/scale-box-shadow.mjs": {
+          "size": 325
+        },
+        "../node_modules/framer-motion/dist/es/motion/features/layout/MeasureLayout.mjs": {
+          "size": 1609
+        },
+        "../node_modules/framer-motion/dist/es/components/AnimatePresence/use-presence.mjs": {
+          "size": 199
+        },
+        "../node_modules/framer-motion/dist/es/projection/animation/mix-values.mjs": {
+          "size": 809
+        },
+        "../node_modules/framer-motion/dist/es/projection/geometry/copy.mjs": {
+          "size": 82
+        },
+        "../node_modules/framer-motion/dist/es/projection/geometry/delta-remove.mjs": {
+          "size": 834
+        },
+        "../node_modules/framer-motion/dist/es/projection/geometry/utils.mjs": {
+          "size": 413
+        },
+        "../node_modules/framer-motion/dist/es/projection/shared/stack.mjs": {
+          "size": 1140
+        },
+        "../node_modules/framer-motion/dist/es/projection/styles/transform.mjs": {
+          "size": 393
+        },
+        "../node_modules/framer-motion/dist/es/render/utils/compare-by-depth.mjs": {
+          "size": 32
+        },
+        "../node_modules/framer-motion/dist/es/render/utils/flat-tree.mjs": {
+          "size": 235
+        },
+        "../node_modules/framer-motion/dist/es/projection/node/create-projection-node.mjs": {
+          "size": 21635
+        },
+        "../node_modules/framer-motion/dist/es/debug/record.mjs": {
+          "size": 56
+        },
+        "../node_modules/framer-motion/dist/es/render/dom/utils/is-svg-element.mjs": {
+          "size": 38
+        },
+        "../node_modules/framer-motion/dist/es/utils/delay.mjs": {
+          "size": 147
+        },
+        "../node_modules/framer-motion/dist/es/animation/interfaces/single-value.mjs": {
+          "size": 78
+        },
+        "../node_modules/framer-motion/dist/es/projection/node/DocumentProjectionNode.mjs": {
+          "size": 233
+        },
+        "../node_modules/framer-motion/dist/es/projection/node/HTMLProjectionNode.mjs": {
+          "size": 351
+        },
+        "../node_modules/framer-motion/dist/es/motion/features/drag.mjs": {
+          "size": 68
+        },
+        "../node_modules/framer-motion/dist/es/gestures/drag/index.mjs": {
+          "size": 347
+        },
+        "../node_modules/framer-motion/dist/es/render/dom/utils/css-variables-conversion.mjs": {
+          "size": 849
+        },
+        "../node_modules/framer-motion/dist/es/render/dom/utils/unit-conversion.mjs": {
+          "size": 2784
+        },
+        "../node_modules/framer-motion/dist/es/render/dom/utils/parse-dom-variant.mjs": {
+          "size": 82
+        },
+        "../node_modules/framer-motion/dist/es/utils/reduced-motion/state.mjs": {
+          "size": 34
+        },
+        "../node_modules/framer-motion/dist/es/render/store.mjs": {
+          "size": 21
+        },
+        "../node_modules/framer-motion/dist/es/render/VisualElement.mjs": {
+          "size": 6849
+        },
+        "../node_modules/framer-motion/dist/es/utils/reduced-motion/index.mjs": {
+          "size": 175
+        },
+        "../node_modules/framer-motion/dist/es/render/utils/motion-values.mjs": {
+          "size": 392
+        },
+        "../node_modules/framer-motion/dist/es/render/dom/DOMVisualElement.mjs": {
+          "size": 506
+        },
+        "../node_modules/framer-motion/dist/es/render/html/HTMLVisualElement.mjs": {
+          "size": 713
+        },
+        "../node_modules/framer-motion/dist/es/render/svg/SVGVisualElement.mjs": {
+          "size": 480
+        },
+        "../node_modules/framer-motion/dist/es/render/dom/create-visual-element.mjs": {
+          "size": 105
+        },
+        "../node_modules/framer-motion/dist/es/render/dom/motion.mjs": {
+          "size": 81
+        },
+        "../node_modules/framer-motion/dist/es/motion/features/layout.mjs": {
+          "size": 47
+        },
+        "../node_modules/framer-motion/dist/es/render/dom/utils/create-config.mjs": {
+          "size": 141
+        },
+        "../node_modules/react-scroll/modules/mixins/scroll-link.js": {
+          "size": 5027
+        },
+        "../node_modules/@remix-run/router/history.ts": {
+          "size": 2604
+        },
+        "../node_modules/@remix-run/router/utils.ts": {
+          "size": 6053
+        },
+        "../node_modules/@remix-run/router/router.ts": {
+          "size": 177
+        },
+        "../node_modules/prop-types/factoryWithThrowingShims.js": {
+          "size": 902
+        },
+        "../node_modules/@firebase/util/dist/postinstall.mjs": {
+          "size": 6
+        },
+        "../node_modules/@firebase/util/src/crypt.ts": {
+          "size": 3094
+        },
+        "../node_modules/@firebase/util/src/defaults.ts": {
+          "size": 1066
+        },
+        "../node_modules/@firebase/util/src/global.ts": {
+          "size": 176
+        },
+        "../node_modules/@firebase/util/src/deferred.ts": {
+          "size": 265
+        },
+        "../node_modules/@firebase/util/src/emulator.ts": {
+          "size": 552
+        },
+        "../node_modules/@firebase/util/src/environment.ts": {
+          "size": 1440
+        },
+        "../node_modules/@firebase/util/src/errors.ts": {
+          "size": 596
+        },
+        "../node_modules/@firebase/util/src/obj.ts": {
+          "size": 395
+        },
+        "../node_modules/@firebase/util/src/query.ts": {
+          "size": 513
+        },
+        "../node_modules/@firebase/util/src/subscribe.ts": {
+          "size": 1682
+        },
+        "../node_modules/@firebase/util/src/compat.ts": {
+          "size": 80
+        },
+        "../node_modules/react-scroll/modules/components/Link.js": {
+          "size": 1092
+        },
+        "../node_modules/react-scroll/modules/mixins/passive-event-listeners.js": {
+          "size": 589
+        },
+        "../node_modules/framer-motion/dist/es/utils/noop.mjs": {
+          "size": 42
+        },
+        "../node_modules/react-scroll/modules/mixins/scroll-spy.js": {
+          "size": 2064
+        },
+        "../node_modules/framer-motion/dist/es/context/LayoutGroupContext.mjs": {
+          "size": 67
+        },
+        "../node_modules/react-scroll/modules/mixins/scroll-hash.js": {
+          "size": 1175
+        },
+        "../node_modules/react-scroll/modules/mixins/utils.js": {
+          "size": 1356
+        },
+        "../node_modules/react-dom/cjs/react-dom.production.min.js": {
+          "size": 129554
+        },
+        "../node_modules/react-scroll/modules/mixins/animate-scroll.js": {
+          "size": 4655
+        },
+        "../node_modules/react-router/lib/context.ts": {
+          "size": 215
+        },
+        "../node_modules/react-router/lib/hooks.tsx": {
+          "size": 6402
+        },
+        "../node_modules/react-router/lib/deprecations.ts": {
+          "size": 1288
+        },
+        "../node_modules/react-router/lib/components.tsx": {
+          "size": 1917
+        },
+        "../node_modules/prop-types/lib/ReactPropTypesSecret.js": {
+          "size": 86
+        },
+        "../node_modules/react-scroll/modules/components/Element.js": {
+          "size": 1718
+        },
+        "../node_modules/react-scroll/modules/mixins/cancel-events.js": {
+          "size": 464
+        },
+        "../node_modules/react-scroll/modules/mixins/scroll-element.js": {
+          "size": 2004
+        },
+        "../node_modules/react/cjs/react.production.min.js": {
+          "size": 6447
+        },
+        "../node_modules/react-dom/client.js": {
+          "size": 189
+        },
+        "../node_modules/tslib/tslib.es6.mjs": {
+          "size": 427
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/core/errors.ts": {
+          "size": 515
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/core/util/log.ts": {
+          "size": 347
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/core/util/assert.ts": {
+          "size": 994
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/core/util/location.ts": {
+          "size": 270
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/core/util/delay.ts": {
+          "size": 232
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/core/util/navigator.ts": {
+          "size": 282
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/core/util/emulator.ts": {
+          "size": 148
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/core/util/fetch_provider.ts": {
+          "size": 1125
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/api/errors.ts": {
+          "size": 2227
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/api/index.ts": {
+          "size": 2223
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/platform_browser/recaptcha/recaptcha.ts": {
+          "size": 781
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/api/authentication/recaptcha.ts": {
+          "size": 69
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/api/account_management/account.ts": {
+          "size": 128
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/core/util/time.ts": {
+          "size": 108
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/core/user/id_token_result.ts": {
+          "size": 1055
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/core/user/invalidation.ts": {
+          "size": 291
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/core/user/proactive_refresh.ts": {
+          "size": 869
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/core/user/user_metadata.ts": {
+          "size": 334
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/core/user/reload.ts": {
+          "size": 1130
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/core/user/token_manager.ts": {
+          "size": 1776
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/api/authentication/token.ts": {
+          "size": 495
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/core/user/user_impl.ts": {
+          "size": 5082
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/core/util/instantiator.ts": {
+          "size": 210
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/core/persistence/in_memory.ts": {
+          "size": 295
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/core/persistence/persistence_user_manager.ts": {
+          "size": 1647
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/core/util/browser.ts": {
+          "size": 1976
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/core/util/version.ts": {
+          "size": 264
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/core/auth/middleware.ts": {
+          "size": 545
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/core/auth/password_policy_impl.ts": {
+          "size": 2817
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/core/auth/auth_impl.ts": {
+          "size": 9982
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/api/password_policy/get_password_policy.ts": {
+          "size": 120
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/platform_browser/load_js.ts": {
+          "size": 303
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/platform_browser/recaptcha/recaptcha_mock.ts": {
+          "size": 209
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/platform_browser/recaptcha/recaptcha_enterprise_verifier.ts": {
+          "size": 3907
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/core/auth/emulator.ts": {
+          "size": 1792
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/core/credentials/auth_credential.ts": {
+          "size": 255
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/api/account_management/email_and_password.ts": {
+          "size": 66
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/api/authentication/email_and_password.ts": {
+          "size": 83
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/core/credentials/email.ts": {
+          "size": 1546
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/api/authentication/email_link.ts": {
+          "size": 162
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/api/authentication/idp.ts": {
+          "size": 78
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/core/credentials/oauth.ts": {
+          "size": 1591
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/api/authentication/sms.ts": {
+          "size": 526
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/core/credentials/phone.ts": {
+          "size": 1235
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/core/action_code_url.ts": {
+          "size": 1032
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/core/providers/email.ts": {
+          "size": 352
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/core/providers/federated.ts": {
+          "size": 251
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/core/providers/oauth.ts": {
+          "size": 174
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/core/providers/facebook.ts": {
+          "size": 619
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/core/providers/google.ts": {
+          "size": 634
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/core/providers/github.ts": {
+          "size": 609
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/core/providers/twitter.ts": {
+          "size": 632
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/core/user/user_credential_impl.ts": {
+          "size": 598
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/mfa/mfa_error.ts": {
+          "size": 573
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/core/user/link_unlink.ts": {
+          "size": 188
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/core/user/reauthenticate.ts": {
+          "size": 464
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/core/strategies/credential.ts": {
+          "size": 295
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/core/strategies/email_and_password.ts": {
+          "size": 282
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/core/index.ts": {
+          "size": 219
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/api/account_management/mfa.ts": {
+          "size": 78
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/mfa/mfa_user.ts": {
+          "size": 12
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/core/persistence/index.ts": {
+          "size": 23
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/platform_browser/persistence/browser.ts": {
+          "size": 502
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/platform_browser/persistence/local_storage.ts": {
+          "size": 2046
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/platform_browser/persistence/session_storage.ts": {
+          "size": 157
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/platform_browser/messagechannel/receiver.ts": {
+          "size": 1102
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/platform_browser/messagechannel/promise.ts": {
+          "size": 131
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/core/util/event_id.ts": {
+          "size": 206
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/platform_browser/messagechannel/sender.ts": {
+          "size": 1044
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/platform_browser/auth_window.ts": {
+          "size": 61
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/platform_browser/util/worker.ts": {
+          "size": 416
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/platform_browser/persistence/indexed_db.ts": {
+          "size": 4305
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/api/authentication/mfa.ts": {
+          "size": 74
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/platform_browser/recaptcha/recaptcha_loader.ts": {
+          "size": 25
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/platform_browser/recaptcha/recaptcha_verifier.ts": {
+          "size": 21
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/platform_browser/strategies/phone.ts": {
+          "size": 2433
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/platform_browser/providers/phone.ts": {
+          "size": 564
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/core/util/resolver.ts": {
+          "size": 106
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/core/strategies/idp.ts": {
+          "size": 805
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/core/strategies/abstract_popup_redirect_operation.ts": {
+          "size": 1435
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/platform_browser/strategies/popup.ts": {
+          "size": 1394
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/core/strategies/redirect.ts": {
+          "size": 1097
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/platform_browser/strategies/redirect.ts": {
+          "size": 318
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/core/auth/auth_event_manager.ts": {
+          "size": 1676
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/core/util/validate_origin.ts": {
+          "size": 647
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/api/project_config/get_project_config.ts": {
+          "size": 109
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/platform_browser/iframe/gapi.ts": {
+          "size": 842
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/platform_browser/iframe/iframe.ts": {
+          "size": 1071
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/platform_browser/util/popup.ts": {
+          "size": 1112
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/core/util/handler.ts": {
+          "size": 938
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/platform_browser/popup_redirect.ts": {
+          "size": 1654
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/core/auth/firebase_internal.ts": {
+          "size": 1017
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/platform_browser/index.ts": {
+          "size": 1420
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/core/auth/initialize.ts": {
+          "size": 476
+        },
+        "../node_modules/firebase/node_modules/@firebase/auth/src/core/auth/register.ts": {
+          "size": 1025
+        },
+        "../node_modules/framer-motion/dist/es/utils/is-browser.mjs": {
+          "size": 115
+        },
+        "components/PerformanceProvider.js": {
+          "size": 4907
+        },
+        "../node_modules/framer-motion/dist/es/utils/use-constant.mjs": {
+          "size": 122
+        },
+        "../node_modules/react/index.js": {
+          "size": 34
+        },
+        "../node_modules/prop-types/index.js": {
+          "size": 580
+        },
+        "../node_modules/react-router-dom/dom.ts": {
+          "size": 324
+        },
+        "../node_modules/react-router-dom/index.tsx": {
+          "size": 2251
+        },
+        "utils/loadingManager.js": {
+          "size": 2165
+        },
+        "../node_modules/react-scroll/modules/mixins/smooth.js": {
+          "size": 811
+        },
+        "../node_modules/react-icons/lib/esm/iconsManifest.js": {
+          "size": 14
+        },
+        "../node_modules/react-icons/lib/esm/iconContext.js": {
+          "size": 109
+        },
+        "../node_modules/react-icons/lib/esm/iconBase.js": {
+          "size": 1406
+        },
+        "../node_modules/react-scroll/modules/mixins/Helpers.js": {
+          "size": 4923
+        },
+        "../node_modules/framer-motion/dist/es/utils/use-is-mounted.mjs": {
+          "size": 136
+        },
+        "../node_modules/framer-motion/dist/es/components/AnimatePresence/PopChild.mjs": {
+          "size": 1104
+        },
+        "../node_modules/framer-motion/dist/es/components/AnimatePresence/PresenceChild.mjs": {
+          "size": 605
+        },
+        "../node_modules/framer-motion/dist/es/components/AnimatePresence/index.mjs": {
+          "size": 1713
+        },
+        "../node_modules/framer-motion/dist/es/utils/use-force-update.mjs": {
+          "size": 156
+        },
+        "../node_modules/framer-motion/dist/es/utils/use-unmount-effect.mjs": {
+          "size": 41
+        },
+        "../node_modules/framer-motion/dist/es/frameloop/render-step.mjs": {
+          "size": 796
+        },
+        "../node_modules/framer-motion/dist/es/frameloop/batcher.mjs": {
+          "size": 710
+        },
+        "../node_modules/framer-motion/dist/es/frameloop/frame.mjs": {
+          "size": 258
+        },
+        "../node_modules/idb/build/wrap-idb-value.js": {
+          "size": 2123
+        },
+        "../node_modules/idb/build/index.js": {
+          "size": 1185
+        },
+        "../node_modules/@firebase/app/src/platformLoggerService.ts": {
+          "size": 339
+        },
+        "../node_modules/@firebase/app/src/logger.ts": {
+          "size": 725
+        },
+        "../node_modules/@firebase/app/src/constants.ts": {
+          "size": 570
+        },
+        "../node_modules/@firebase/app/src/internal.ts": {
+          "size": 595
+        },
+        "../node_modules/@firebase/app/src/errors.ts": {
+          "size": 1287
+        },
+        "../node_modules/@firebase/app/src/firebaseApp.ts": {
+          "size": 845
+        },
+        "../node_modules/@firebase/app/src/api.ts": {
+          "size": 1246
+        },
+        "../node_modules/@firebase/app/src/indexeddb.ts": {
+          "size": 902
+        },
+        "../node_modules/@firebase/app/src/heartbeatService.ts": {
+          "size": 3064
+        },
+        "../node_modules/@firebase/app/src/registerCoreComponents.ts": {
+          "size": 190
+        },
+        "../node_modules/@firebase/app/src/index.ts": {
+          "size": 3
+        },
+        "../node_modules/scheduler/cjs/scheduler.production.min.js": {
+          "size": 3834
+        },
+        "../node_modules/react-scroll/modules/components/Button.js": {
+          "size": 1266
+        },
+        "../node_modules/react-dom/index.js": {
+          "size": 384
+        },
+        "../node_modules/framer-motion/dist/es/utils/errors.mjs": {
+          "size": 274
+        },
+        "../node_modules/@firebase/component/src/component.ts": {
+          "size": 414
+        },
+        "../node_modules/@firebase/component/src/constants.ts": {
+          "size": 26
+        },
+        "../node_modules/@firebase/component/src/provider.ts": {
+          "size": 3663
+        },
+        "../node_modules/@firebase/component/src/component_container.ts": {
+          "size": 560
+        },
+        "../node_modules/scheduler/index.js": {
+          "size": 47
+        },
+        "../node_modules/react-scroll/modules/mixins/scroller.js": {
+          "size": 1217
+        },
+        "../node_modules/react-scroll/modules/index.js": {
+          "size": 429
+        },
+        "../node_modules/react-scroll/modules/mixins/scroll-events.js": {
+          "size": 226
+        },
+        "../node_modules/framer-motion/dist/es/context/PresenceContext.mjs": {
+          "size": 42
+        },
+        "../webpack/bootstrap": {
+          "size": 134
+        },
+        "../webpack/runtime/create fake namespace object": {
+          "size": 453
+        },
+        "../webpack/runtime/define property getters": {
+          "size": 101
+        },
+        "../webpack/runtime/ensure chunk": {
+          "size": 80
+        },
+        "../webpack/runtime/get javascript chunk filename": {
+          "size": 253
+        },
+        "../webpack/runtime/get mini-css chunk filename": {
+          "size": 17
+        },
+        "../webpack/runtime/global": {
+          "size": 167
+        },
+        "../webpack/runtime/hasOwnProperty shorthand": {
+          "size": 59
+        },
+        "../webpack/runtime/load script": {
+          "size": 741
+        },
+        "../webpack/runtime/make namespace object": {
+          "size": 168
+        },
+        "../webpack/runtime/publicPath": {
+          "size": 14
+        },
+        "../webpack/runtime/jsonp chunk loading": {
+          "size": 858
+        },
+        "components/Navbar.js": {
+          "size": 7164
+        },
+        "../node_modules/react-icons/hi/index.esm.js": {
+          "size": 2061
+        },
+        "components/MobileNavbar.js": {
+          "size": 3304
+        },
+        "components/LoadingScreen.js": {
+          "size": 2637
+        },
+        "utils/assetRegistry.js": {
+          "size": 1609
+        },
+        "App.js": {
+          "size": 2547
+        },
+        "reportWebVitals.js": {
+          "size": 154
+        },
+        "index.js": {
+          "size": 117
+        },
+        "[sourceMappingURL]": {
+          "size": 41
+        },
+        "[unmapped]": {
+          "size": 141
+        },
+        "[EOLs]": {
+          "size": 2
+        }
+      }
+    }
+  ]
+}

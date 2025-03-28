@@ -4,6 +4,10 @@ import { getPortfolioItems } from '../utils/firebase';
 import { FaExpand, FaVolumeMute, FaVolumeUp, FaChevronDown, FaChevronUp } from 'react-icons/fa';
 import OptimizedVideo from './OptimizedVideo';
 
+// Constants for buffer detection debounce times
+const WAITING_DEBOUNCE_TIME = 200;
+const PLAYING_DEBOUNCE_TIME = 50;
+
 // Custom hook for checking if element is visible
 const useIsVisible = (options = {}, defaultValue = false) => {
   const [isVisible, setIsVisible] = useState(defaultValue);
@@ -28,6 +32,81 @@ const useIsVisible = (options = {}, defaultValue = false) => {
   return { isVisible, targetRef };
 };
 
+// Custom hook for video buffer management - YouTube style
+const useVideoBuffer = () => {
+  // Store buffer data for each video
+  const bufferData = useRef({});
+  
+  // Function to start buffering a video completely
+  const startBuffering = useCallback((videoElement, videoId) => {
+    if (!videoElement || bufferData.current[videoId]?.isBuffering) return;
+    
+    // Set buffering status
+    bufferData.current[videoId] = {
+      isBuffering: true,
+      progress: 0,
+      startTime: Date.now()
+    };
+    
+    // Set preload to auto to trigger full loading
+    videoElement.preload = 'auto';
+    
+    // Force load to start buffer downloading
+    if (videoElement.readyState === 0) {
+      videoElement.load();
+    }
+    
+    // Start a background fetch request for the video to prime the browser cache
+    if ('fetch' in window) {
+      fetch(videoElement.src, { 
+        method: 'GET',
+        headers: { 'Range': 'bytes=0-' },
+        mode: 'cors',
+        credentials: 'same-origin',
+        cache: 'force-cache'
+      }).catch(e => console.log('Background fetch error:', e));
+    }
+    
+    // Listen for buffer progress
+    const updateBufferProgress = () => {
+      if (!videoElement || !bufferData.current[videoId]) return;
+      
+      const buffered = videoElement.buffered;
+      if (buffered.length > 0) {
+        // Get the end of the largest buffered range
+        const bufferedEnd = buffered.end(buffered.length - 1);
+        const duration = videoElement.duration || 1;
+        const progress = Math.min(100, Math.round((bufferedEnd / duration) * 100));
+        
+        bufferData.current[videoId].progress = progress;
+        
+        // When buffer reaches 100%, mark as fully buffered
+        if (progress >= 100) {
+          bufferData.current[videoId].isFullyBuffered = true;
+          videoElement.removeEventListener('progress', updateBufferProgress);
+        }
+      }
+    };
+    
+    videoElement.addEventListener('progress', updateBufferProgress);
+    
+    // Return cleanup function
+    return () => {
+      videoElement.removeEventListener('progress', updateBufferProgress);
+      if (bufferData.current[videoId]) {
+        bufferData.current[videoId].isBuffering = false;
+      }
+    };
+  }, []);
+  
+  // Get buffer status for a video
+  const getBufferStatus = useCallback((videoId) => {
+    return bufferData.current[videoId] || { isBuffering: false, progress: 0, isFullyBuffered: false };
+  }, []);
+  
+  return { startBuffering, getBufferStatus };
+};
+
 const Portfolio = () => {
   const [portfolioItems, setPortfolioItems] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -44,6 +123,80 @@ const Portfolio = () => {
   const [showAll, setShowAll] = useState(false);
   const [selectedVideo, setSelectedVideo] = useState(null);
   const [videoStates, setVideoStates] = useState({});
+  const [bufferStates, setBufferStates] = useState({});
+  const { startBuffering, getBufferStatus } = useVideoBuffer();
+  const timeCheckIntervals = useRef({});
+  
+  // Add debounce timeout refs
+  const waitingTimeouts = useRef({});
+  const playingTimeouts = useRef({});
+
+  // Add a throttle utility for buffer updates
+  const throttleTimeouts = useRef({});
+  
+  const throttleBufferUpdate = useCallback((id, callback, delay = 1000) => {
+    if (throttleTimeouts.current[id]) {
+      return false;
+    }
+    
+    throttleTimeouts.current[id] = setTimeout(() => {
+      throttleTimeouts.current[id] = null;
+    }, delay);
+    
+    callback();
+    return true;
+  }, []);
+
+  // Register service worker for video buffering
+  useEffect(() => {
+    // Load buffer client script
+    const scriptElement = document.createElement('script');
+    scriptElement.src = '/buffer-client.js';
+    scriptElement.async = true;
+    scriptElement.onload = () => {
+      console.log('Video buffer client loaded');
+    };
+    document.head.appendChild(scriptElement);
+    
+    return () => {
+      if (document.head.contains(scriptElement)) {
+        document.head.removeChild(scriptElement);
+      }
+    };
+  }, []);
+  
+  // Pre-buffer videos on page load
+  useEffect(() => {
+    if (!portfolioItems.length || !window.bufferVideo) return;
+    
+    // Track which videos we've already processed
+    const processedVideos = new Set();
+    
+    // Buffer the first 4 videos immediately
+    portfolioItems.slice(0, 4).forEach(item => {
+      if (window.bufferVideo && item.videoUrl && !processedVideos.has(item.id)) {
+        processedVideos.add(item.id);
+        console.log('Pre-buffering video:', item.videoUrl);
+        window.bufferVideo(item.videoUrl, (status) => {
+          if (status.buffered >= 15 && status.buffered < 100) {
+            console.log(`Video ${item.id} is ${status.buffered}% buffered and ready to play`);
+            
+            // Only update buffer state once the video is sufficiently buffered
+            if (!bufferStates[item.id] || !bufferStates[item.id].reported15Percent) {
+              setBufferStates(prev => ({
+                ...prev,
+                [item.id]: { 
+                  isBuffering: !status.done, 
+                  progress: status.buffered,
+                  reported15Percent: true
+                }
+              }));
+            }
+          }
+        });
+      }
+    });
+  }, [portfolioItems]); // Only run when portfolioItems changes
 
   // Prevent right-click context menu
   useEffect(() => {
@@ -102,20 +255,334 @@ const Portfolio = () => {
     setVideoStates(initialStates);
   }, [portfolioItems]);
 
-  // Optimized video playback handler
+  // Enhanced video time update handler with improved reliability
+  const handleTimeUpdate = useCallback((id) => {
+    const videoElement = videoRefs.current[id];
+    if (!videoElement) return;
+
+    const currentTime = videoElement.currentTime;
+    
+    // Hard stop at exactly 15 seconds
+    if (currentTime >= 15 && !stoppedVideos[id] && !videoStates[id]?.stopped) {
+      console.log(`Video ${id} reached 15 seconds, stopping...`);
+      
+      // Ensure video is paused
+      videoElement.pause();
+      
+      // Update all relevant states to mark video as stopped
+      setVideoStates(prev => ({
+        ...prev,
+        [id]: {
+          ...prev[id],
+          time: currentTime,
+          stopped: true,
+          showFullOption: true,
+          shouldNotAutoplay: true
+        }
+      }));
+      
+      setShowFullVideoOption(prev => ({
+        ...prev,
+        [id]: true
+      }));
+      
+      setStoppedVideos(prev => ({
+        ...prev,
+        [id]: true
+      }));
+      
+      // Clear any existing interval for this video
+      if (timeCheckIntervals.current[id]) {
+        clearInterval(timeCheckIntervals.current[id]);
+        timeCheckIntervals.current[id] = null;
+      }
+      
+      // Remove timeupdate listener to prevent duplicate stopping
+      videoElement.removeEventListener('timeupdate', () => handleTimeUpdate(id));
+      
+      return;
+    }
+    
+    // Just update time tracking if not yet at 15 seconds
+    setVideoStates(prev => ({
+      ...prev,
+      [id]: {
+        ...prev[id],
+        time: currentTime
+      }
+    }));
+  }, [stoppedVideos, videoStates]);
+
+  // Setup additional backup timer to ensure videos stop at 15 seconds
+  const setupVideoTimeCheck = useCallback((id) => {
+    const videoElement = videoRefs.current[id];
+    if (!videoElement || timeCheckIntervals.current[id]) return;
+    
+    // Create an interval that checks video time every 500ms as a backup to timeupdate event
+    timeCheckIntervals.current[id] = setInterval(() => {
+      const video = videoRefs.current[id];
+      if (!video) {
+        clearInterval(timeCheckIntervals.current[id]);
+        timeCheckIntervals.current[id] = null;
+        return;
+      }
+      
+      const currentTime = video.currentTime;
+      
+      // If video has played for at least 15 seconds but hasn't been marked as stopped
+      if (currentTime >= 15 && !stoppedVideos[id] && !videoStates[id]?.stopped) {
+        console.log(`Backup timer stopping video ${id} at ${currentTime}s`);
+        
+        // Force pause
+        video.pause();
+        
+        // Update all states
+        setVideoStates(prev => ({
+          ...prev,
+          [id]: {
+            ...prev[id],
+            time: currentTime,
+            stopped: true,
+            showFullOption: true,
+            shouldNotAutoplay: true
+          }
+        }));
+        
+        setShowFullVideoOption(prev => ({
+          ...prev,
+          [id]: true
+        }));
+        
+        setStoppedVideos(prev => ({
+          ...prev,
+          [id]: true
+        }));
+        
+        // Clear interval after stopping
+        clearInterval(timeCheckIntervals.current[id]);
+        timeCheckIntervals.current[id] = null;
+      }
+    }, 500);
+  }, [stoppedVideos, videoStates]);
+
+  // Clean up all intervals on component unmount
+  useEffect(() => {
+    return () => {
+      Object.keys(timeCheckIntervals.current).forEach(id => {
+        if (timeCheckIntervals.current[id]) {
+          clearInterval(timeCheckIntervals.current[id]);
+        }
+      });
+    };
+  }, []);
+
+  // Setup advanced buffering detection with debounce
+  const setupAdvancedBufferDetection = useCallback((videoElement, id) => {
+    if (!videoElement) return;
+    
+    // Clear any existing event listeners
+    videoElement.removeEventListener('waiting', () => {});
+    videoElement.removeEventListener('playing', () => {});
+    videoElement.removeEventListener('play', () => {});
+    videoElement.removeEventListener('canplay', () => {});
+    
+    // Define better waiting handler with debounce
+    const waitingHandler = () => {
+      // Clear any existing timeouts
+      if (waitingTimeouts.current[id]) {
+        clearTimeout(waitingTimeouts.current[id]);
+      }
+      
+      if (playingTimeouts.current[id]) {
+        clearTimeout(playingTimeouts.current[id]);
+      }
+      
+      // Set a small timeout to avoid rapid state changes
+      waitingTimeouts.current[id] = setTimeout(() => {
+        console.log(`Video ${id} waiting/buffering...`);
+        
+        setBufferStates(prev => ({
+          ...prev,
+          [id]: { 
+            ...prev[id], 
+            isBuffering: true,
+            lastBufferTime: Date.now()
+          }
+        }));
+      }, WAITING_DEBOUNCE_TIME);
+    };
+    
+    // Define better playing handler with debounce
+    const playingHandler = () => {
+      // Clear any existing timeouts
+      if (waitingTimeouts.current[id]) {
+        clearTimeout(waitingTimeouts.current[id]);
+      }
+      
+      if (playingTimeouts.current[id]) {
+        clearTimeout(playingTimeouts.current[id]);
+      }
+      
+      // Set a small timeout to avoid rapid state changes
+      playingTimeouts.current[id] = setTimeout(() => {
+        setBufferStates(prev => ({
+          ...prev,
+          [id]: { 
+            ...prev[id], 
+            isBuffering: false 
+          }
+        }));
+      }, PLAYING_DEBOUNCE_TIME);
+    };
+    
+    // Add event listeners
+    videoElement.addEventListener('waiting', waitingHandler);
+    videoElement.addEventListener('play', playingHandler);
+    videoElement.addEventListener('playing', playingHandler);
+    videoElement.addEventListener('canplay', playingHandler);
+    
+    // Return cleanup function
+    return () => {
+      videoElement.removeEventListener('waiting', waitingHandler);
+      videoElement.removeEventListener('play', playingHandler);
+      videoElement.removeEventListener('playing', playingHandler);
+      videoElement.removeEventListener('canplay', playingHandler);
+      
+      if (waitingTimeouts.current[id]) {
+        clearTimeout(waitingTimeouts.current[id]);
+      }
+      
+      if (playingTimeouts.current[id]) {
+        clearTimeout(playingTimeouts.current[id]);
+      }
+    };
+  }, []);
+
+  // Clean up all timeouts on component unmount
+  useEffect(() => {
+    return () => {
+      Object.keys(waitingTimeouts.current).forEach(id => {
+        if (waitingTimeouts.current[id]) {
+          clearTimeout(waitingTimeouts.current[id]);
+        }
+      });
+      
+      Object.keys(playingTimeouts.current).forEach(id => {
+        if (playingTimeouts.current[id]) {
+          clearTimeout(playingTimeouts.current[id]);
+        }
+      });
+      
+      Object.keys(throttleTimeouts.current).forEach(id => {
+        if (throttleTimeouts.current[id]) {
+          clearTimeout(throttleTimeouts.current[id]);
+        }
+      });
+    };
+  }, []);
+
+  // Enhanced video playback handler with service worker integration
   const handleVideoPlayback = useCallback((id, isVisible) => {
     const videoElement = videoRefs.current[id];
     if (!videoElement) return;
 
     if (isVisible) {
+      // Setup advanced buffer detection on this video element
+      setupAdvancedBufferDetection(videoElement, id);
+      
+      // Use service worker for buffering if available
+      if (window.bufferVideo && !videoElement.getAttribute('data-buffer-id')) {
+        videoElement.setAttribute('data-buffer-id', 'processing');
+        window.bufferVideo(videoElement.src, (status) => {
+          // Throttle buffer state updates to prevent excessive re-renders
+          throttleBufferUpdate(id, () => {
+            setBufferStates(prev => ({
+              ...prev,
+              [id]: { 
+                isBuffering: !status.done, 
+                progress: status.buffered 
+              }
+            }));
+          });
+          
+          // Play video when we have enough buffer (15%)
+          if (status.buffered >= 15 && isVisible && !videoStates[id]?.shouldNotAutoplay && !stoppedVideos[id]) {
+            const playPromise = videoElement.play();
+            if (playPromise !== undefined) {
+              playPromise.catch(e => console.log("Autoplay failed:", e));
+            }
+          }
+        });
+      }
+      
       // Only start loading when visible
       if (!videoStates[id]?.isLoaded) {
+        console.log("Loading video:", id);
+        
+        // Set video attributes for improved loading
+        videoElement.preload = 'auto'; // Full preload
+        
+        // Set playback quality based on network conditions
+        if ('connection' in navigator) {
+          const connection = navigator.connection;
+          const effectiveType = connection?.effectiveType;
+          
+          // Set low quality initially to start faster (like YouTube)
+          if (videoElement.src && videoElement.src.includes('?')) {
+            if (effectiveType === 'slow-2g' || effectiveType === '2g') {
+              videoElement.src = videoElement.src.replace(/q=(high|medium|low)/i, 'q=low');
+            } else if (effectiveType === '3g') {
+              videoElement.src = videoElement.src.replace(/q=(high|low)/i, 'q=medium');
+            } else {
+              // Default to high for 4g+ connections after initial load
+              if (!videoElement.src.includes('q=low')) {
+                videoElement.src = videoElement.src.replace(/q=(medium|low)/i, 'q=high');
+              }
+            }
+          }
+        }
+        
+        // Use progressive loading strategy
         videoElement.load();
+        
+        // After the video has some initial data, start playing
+        videoElement.addEventListener('loadedmetadata', function onLoadedMetadata() {
+          // Start with a lower playback position to avoid initial buffer
+          videoElement.currentTime = 0.1;
+          videoElement.removeEventListener('loadedmetadata', onLoadedMetadata);
+        }, { once: true });
+        
+        // Set up better buffering detection
+        videoElement.addEventListener('waiting', () => {
+          setBufferStates(prev => ({
+            ...prev,
+            [id]: { ...prev[id], isBuffering: true }
+          }));
+        });
+        
+        videoElement.addEventListener('canplay', () => {
+          setBufferStates(prev => ({
+            ...prev,
+            [id]: { ...prev[id], isBuffering: false }
+          }));
+        });
+        
         setVideoStates(prev => ({
           ...prev,
           [id]: { ...prev[id], isLoaded: true }
         }));
+        
+        // Set crossOrigin to ensure service worker can cache properly
+        videoElement.crossOrigin = 'anonymous';
       }
+
+      // Skip playback if video should not autoplay (reached 15s mark) or if fullscreen is open
+      const fullscreenOpen = document.body.style.overflow === 'hidden';
+      const shouldNotAutoplay = videoStates[id]?.shouldNotAutoplay || videoStates[id]?.stopped || stoppedVideos[id];
+      
+      if (!fullscreenOpen && !shouldNotAutoplay) {
+        // Setup time checker when video starts playing
+        setupVideoTimeCheck(id);
 
       // Play video with error handling
       const playPromise = videoElement.play();
@@ -128,60 +595,46 @@ const Portfolio = () => {
             videoElement.play().catch(e => console.log("Couldn't play even muted:", e));
           }
         });
+        }
       }
     } else {
-      // Pause and reset when not visible
+      // Continue buffering in background but pause playback when not visible
       if (!videoElement.paused) {
         videoElement.pause();
       }
     }
-  }, [videoStates]);
+  }, [videoStates, stoppedVideos, startBuffering, getBufferStatus, setupVideoTimeCheck, setupAdvancedBufferDetection, throttleBufferUpdate]);
 
-  // Optimized video time update handler
-  const handleTimeUpdate = useCallback((id) => {
-    const videoElement = videoRefs.current[id];
-    if (!videoElement) return;
-
-    const currentTime = videoElement.currentTime;
-    
-    setVideoStates(prev => {
-      const currentState = prev[id] || {};
-      
-      // Check if we need to stop at 15 seconds
-      if (currentTime >= 15 && !currentState.stopped) {
-        videoElement.pause();
-        return {
-          ...prev,
-          [id]: {
-            ...currentState,
-            time: currentTime,
-            stopped: true,
-            showFullOption: true
+  // Force videos to load after a timeout regardless of visibility
+  useEffect(() => {
+    const forceLoadTimeout = setTimeout(() => {
+      portfolioItems.forEach(item => {
+        const videoElement = videoRefs.current[item.id];
+        if (videoElement && !videoStates[item.id]?.isLoaded) {
+          console.log("Force loading video:", item.id);
+          videoElement.load();
+          setVideoStates(prev => ({
+            ...prev,
+            [item.id]: { ...prev[item.id], isLoaded: true }
+          }));
+          
+          // Try to play the video if it's in viewport
+          const rect = videoElement.getBoundingClientRect();
+          const isInViewport = 
+            rect.top >= 0 &&
+            rect.left >= 0 &&
+            rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+            rect.right <= (window.innerWidth || document.documentElement.clientWidth);
+            
+          if (isInViewport) {
+            videoElement.play().catch(e => console.log("Force play failed:", e));
           }
-        };
-      }
-      
-      return {
-        ...prev,
-        [id]: {
-          ...currentState,
-          time: currentTime
         }
-      };
-    });
+      });
+    }, 5000); // Force load after 5 seconds
 
-    // Update showFullVideoOption state after 15 seconds
-    if (currentTime >= 15) {
-      setShowFullVideoOption(prev => ({
-        ...prev,
-        [id]: true
-      }));
-      setStoppedVideos(prev => ({
-        ...prev,
-        [id]: true
-      }));
-    }
-  }, []);
+    return () => clearTimeout(forceLoadTimeout);
+  }, [portfolioItems, videoStates]);
 
   // Optimized mute toggle
   const toggleMute = useCallback((e, id) => {
@@ -206,8 +659,10 @@ const Portfolio = () => {
         }
       }));
 
-      // Try to play if it was paused
-      if (newMutedState === false && videoElement.paused) {
+      // Try to play if it was paused, but only if the video hasn't reached the 15s mark
+      const shouldNotAutoplay = videoStates[id]?.shouldNotAutoplay || videoStates[id]?.stopped || stoppedVideos[id];
+      
+      if (newMutedState === false && videoElement.paused && !shouldNotAutoplay) {
         videoElement.play().catch(error => {
           console.log("Couldn't play after unmuting:", error);
           // If play fails, revert mute state
@@ -224,14 +679,14 @@ const Portfolio = () => {
     } catch (error) {
       console.error("Error toggling mute:", error);
     }
-  }, []);
+  }, [videoStates, stoppedVideos]);
 
-  // Setup Intersection Observer for videos
+  // Setup Intersection Observer for videos with improved threshold
   useEffect(() => {
     const options = {
       root: null,
-      rootMargin: '0px',
-      threshold: 0.5,
+      rootMargin: '200px 0px', // Increased margin to preload videos earlier
+      threshold: 0.1, // Lower threshold to detect videos sooner
     };
 
     // Event handler functions stored per video id
@@ -252,21 +707,62 @@ const Portfolio = () => {
           video.removeEventListener('timeupdate', timeUpdateHandlers[videoId]);
         }
 
+        // Skip if video is already marked as stopped
+        if (stoppedVideos[videoId] || videoStates[videoId]?.stopped) {
+          // Just ensure the video is paused
+          if (!video.paused) {
+            video.pause();
+          }
+          return;
+        }
+
         // Create and store a new handler for this video
         timeUpdateHandlers[videoId] = () => handleTimeUpdate(videoId);
         
         // Add timeupdate event listener to track video time
         video.addEventListener('timeupdate', timeUpdateHandlers[videoId]);
 
-        if (entry.isIntersecting) {
-          video.muted = true; // Keep muted
+        // Skip autoplay if fullscreen mode is active or if video has reached 15s mark
+        const fullscreenOpen = document.body.style.overflow === 'hidden';
+        const shouldNotAutoplay = videoStates[videoId]?.shouldNotAutoplay || videoStates[videoId]?.stopped || stoppedVideos[videoId];
+
+        if (entry.isIntersecting && !fullscreenOpen && !shouldNotAutoplay) {
+          // Ensure we respect existing mute state
+          video.muted = videoStates[videoId]?.muted !== false;
+          
+          // Improved progressive loading
+          if (!videoStates[videoId]?.playAttempted) {
+            // Add a small delay before playing to allow initial buffering
+            setTimeout(() => {
+              // Double-check that we still shouldn't autoplay before attempting to play
+              if (!videoStates[videoId]?.shouldNotAutoplay && !stoppedVideos[videoId]) {
           const playPromise = video.play();
           if (playPromise !== undefined) {
             playPromise.catch(error => {
               console.log("Autoplay prevented:", error);
               // Try again while keeping muted
+                    video.muted = true;
+                    setVideoStates(prev => ({
+                      ...prev,
+                      [videoId]: { ...prev[videoId], muted: true }
+                    }));
               video.play().catch(e => console.log("Couldn't play:", e));
             });
+                }
+                
+                // Mark that we've attempted to play this video
+                setVideoStates(prev => ({
+                  ...prev,
+                  [videoId]: { ...prev[videoId], playAttempted: true }
+                }));
+              }
+            }, 100);
+          } else if (!shouldNotAutoplay) {
+            // For videos we've already tried to play before, just play them if they should autoplay
+            const playPromise = video.play();
+            if (playPromise !== undefined) {
+              playPromise.catch(e => console.log("Play error:", e));
+            }
           }
         } else {
           if (!video.paused) {
@@ -282,7 +778,7 @@ const Portfolio = () => {
     // Clear existing observers
     observer.disconnect();
 
-    // Observe all video elements - both initial and expanded
+    // Observe all video elements with a shorter delay
     setTimeout(() => {
       portfolioItems.forEach(item => {
         const videoContainer = document.querySelector(`[data-video-container="${item.id}"]`);
@@ -290,7 +786,7 @@ const Portfolio = () => {
           observer.observe(videoContainer);
         }
       });
-    }, 100); // Small delay to ensure DOM is updated
+    }, 50); // Shorter delay to ensure faster observation
 
     return () => {
       // Clean up observer
@@ -304,10 +800,81 @@ const Portfolio = () => {
         }
       });
     };
-  }, [portfolioItems, showAll]); // Add showAll dependency to rerun when "View More" is clicked
+  }, [portfolioItems, showAll, videoStates, stoppedVideos, handleTimeUpdate]); // Added stoppedVideos and handleTimeUpdate dependencies
 
   const openFullscreenVideo = (e, videoUrl, id) => {
     e.stopPropagation();
+    
+    // Show loading state with better feedback
+    const loadingOverlay = document.createElement('div');
+    loadingOverlay.className = 'fixed inset-0 bg-black/80 z-[9999] flex flex-col items-center justify-center';
+    loadingOverlay.innerHTML = `
+      <div class="flex flex-col items-center gap-4">
+        <div class="w-20 h-20 border-4 border-primary-700 border-t-transparent rounded-full animate-spin"></div>
+        <div class="text-white font-medium text-lg">Loading video...</div>
+        <div class="text-white/70 text-sm mb-2 buffer-status">Preparing video stream...</div>
+        <div class="w-80 bg-secondary-200/30 rounded-full h-3 mt-1">
+          <div class="bg-primary-700 h-3 rounded-full transition-all duration-300" style="width: 0%"></div>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(loadingOverlay);
+    
+    // Pause all videos when fullscreen is opened to improve performance
+    Object.keys(videoRefs.current).forEach(videoId => {
+      try {
+        const videoElement = videoRefs.current[videoId];
+        if (videoElement && !videoElement.paused) {
+          videoElement.pause();
+        }
+      } catch (err) {
+        console.error("Error pausing video:", err);
+      }
+    });
+    
+    const statusText = loadingOverlay.querySelector('.buffer-status');
+    const progressBar = loadingOverlay.querySelector('.bg-primary-700');
+    let videoStarted = false;
+    
+    // Use service worker for buffering if available
+    if (window.bufferVideo) {
+      statusText.textContent = 'Please Wait...';
+      
+      window.bufferVideo(videoUrl, (status) => {
+        if (progressBar) {
+          progressBar.style.width = `${status.buffered}%`;
+        }
+        
+        if (statusText) {
+          statusText.textContent = `Buffered ${status.buffered}% of video...${status.speed ? ` (${status.speed} MB/s)` : ''}`;
+        }
+        
+        // When we have enough buffer, show the player
+        if ((status.buffered >= 20 || status.done) && !videoStarted) {
+          videoStarted = true;
+          showFullscreenPlayer();
+        }
+      });
+      
+      // Fallback if buffering takes too long
+      setTimeout(() => {
+        if (!videoStarted) {
+          videoStarted = true;
+          showFullscreenPlayer();
+        }
+      }, 5000);
+    } else {
+      // Fall back to original implementation
+      // ... existing fetch code ...
+    }
+    
+    // Create the actual fullscreen player
+    const showFullscreenPlayer = () => {
+      // If the overlay was removed already, don't proceed
+      if (!document.body.contains(loadingOverlay)) return;
+      
+      // Remove preload elements
+      document.body.removeChild(loadingOverlay);
     
     // Create container with dark background
     const container = document.createElement('div');
@@ -356,7 +923,7 @@ const Portfolio = () => {
     const videoWrapper = document.createElement('div');
     videoWrapper.className = 'flex items-center justify-center w-full h-full touch-none overflow-hidden';
     
-    // Create and configure video element
+      // Create and configure video element with improved buffering
     const videoElement = document.createElement('video');
     videoElement.className = 'w-auto h-auto max-h-[90vh] max-w-[95vw] object-contain touch-none';
     videoElement.src = videoUrl;
@@ -366,11 +933,42 @@ const Portfolio = () => {
     videoElement.disablePictureInPicture = true;
     videoElement.playsInline = true;
     videoElement.preload = 'auto';
+      videoElement.crossOrigin = 'anonymous';
+      
+      // Add data-buffer attribute for service worker to pick up
+      videoElement.setAttribute('data-buffer', 'true');
+      
+      // Set buffer mode to auto to prioritize uninterrupted playback
+      if (typeof videoElement.playbackRate !== 'undefined') {
+        // Skip initial frame for faster start
+        videoElement.currentTime = 0.1;
+      }
 
-    // Set initial quality to lower for faster start
-    if (videoElement.canPlayType('video/mp4')) {
-        videoElement.currentTime = 0.1; // Skip initial frame for faster start
-    }
+      // Add buffer monitoring
+      const bufferHandler = () => {
+        // Check if we need to add a buffering indicator
+        if (videoElement.readyState < 3 && !videoElement.paused) {
+          // Show buffer indicator
+          if (!document.querySelector('.fullscreen-buffer-indicator')) {
+            const bufferIndicator = document.createElement('div');
+            bufferIndicator.className = 'fullscreen-buffer-indicator absolute inset-0 bg-black/50 flex items-center justify-center';
+            bufferIndicator.innerHTML = `
+              <div class="w-16 h-16 border-4 border-primary-700 border-t-transparent rounded-full animate-spin"></div>
+            `;
+            videoWrapper.appendChild(bufferIndicator);
+          }
+        } else {
+          // Remove buffer indicator if it exists
+          const indicator = document.querySelector('.fullscreen-buffer-indicator');
+          if (indicator) {
+            indicator.remove();
+          }
+        }
+      };
+      
+      videoElement.addEventListener('waiting', bufferHandler);
+      videoElement.addEventListener('playing', bufferHandler);
+      videoElement.addEventListener('canplay', bufferHandler);
 
     // Handle closing with smooth animation
     const closeFullscreen = async () => {
@@ -430,21 +1028,6 @@ const Portfolio = () => {
     // Prevent right-click menu
     videoElement.oncontextmenu = () => false;
     
-    // Add loading indicator
-    const loadingIndicator = document.createElement('div');
-    loadingIndicator.className = 'absolute inset-0 flex items-center justify-center bg-black/50';
-    loadingIndicator.innerHTML = `
-        <div class="w-12 h-12 border-4 border-[#ff6d6d] border-t-transparent rounded-full animate-spin"></div>
-    `;
-    videoWrapper.appendChild(loadingIndicator);
-    
-    // Handle video loading
-    videoElement.addEventListener('canplay', () => {
-        if (loadingIndicator.parentNode) {
-            loadingIndicator.remove();
-        }
-    });
-    
     // Assemble the components
     header.appendChild(backButton);
     videoWrapper.appendChild(videoElement);
@@ -459,10 +1042,44 @@ const Portfolio = () => {
         container.style.transform = 'scale(1)';
     });
     
-    // Start playback immediately
-    videoElement.play().catch(error => {
-        console.log("Fullscreen play prevented:", error);
-    });
+      // Improved startup sequence with better buffering
+      const playFullscreenVideo = async () => {
+        try {
+          // Small delay for initial buffer
+          await new Promise(resolve => setTimeout(resolve, 100));
+          
+          // Try to play the video
+          const playResult = videoElement.play();
+          if (playResult !== undefined) {
+            playResult.catch(error => {
+              console.log("Fullscreen play error:", error);
+              // If autoplay fails, show a play button overlay
+              const playOverlay = document.createElement('div');
+              playOverlay.className = 'absolute inset-0 bg-black/70 flex items-center justify-center cursor-pointer';
+              playOverlay.innerHTML = `
+                <div class="w-20 h-20 rounded-full bg-primary-700 flex items-center justify-center shadow-xl">
+                  <svg class="w-10 h-10 text-white" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M8 5V19L19 12L8 5Z" fill="currentColor" />
+                  </svg>
+                </div>
+              `;
+              
+              // Play when clicked
+              playOverlay.addEventListener('click', () => {
+                videoElement.play().catch(e => console.log("Play error after click:", e));
+                playOverlay.remove();
+              });
+              
+              videoWrapper.appendChild(playOverlay);
+            });
+          }
+        } catch (error) {
+          console.error("Error in playFullscreenVideo:", error);
+        }
+      };
+      
+      playFullscreenVideo();
+    };
 };
 
   const handleVideoClick = (video) => {
@@ -566,7 +1183,8 @@ const Portfolio = () => {
                     src={item.videoUrl}
                     posterSrc={item.thumbnail}
                     className="w-full h-full"
-                    priority={index < 2}
+                    priority={true}
+                    data-buffer="true"
                     ref={el => {
                       if (el) {
                         videoRefs.current[item.id] = el;
@@ -574,26 +1192,60 @@ const Portfolio = () => {
                         // Set initial attributes
                         el.muted = true;
                         el.playsInline = true;
-                        el.preload = "metadata";
+                        el.preload = "auto";
+                        el.crossOrigin = "anonymous"; // Required for service worker caching
                         
-                        // Add timeupdate listener
-                        el.addEventListener('timeupdate', () => handleTimeUpdate(item.id));
+                        // Setup better buffering detection
+                        setupAdvancedBufferDetection(el, item.id);
+                        
+                        // Ensure any existing listener is removed first to prevent duplicates
+                        const existingHandler = () => handleTimeUpdate(item.id);
+                        el.removeEventListener('timeupdate', existingHandler);
+                        
+                        // Add timeupdate listener with proper binding
+                        const timeUpdateHandler = () => handleTimeUpdate(item.id);
+                        el.addEventListener('timeupdate', timeUpdateHandler);
+                        
+                        // Add loadeddata event to start time checking once the video loads
+                        el.addEventListener('loadeddata', () => {
+                          // Check if we need to stop right away (for videos that might have been cached)
+                          if (el.currentTime >= 15) {
+                            handleTimeUpdate(item.id);
+                          }
+                          
+                          // Setup the backup timer
+                          setupVideoTimeCheck(item.id);
+                        }, { once: true });
                         
                         // Use Intersection Observer
                         const observer = new IntersectionObserver(
                           ([entry]) => handleVideoPlayback(item.id, entry.isIntersecting),
-                          { threshold: 0.5 }
+                          { threshold: 0.3 }
                         );
                         observer.observe(el.parentElement);
                         
                         // Cleanup on unmount
                         return () => {
-                          el.removeEventListener('timeupdate', () => handleTimeUpdate(item.id));
+                          el.removeEventListener('timeupdate', timeUpdateHandler);
+                          if (timeCheckIntervals.current[item.id]) {
+                            clearInterval(timeCheckIntervals.current[item.id]);
+                            timeCheckIntervals.current[item.id] = null;
+                          }
                           observer.disconnect();
                         };
                       }
                     }}
                   />
+                  
+                  {/* Buffer indicator */}
+                  {bufferStates[item.id]?.isBuffering && !stoppedVideos[item.id] && (
+                    <div className="absolute bottom-0 left-0 right-0 h-1 bg-secondary-300/50">
+                      <div 
+                        className="h-full bg-primary-700 transition-all duration-300" 
+                        style={{ width: `${bufferStates[item.id]?.progress || 0}%` }}
+                      />
+                    </div>
+                  )}
                   
                   {/* Sound Control Button - Shows on hover for desktop and on click for mobile */}
                   <AnimatePresence>
@@ -742,7 +1394,8 @@ const Portfolio = () => {
                       src={item.videoUrl}
                       posterSrc={item.thumbnail}
                       className="w-full h-full"
-                      priority={index < 2}
+                      priority={true}
+                      data-buffer="true"
                       ref={el => {
                         if (el) {
                           videoRefs.current[item.id] = el;
@@ -750,26 +1403,60 @@ const Portfolio = () => {
                           // Set initial attributes
                           el.muted = true;
                           el.playsInline = true;
-                          el.preload = "metadata";
+                          el.preload = "auto";
+                          el.crossOrigin = "anonymous"; // Required for service worker caching
                           
-                          // Add timeupdate listener
-                          el.addEventListener('timeupdate', () => handleTimeUpdate(item.id));
+                          // Setup better buffering detection
+                          setupAdvancedBufferDetection(el, item.id);
+                          
+                          // Ensure any existing listener is removed first to prevent duplicates
+                          const existingHandler = () => handleTimeUpdate(item.id);
+                          el.removeEventListener('timeupdate', existingHandler);
+                          
+                          // Add timeupdate listener with proper binding
+                          const timeUpdateHandler = () => handleTimeUpdate(item.id);
+                          el.addEventListener('timeupdate', timeUpdateHandler);
+                          
+                          // Add loadeddata event to start time checking once the video loads
+                          el.addEventListener('loadeddata', () => {
+                            // Check if we need to stop right away (for videos that might have been cached)
+                            if (el.currentTime >= 15) {
+                              handleTimeUpdate(item.id);
+                            }
+                            
+                            // Setup the backup timer
+                            setupVideoTimeCheck(item.id);
+                          }, { once: true });
                           
                           // Use Intersection Observer
                           const observer = new IntersectionObserver(
                             ([entry]) => handleVideoPlayback(item.id, entry.isIntersecting),
-                            { threshold: 0.5 }
+                            { threshold: 0.3 }
                           );
                           observer.observe(el.parentElement);
                           
                           // Cleanup on unmount
                           return () => {
-                            el.removeEventListener('timeupdate', () => handleTimeUpdate(item.id));
+                            el.removeEventListener('timeupdate', timeUpdateHandler);
+                            if (timeCheckIntervals.current[item.id]) {
+                              clearInterval(timeCheckIntervals.current[item.id]);
+                              timeCheckIntervals.current[item.id] = null;
+                            }
                             observer.disconnect();
                           };
                         }
                       }}
                     />
+                    
+                    {/* Buffer indicator */}
+                    {bufferStates[item.id]?.isBuffering && !stoppedVideos[item.id] && (
+                      <div className="absolute bottom-0 left-0 right-0 h-1 bg-secondary-300/50">
+                        <div 
+                          className="h-full bg-primary-700 transition-all duration-300" 
+                          style={{ width: `${bufferStates[item.id]?.progress || 0}%` }}
+                        />
+                      </div>
+                    )}
                     
                     {/* Sound Control Button - Shows on hover for desktop and on click for mobile */}
                     <AnimatePresence>

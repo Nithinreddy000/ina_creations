@@ -10,10 +10,12 @@ const ImageWithPreload = ({ src, alt, className, onLoad }) => {
   useEffect(() => {
     // Check if image is already cached
     if (imgRef.current && imgRef.current.complete) {
-      setLoaded(true);
-      if (onLoad) onLoad();
+      if (!loaded) {
+        setLoaded(true);
+        if (onLoad) onLoad();
+      }
     }
-  }, [onLoad]);
+  }, [loaded, onLoad, src]);
 
   return (
     <div className="relative w-full h-full">
@@ -31,8 +33,10 @@ const ImageWithPreload = ({ src, alt, className, onLoad }) => {
         alt={alt}
         className={`${className} ${loaded ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300`}
         onLoad={() => {
-          setLoaded(true);
-          if (onLoad) onLoad();
+          if (!loaded) {
+            setLoaded(true);
+            if (onLoad) onLoad();
+          }
         }}
       />
     </div>
@@ -138,7 +142,7 @@ const Team = () => {
     },
     {
       name: "Balaram Chowdary",
-      title: "Treasurer",
+      title: "Creative",
       description: "Expert in strategic financial planning and effective management.",
       image: require('../assets/our_team/Balaram.png'),
       instagram: "https://www.instagram.com/balaram_kalluri?igsh=MXAxbjI1bWt2MjlhMA==",
@@ -146,7 +150,7 @@ const Team = () => {
     },
     {
       name: "Sahasra",
-      title: "Treasurer",
+      title: "Creative",
       description: "Specialist in optimizing financial strategies and management.",
       image: require('../assets/our_team/Sahasra.png'),
       instagram: "https://www.instagram.com/sahasra_reddyy_03?igsh=aGx0YWtzdWRvamNy&utm_source=qr",

@@ -1,0 +1,531 @@
+{
+  "lastUpdated": "2025-03-28T16:21:36.448Z",
+  "totalAssets": 14,
+  "criticalAssets": [
+    {
+      "name": "logo",
+      "path": "src\\assets\\logo\\logo.png",
+      "original": {
+        "width": 601,
+        "height": 301,
+        "type": "jpeg"
+      },
+      "responsive": {
+        "xs": {
+          "width": 400,
+          "formats": {
+            "webp": "optimized-images/xs/logo-xs.webp",
+            "png": "optimized-images/xs/logo-xs.png",
+            "avif": "optimized-images/xs/logo-xs.avif"
+          }
+        }
+      },
+      "formats": {
+        "original": "optimized-images/original/logo.png",
+        "webp": "optimized-images/original/logo.webp",
+        "avif": "optimized-images/original/logo.avif"
+      },
+      "isCritical": true
+    }
+  ],
+  "assets": [
+    {
+      "name": "logo",
+      "path": "src\\assets\\logo\\logo.png",
+      "original": {
+        "width": 601,
+        "height": 301,
+        "type": "jpeg"
+      },
+      "responsive": {
+        "xs": {
+          "width": 400,
+          "formats": {
+            "webp": "optimized-images/xs/logo-xs.webp",
+            "png": "optimized-images/xs/logo-xs.png",
+            "avif": "optimized-images/xs/logo-xs.avif"
+          }
+        }
+      },
+      "formats": {
+        "original": "optimized-images/original/logo.png",
+        "webp": "optimized-images/original/logo.webp",
+        "avif": "optimized-images/original/logo.avif"
+      },
+      "isCritical": true
+    },
+    {
+      "name": "main",
+      "path": "src\\assets\\mainbackgroundvideo\\main.mp4",
+      "type": "video",
+      "qualities": {},
+      "poster": {}
+    },
+    {
+      "name": "main3",
+      "path": "src\\assets\\mainbackgroundvideo\\main3.mp4",
+      "type": "video",
+      "qualities": {},
+      "poster": {}
+    },
+    {
+      "name": "placeholder",
+      "path": "src\\assets\\mainbackgroundvideo\\placeholder.jpg",
+      "original": {
+        "width": 1024,
+        "height": 768,
+        "type": "jpeg"
+      },
+      "responsive": {
+        "xs": {
+          "width": 400,
+          "formats": {
+            "webp": "optimized-images/xs/placeholder-xs.webp",
+            "jpg": "optimized-images/xs/placeholder-xs.jpg",
+            "avif": "optimized-images/xs/placeholder-xs.avif"
+          }
+        },
+        "sm": {
+          "width": 640,
+          "formats": {
+            "webp": "optimized-images/sm/placeholder-sm.webp",
+            "jpg": "optimized-images/sm/placeholder-sm.jpg",
+            "avif": "optimized-images/sm/placeholder-sm.avif"
+          }
+        }
+      },
+      "formats": {
+        "original": "optimized-images/original/placeholder.jpg",
+        "webp": "optimized-images/original/placeholder.webp",
+        "avif": "optimized-images/original/placeholder.avif"
+      },
+      "isCritical": false
+    },
+    {
+      "name": "Balaram",
+      "path": "src\\assets\\our_team\\Balaram.png",
+      "original": {
+        "width": 2252,
+        "height": 4000,
+        "type": "jpeg"
+      },
+      "responsive": {
+        "xs": {
+          "width": 400,
+          "formats": {
+            "webp": "optimized-images/xs/Balaram-xs.webp",
+            "png": "optimized-images/xs/Balaram-xs.png",
+            "avif": "optimized-images/xs/Balaram-xs.avif"
+          }
+        },
+        "sm": {
+          "width": 640,
+          "formats": {
+            "webp": "optimized-images/sm/Balaram-sm.webp",
+            "png": "optimized-images/sm/Balaram-sm.png",
+            "avif": "optimized-images/sm/Balaram-sm.avif"
+          }
+        },
+        "md": {
+          "width": 1024,
+          "formats": {
+            "webp": "optimized-images/md/Balaram-md.webp",
+            "png": "optimized-images/md/Balaram-md.png",
+            "avif": "optimized-images/md/Balaram-md.avif"
+          }
+        },
+        "lg": {
+          "width": 1440,
+          "formats": {
+            "webp": "optimized-images/lg/Balaram-lg.webp",
+            "png": "optimized-images/lg/Balaram-lg.png",
+            "avif": "optimized-images/lg/Balaram-lg.avif"
+          }
+        },
+        "xl": {
+          "width": 1920,
+          "formats": {
+            "webp": "optimized-images/xl/Balaram-xl.webp",
+            "png": "optimized-images/xl/Balaram-xl.png",
+            "avif": "optimized-images/xl/Balaram-xl.avif"
+          }
+        }
+      },
+      "formats": {
+        "original": "optimized-images/original/Balaram.png",
+        "webp": "optimized-images/original/Balaram.webp",
+        "avif": "optimized-images/original/Balaram.avif"
+      },
+      "isCritical": false
+    },
+    {
+      "name": "Bhuvana",
+      "path": "src\\assets\\our_team\\Bhuvana.png",
+      "original": {
+        "width": 2076,
+        "height": 4608,
+        "type": "jpeg"
+      },
+      "responsive": {
+        "xs": {
+          "width": 400,
+          "formats": {
+            "webp": "optimized-images/xs/Bhuvana-xs.webp",
+            "png": "optimized-images/xs/Bhuvana-xs.png",
+            "avif": "optimized-images/xs/Bhuvana-xs.avif"
+          }
+        },
+        "sm": {
+          "width": 640,
+          "formats": {
+            "webp": "optimized-images/sm/Bhuvana-sm.webp",
+            "png": "optimized-images/sm/Bhuvana-sm.png",
+            "avif": "optimized-images/sm/Bhuvana-sm.avif"
+          }
+        },
+        "md": {
+          "width": 1024,
+          "formats": {
+            "webp": "optimized-images/md/Bhuvana-md.webp",
+            "png": "optimized-images/md/Bhuvana-md.png",
+            "avif": "optimized-images/md/Bhuvana-md.avif"
+          }
+        },
+        "lg": {
+          "width": 1440,
+          "formats": {
+            "webp": "optimized-images/lg/Bhuvana-lg.webp",
+            "png": "optimized-images/lg/Bhuvana-lg.png",
+            "avif": "optimized-images/lg/Bhuvana-lg.avif"
+          }
+        },
+        "xl": {
+          "width": 1920,
+          "formats": {
+            "webp": "optimized-images/xl/Bhuvana-xl.webp",
+            "png": "optimized-images/xl/Bhuvana-xl.png",
+            "avif": "optimized-images/xl/Bhuvana-xl.avif"
+          }
+        }
+      },
+      "formats": {
+        "original": "optimized-images/original/Bhuvana.png",
+        "webp": "optimized-images/original/Bhuvana.webp",
+        "avif": "optimized-images/original/Bhuvana.avif"
+      },
+      "isCritical": false
+    },
+    {
+      "name": "Chandhan",
+      "path": "src\\assets\\our_team\\Chandhan.png",
+      "original": {
+        "width": 4080,
+        "height": 3060,
+        "type": "jpeg"
+      },
+      "responsive": {
+        "xs": {
+          "width": 400,
+          "formats": {
+            "webp": "optimized-images/xs/Chandhan-xs.webp",
+            "png": "optimized-images/xs/Chandhan-xs.png",
+            "avif": "optimized-images/xs/Chandhan-xs.avif"
+          }
+        },
+        "sm": {
+          "width": 640,
+          "formats": {
+            "webp": "optimized-images/sm/Chandhan-sm.webp",
+            "png": "optimized-images/sm/Chandhan-sm.png",
+            "avif": "optimized-images/sm/Chandhan-sm.avif"
+          }
+        },
+        "md": {
+          "width": 1024,
+          "formats": {
+            "webp": "optimized-images/md/Chandhan-md.webp",
+            "png": "optimized-images/md/Chandhan-md.png",
+            "avif": "optimized-images/md/Chandhan-md.avif"
+          }
+        },
+        "lg": {
+          "width": 1440,
+          "formats": {
+            "webp": "optimized-images/lg/Chandhan-lg.webp",
+            "png": "optimized-images/lg/Chandhan-lg.png",
+            "avif": "optimized-images/lg/Chandhan-lg.avif"
+          }
+        },
+        "xl": {
+          "width": 1920,
+          "formats": {
+            "webp": "optimized-images/xl/Chandhan-xl.webp",
+            "png": "optimized-images/xl/Chandhan-xl.png",
+            "avif": "optimized-images/xl/Chandhan-xl.avif"
+          }
+        }
+      },
+      "formats": {
+        "original": "optimized-images/original/Chandhan.png",
+        "webp": "optimized-images/original/Chandhan.webp",
+        "avif": "optimized-images/original/Chandhan.avif"
+      },
+      "isCritical": false
+    },
+    {
+      "name": "Gnan",
+      "path": "src\\assets\\our_team\\Gnan.png",
+      "original": {
+        "width": 900,
+        "height": 1600,
+        "type": "jpeg"
+      },
+      "responsive": {
+        "xs": {
+          "width": 400,
+          "formats": {
+            "webp": "optimized-images/xs/Gnan-xs.webp",
+            "png": "optimized-images/xs/Gnan-xs.png",
+            "avif": "optimized-images/xs/Gnan-xs.avif"
+          }
+        },
+        "sm": {
+          "width": 640,
+          "formats": {
+            "webp": "optimized-images/sm/Gnan-sm.webp",
+            "png": "optimized-images/sm/Gnan-sm.png",
+            "avif": "optimized-images/sm/Gnan-sm.avif"
+          }
+        }
+      },
+      "formats": {
+        "original": "optimized-images/original/Gnan.png",
+        "webp": "optimized-images/original/Gnan.webp",
+        "avif": "optimized-images/original/Gnan.avif"
+      },
+      "isCritical": false
+    },
+    {
+      "name": "Hemanth",
+      "path": "src\\assets\\our_team\\Hemanth.png",
+      "original": {
+        "width": 1080,
+        "height": 1063,
+        "type": "jpeg"
+      },
+      "responsive": {
+        "xs": {
+          "width": 400,
+          "formats": {
+            "webp": "optimized-images/xs/Hemanth-xs.webp",
+            "png": "optimized-images/xs/Hemanth-xs.png",
+            "avif": "optimized-images/xs/Hemanth-xs.avif"
+          }
+        },
+        "sm": {
+          "width": 640,
+          "formats": {
+            "webp": "optimized-images/sm/Hemanth-sm.webp",
+            "png": "optimized-images/sm/Hemanth-sm.png",
+            "avif": "optimized-images/sm/Hemanth-sm.avif"
+          }
+        },
+        "md": {
+          "width": 1024,
+          "formats": {
+            "webp": "optimized-images/md/Hemanth-md.webp",
+            "png": "optimized-images/md/Hemanth-md.png",
+            "avif": "optimized-images/md/Hemanth-md.avif"
+          }
+        }
+      },
+      "formats": {
+        "original": "optimized-images/original/Hemanth.png",
+        "webp": "optimized-images/original/Hemanth.webp",
+        "avif": "optimized-images/original/Hemanth.avif"
+      },
+      "isCritical": false
+    },
+    {
+      "name": "Manish",
+      "path": "src\\assets\\our_team\\Manish.png",
+      "original": {
+        "width": 720,
+        "height": 1280,
+        "type": "jpeg"
+      },
+      "responsive": {
+        "xs": {
+          "width": 400,
+          "formats": {
+            "webp": "optimized-images/xs/Manish-xs.webp",
+            "png": "optimized-images/xs/Manish-xs.png",
+            "avif": "optimized-images/xs/Manish-xs.avif"
+          }
+        },
+        "sm": {
+          "width": 640,
+          "formats": {
+            "webp": "optimized-images/sm/Manish-sm.webp",
+            "png": "optimized-images/sm/Manish-sm.png",
+            "avif": "optimized-images/sm/Manish-sm.avif"
+          }
+        }
+      },
+      "formats": {
+        "original": "optimized-images/original/Manish.png",
+        "webp": "optimized-images/original/Manish.webp",
+        "avif": "optimized-images/original/Manish.avif"
+      },
+      "isCritical": false
+    },
+    {
+      "name": "Nithin",
+      "path": "src\\assets\\our_team\\Nithin.png",
+      "original": {
+        "width": 761,
+        "height": 761,
+        "type": "jpeg"
+      },
+      "responsive": {
+        "xs": {
+          "width": 400,
+          "formats": {
+            "webp": "optimized-images/xs/Nithin-xs.webp",
+            "png": "optimized-images/xs/Nithin-xs.png",
+            "avif": "optimized-images/xs/Nithin-xs.avif"
+          }
+        },
+        "sm": {
+          "width": 640,
+          "formats": {
+            "webp": "optimized-images/sm/Nithin-sm.webp",
+            "png": "optimized-images/sm/Nithin-sm.png",
+            "avif": "optimized-images/sm/Nithin-sm.avif"
+          }
+        }
+      },
+      "formats": {
+        "original": "optimized-images/original/Nithin.png",
+        "webp": "optimized-images/original/Nithin.webp",
+        "avif": "optimized-images/original/Nithin.avif"
+      },
+      "isCritical": false
+    },
+    {
+      "name": "Sahasra",
+      "path": "src\\assets\\our_team\\Sahasra.png",
+      "original": {
+        "width": 1280,
+        "height": 960,
+        "type": "jpeg"
+      },
+      "responsive": {
+        "xs": {
+          "width": 400,
+          "formats": {
+            "webp": "optimized-images/xs/Sahasra-xs.webp",
+            "png": "optimized-images/xs/Sahasra-xs.png",
+            "avif": "optimized-images/xs/Sahasra-xs.avif"
+          }
+        },
+        "sm": {
+          "width": 640,
+          "formats": {
+            "webp": "optimized-images/sm/Sahasra-sm.webp",
+            "png": "optimized-images/sm/Sahasra-sm.png",
+            "avif": "optimized-images/sm/Sahasra-sm.avif"
+          }
+        },
+        "md": {
+          "width": 1024,
+          "formats": {
+            "webp": "optimized-images/md/Sahasra-md.webp",
+            "png": "optimized-images/md/Sahasra-md.png",
+            "avif": "optimized-images/md/Sahasra-md.avif"
+          }
+        }
+      },
+      "formats": {
+        "original": "optimized-images/original/Sahasra.png",
+        "webp": "optimized-images/original/Sahasra.webp",
+        "avif": "optimized-images/original/Sahasra.avif"
+      },
+      "isCritical": false
+    },
+    {
+      "name": "Thanuja",
+      "path": "src\\assets\\our_team\\Thanuja.png",
+      "original": {
+        "width": 1070,
+        "height": 1070,
+        "type": "jpeg"
+      },
+      "responsive": {
+        "xs": {
+          "width": 400,
+          "formats": {
+            "webp": "optimized-images/xs/Thanuja-xs.webp",
+            "png": "optimized-images/xs/Thanuja-xs.png",
+            "avif": "optimized-images/xs/Thanuja-xs.avif"
+          }
+        },
+        "sm": {
+          "width": 640,
+          "formats": {
+            "webp": "optimized-images/sm/Thanuja-sm.webp",
+            "png": "optimized-images/sm/Thanuja-sm.png",
+            "avif": "optimized-images/sm/Thanuja-sm.avif"
+          }
+        },
+        "md": {
+          "width": 1024,
+          "formats": {
+            "webp": "optimized-images/md/Thanuja-md.webp",
+            "png": "optimized-images/md/Thanuja-md.png",
+            "avif": "optimized-images/md/Thanuja-md.avif"
+          }
+        }
+      },
+      "formats": {
+        "original": "optimized-images/original/Thanuja.png",
+        "webp": "optimized-images/original/Thanuja.webp",
+        "avif": "optimized-images/original/Thanuja.avif"
+      },
+      "isCritical": false
+    },
+    {
+      "name": "Yashasri",
+      "path": "src\\assets\\our_team\\Yashasri.png",
+      "original": {
+        "width": 960,
+        "height": 1280,
+        "type": "jpeg"
+      },
+      "responsive": {
+        "xs": {
+          "width": 400,
+          "formats": {
+            "webp": "optimized-images/xs/Yashasri-xs.webp",
+            "png": "optimized-images/xs/Yashasri-xs.png",
+            "avif": "optimized-images/xs/Yashasri-xs.avif"
+          }
+        },
+        "sm": {
+          "width": 640,
+          "formats": {
+            "webp": "optimized-images/sm/Yashasri-sm.webp",
+            "png": "optimized-images/sm/Yashasri-sm.png",
+            "avif": "optimized-images/sm/Yashasri-sm.avif"
+          }
+        }
+      },
+      "formats": {
+        "original": "optimized-images/original/Yashasri.png",
+        "webp": "optimized-images/original/Yashasri.webp",
+        "avif": "optimized-images/original/Yashasri.avif"
+      },
+      "isCritical": false
+    }
+  ]
+}

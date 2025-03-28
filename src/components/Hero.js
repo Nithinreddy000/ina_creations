@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaArrowDown, FaVolumeMute, FaVolumeUp } from 'react-icons/fa';
+import { FaArrowDown } from 'react-icons/fa';
 import { Link } from 'react-scroll';
 import { useIsVisible } from '../hooks/useIsVisible';
 import backgroundVideo from '../assets/mainbackgroundvideo/main.mp4';
@@ -16,7 +16,6 @@ const Hero = () => {
   const [videoError, setVideoError] = useState(false);
   const [shouldReduceMotion, setShouldReduceMotion] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
-  const [showVolumeControl, setShowVolumeControl] = useState(false);
   const videoRef = useRef(null);
   const { isVisible, targetRef } = useIsVisible({
     rootMargin: '100px',
@@ -59,11 +58,6 @@ const Hero = () => {
     if (videoElement) {
       videoRef.current = videoElement;
     }
-    
-    // Show volume control after video is loaded
-    setTimeout(() => {
-      setShowVolumeControl(true);
-    }, 1000);
   };
 
   const handleVideoError = () => {
@@ -72,22 +66,6 @@ const Hero = () => {
     // Still notify the loading system to avoid blocking the app
     resourceLoaded('hero_video');
     setIsVideoLoaded(false);
-  };
-
-  const toggleMute = (e) => {
-    if (e) e.stopPropagation();
-    
-    if (videoRef.current) {
-      const newMutedState = !isMuted;
-      videoRef.current.muted = newMutedState;
-      
-      // Ensure proper volume when unmuting
-      if (!newMutedState) {
-        videoRef.current.volume = 1.0;
-      }
-      
-      setIsMuted(newMutedState);
-    }
   };
 
   return (
@@ -114,32 +92,13 @@ const Hero = () => {
               className={`absolute top-0 left-0 w-full h-full object-cover transition-opacity duration-1000 hero-video-element ${isVideoLoaded ? 'opacity-100' : 'opacity-0'}`}
               autoPlay
               loop
-              muted={isMuted}
+              muted={true}
               playsInline
               preload="auto"
               onLoaded={handleVideoLoaded}
               onError={handleVideoError}
               priority={true} // Load video immediately for hero section
             />
-          )}
-        </AnimatePresence>
-
-        {/* Volume Control */}
-        <AnimatePresence>
-          {showVolumeControl && (
-            <motion.button
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.3 }}
-              className="absolute bottom-24 right-8 bg-primary-900/50 p-3 rounded-full text-white hover:bg-primary-800/70 transition-all z-20 backdrop-blur-sm border border-white/10 shadow-lg"
-              onClick={toggleMute}
-            >
-              {isMuted ? 
-                <FaVolumeMute size={22} /> : 
-                <FaVolumeUp size={22} />
-              }
-            </motion.button>
           )}
         </AnimatePresence>
 

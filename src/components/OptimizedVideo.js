@@ -45,10 +45,19 @@ const OptimizedVideo = ({
       observer.observe(videoRef.current);
     }
 
+    // Add a timeout to ensure videos load after 3 seconds even if not visible
+    const timeoutId = setTimeout(() => {
+      setIsVisible(true);
+      if (videoRef.current) {
+        observer.unobserve(videoRef.current);
+      }
+    }, 3000);
+
     return () => {
       if (videoRef.current) {
         observer.disconnect();
       }
+      clearTimeout(timeoutId);
     };
   }, [priority]);
 
@@ -67,6 +76,12 @@ const OptimizedVideo = ({
       if (onError) onError(e);
     };
 
+    // Force load the video
+    if (!video.src && src) {
+      const videoQuality = shouldLoadHighQualityMedia() ? 'high' : 'low';
+      video.src = `${src}?q=${videoQuality}`;
+    }
+    
     // Ensure proper initial muted state and volume
     video.muted = muted;
     video.volume = 1.0; // Set full volume by default
@@ -74,11 +89,24 @@ const OptimizedVideo = ({
     video.addEventListener('loadeddata', handleLoadedData);
     video.addEventListener('error', handleError);
 
+    // If video hasn't loaded after 5 seconds, try to force it
+    const loadingTimeout = setTimeout(() => {
+      if (!hasLoaded && video) {
+        console.log('Forcing video load:', src);
+        // Try to trigger load by changing current time
+        video.currentTime = 0.1;
+        if (autoPlay) {
+          video.play().catch(err => console.log('Auto play failed:', err));
+        }
+      }
+    }, 5000);
+
     return () => {
       video.removeEventListener('loadeddata', handleLoadedData);
       video.removeEventListener('error', handleError);
+      clearTimeout(loadingTimeout);
     };
-  }, [isVisible, onLoaded, onError, muted]);
+  }, [isVisible, onLoaded, onError, muted, src, autoPlay, hasLoaded, shouldLoadHighQualityMedia]);
 
   // Determine video quality based on device performance
   const videoQuality = shouldLoadHighQualityMedia() ? 'high' : 'low';

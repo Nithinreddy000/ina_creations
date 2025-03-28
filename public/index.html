@@ -36,7 +36,26 @@
     <link rel="manifest" href="%PUBLIC_URL%/favicons/site.webmanifest" />
     <link rel="icon" href="%PUBLIC_URL%/favicons/favicon.ico" />
     
+    <!-- Video Buffer Styles -->
+    <link rel="stylesheet" href="%PUBLIC_URL%/video-buffer.css" />
+    
     <title>INA Creations - Professional Photography & Videography Services</title>
+    
+    <!-- Video buffer service worker registration -->
+    <script>
+      // Register the video buffer service worker
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+          navigator.serviceWorker.register('/buffer-worker.js')
+            .then(function(registration) {
+              console.log('Video buffer service worker registered:', registration.scope);
+            })
+            .catch(function(error) {
+              console.log('Video buffer service worker registration failed:', error);
+            });
+        });
+      }
+    </script>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>

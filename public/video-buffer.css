@@ -1,0 +1,117 @@
+/* Video Buffer Styles */
+
+.video-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.video-buffer-indicator {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0%;
+  height: 4px;
+  background-color: #3984ff;
+  transition: width 0.3s ease, opacity 0.5s ease;
+  z-index: 10;
+}
+
+.video-buffer-indicator.complete {
+  opacity: 0;
+}
+
+.video-buffer-indicator.error {
+  background-color: #ff3939;
+}
+
+/* Buffering spinner */
+.video-buffering-spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #fff;
+  animation: spin 1s infinite linear;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.video-buffering-spinner.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+@keyframes spin {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+/* Buffer status indicator */
+.buffer-status-text {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.buffer-status-text:hover {
+  opacity: 1;
+}
+
+/* Fullscreen buffer indicator */
+.fullscreen-buffer-indicator {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 0%;
+  height: 6px;
+  background-color: #3984ff;
+  transition: width 0.3s ease;
+  z-index: 10000;
+}
+
+/* Video wrapper */
+.video-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  max-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Add buffer preload transition */
+.video-preload-transition {
+  transition: opacity 0.5s ease;
+}
+
+/* Video fade-in effect when loaded */
+.video-fade-in {
+  animation: fadeIn 0.5s ease forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+} 
