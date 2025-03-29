@@ -1176,7 +1176,6 @@ const Portfolio = () => {
                         }}
                       >
                         <FaExpand size={16} />
-                        <span className="text-sm font-medium">Full Video</span>
                       </motion.button>
                     )}
                   </AnimatePresence>
