@@ -117,6 +117,7 @@ const Portfolio = () => {
   const [hoveredVideo, setHoveredVideo] = useState(null);
   const [showControls, setShowControls] = useState({});
   const [showFullVideoOption, setShowFullVideoOption] = useState({});
+  const [visibleVideos, setVisibleVideos] = useState({});
   const videoRefs = useRef({});
   const observerRefs = useRef({});
   const isMobile = window.innerWidth <= 768;
@@ -147,7 +148,7 @@ const Portfolio = () => {
     return true;
   }, []);
 
-  // Register service worker for video buffering
+  // Register service worker for video buffering with enhanced aggressive caching
   useEffect(() => {
     // Load buffer client script
     const scriptElement = document.createElement('script');
@@ -155,6 +156,17 @@ const Portfolio = () => {
     scriptElement.async = true;
     scriptElement.onload = () => {
       console.log('Video buffer client loaded');
+      
+      // Set global buffer options for zero buffering
+      if (window.setBufferOptions) {
+        window.setBufferOptions({
+          aggressiveCaching: true,
+          prefetchAmount: 100, // Prefetch 100% of the video
+          chunkSize: 2 * 1024 * 1024, // 2MB chunks for faster initial load
+          parallelRequests: 4, // Use 4 parallel requests to speed up downloading
+          preloadMetadata: true // Preload video metadata for faster start
+        });
+      }
     };
     document.head.appendChild(scriptElement);
     
@@ -165,38 +177,47 @@ const Portfolio = () => {
     };
   }, []);
   
-  // Pre-buffer videos on page load
+  // Pre-buffer all videos on page load with maximum buffer priority
   useEffect(() => {
     if (!portfolioItems.length || !window.bufferVideo) return;
     
     // Track which videos we've already processed
     const processedVideos = new Set();
     
-    // Buffer the first 4 videos immediately
-    portfolioItems.slice(0, 4).forEach(item => {
+    // Precache all videos immediately with high priority for zero buffering
+    portfolioItems.forEach(item => {
       if (window.bufferVideo && item.videoUrl && !processedVideos.has(item.id)) {
         processedVideos.add(item.id);
         console.log('Pre-buffering video:', item.videoUrl);
+        
+        // Set high priority for all videos to ensure zero buffering
+        const isPriority = true;
+        
         window.bufferVideo(item.videoUrl, (status) => {
-          if (status.buffered >= 15 && status.buffered < 100) {
-            console.log(`Video ${item.id} is ${status.buffered}% buffered and ready to play`);
-            
-            // Only update buffer state once the video is sufficiently buffered
-            if (!bufferStates[item.id] || !bufferStates[item.id].reported15Percent) {
-              setBufferStates(prev => ({
-                ...prev,
-                [item.id]: { 
-                  isBuffering: !status.done, 
-                  progress: status.buffered,
-                  reported15Percent: true
-                }
-              }));
+          // Update buffer state for UI
+          throttleBufferUpdate(item.id, () => {
+            setBufferStates(prev => ({
+              ...prev,
+              [item.id]: { 
+                isBuffering: !status.done, 
+                progress: status.buffered,
+                isPriority: isPriority
+              }
+            }));
+          });
+          
+          // Enable playback once we have minimal buffer for instant start
+          if (status.buffered >= 1 && visibleVideos[item.id] && !isMobile) {
+            const videoElement = videoRefs.current[item.id];
+            if (videoElement && videoElement.paused) {
+              videoElement.currentTime = 0; // Start from beginning
+              videoElement.play().catch(e => console.log("Auto play failed:", e));
             }
           }
-        });
+        }, isPriority, { fullBuffer: true });
       }
     });
-  }, [portfolioItems]); // Only run when portfolioItems changes
+  }, [portfolioItems, visibleVideos, isMobile, throttleBufferUpdate]);
 
   // Prevent right-click context menu
   useEffect(() => {
@@ -262,48 +283,8 @@ const Portfolio = () => {
 
     const currentTime = videoElement.currentTime;
     
-    // Hard stop at exactly 15 seconds
-    if (currentTime >= 15 && !stoppedVideos[id] && !videoStates[id]?.stopped) {
-      console.log(`Video ${id} reached 15 seconds, stopping...`);
-      
-      // Ensure video is paused
-      videoElement.pause();
-      
-      // Update all relevant states to mark video as stopped
-      setVideoStates(prev => ({
-        ...prev,
-        [id]: {
-          ...prev[id],
-          time: currentTime,
-          stopped: true,
-          showFullOption: true,
-          shouldNotAutoplay: true
-        }
-      }));
-      
-      setShowFullVideoOption(prev => ({
-        ...prev,
-        [id]: true
-      }));
-      
-      setStoppedVideos(prev => ({
-        ...prev,
-        [id]: true
-      }));
-      
-      // Clear any existing interval for this video
-      if (timeCheckIntervals.current[id]) {
-        clearInterval(timeCheckIntervals.current[id]);
-        timeCheckIntervals.current[id] = null;
-      }
-      
-      // Remove timeupdate listener to prevent duplicate stopping
-      videoElement.removeEventListener('timeupdate', () => handleTimeUpdate(id));
-      
-      return;
-    }
-    
-    // Just update time tracking if not yet at 15 seconds
+    // Instead of stopping at 15 seconds, allow continuous playback
+    // Just update time tracking for UI
     setVideoStates(prev => ({
       ...prev,
       [id]: {
@@ -311,14 +292,20 @@ const Portfolio = () => {
         time: currentTime
       }
     }));
-  }, [stoppedVideos, videoStates]);
+    
+    // If video reaches the end, loop it
+    if (currentTime >= videoElement.duration - 0.5) {
+      // Ensure looping is enabled
+      videoElement.loop = true;
+    }
+  }, [videoStates]);
 
-  // Setup additional backup timer to ensure videos stop at 15 seconds
+  // Setup additional backup timer to ensure videos loop properly
   const setupVideoTimeCheck = useCallback((id) => {
     const videoElement = videoRefs.current[id];
     if (!videoElement || timeCheckIntervals.current[id]) return;
     
-    // Create an interval that checks video time every 500ms as a backup to timeupdate event
+    // Create an interval that checks video state every 2 seconds to ensure proper looping
     timeCheckIntervals.current[id] = setInterval(() => {
       const video = videoRefs.current[id];
       if (!video) {
@@ -327,43 +314,15 @@ const Portfolio = () => {
         return;
       }
       
-      const currentTime = video.currentTime;
-      
-      // If video has played for at least 15 seconds but hasn't been marked as stopped
-      if (currentTime >= 15 && !stoppedVideos[id] && !videoStates[id]?.stopped) {
-        console.log(`Backup timer stopping video ${id} at ${currentTime}s`);
-        
-        // Force pause
-        video.pause();
-        
-        // Update all states
-        setVideoStates(prev => ({
-          ...prev,
-          [id]: {
-            ...prev[id],
-            time: currentTime,
-            stopped: true,
-            showFullOption: true,
-            shouldNotAutoplay: true
-          }
-        }));
-        
-        setShowFullVideoOption(prev => ({
-          ...prev,
-          [id]: true
-        }));
-        
-        setStoppedVideos(prev => ({
-          ...prev,
-          [id]: true
-        }));
-        
-        // Clear interval after stopping
-        clearInterval(timeCheckIntervals.current[id]);
-        timeCheckIntervals.current[id] = null;
+      // Ensure video is playing if it should be visible
+      if (video.paused && visibleVideos[id] && !isMobile) {
+        video.play().catch(e => console.log("Auto-resume failed:", e));
       }
-    }, 500);
-  }, [stoppedVideos, videoStates]);
+      
+      // Ensure looping is enabled
+      video.loop = true;
+    }, 2000);
+  }, [visibleVideos, isMobile]);
 
   // Clean up all intervals on component unmount
   useEffect(() => {
@@ -481,7 +440,7 @@ const Portfolio = () => {
     };
   }, []);
 
-  // Enhanced video playback handler with service worker integration
+  // Enhanced video playback handler with service worker integration for zero buffering
   const handleVideoPlayback = useCallback((id, isVisible) => {
     const videoElement = videoRefs.current[id];
     if (!videoElement) return;
@@ -490,9 +449,16 @@ const Portfolio = () => {
       // Setup advanced buffer detection on this video element
       setupAdvancedBufferDetection(videoElement, id);
       
+      // Enable looping
+      videoElement.loop = true;
+      
       // Use service worker for buffering if available
       if (window.bufferVideo && !videoElement.getAttribute('data-buffer-id')) {
         videoElement.setAttribute('data-buffer-id', 'processing');
+        
+        // Request higher quality and priority for the buffer-worker
+        const isPriority = Object.keys(visibleVideos).indexOf(id) < 4;
+        
         window.bufferVideo(videoElement.src, (status) => {
           // Throttle buffer state updates to prevent excessive re-renders
           throttleBufferUpdate(id, () => {
@@ -505,105 +471,35 @@ const Portfolio = () => {
             }));
           });
           
-          // Play video when we have enough buffer (15%)
-          if (status.buffered >= 15 && isVisible && !videoStates[id]?.shouldNotAutoplay && !stoppedVideos[id]) {
+          // Play video when we have enough buffer (5% is enough with continuous buffering)
+          if (status.buffered >= 5 && isVisible && !isMobile) {
             const playPromise = videoElement.play();
             if (playPromise !== undefined) {
               playPromise.catch(e => console.log("Autoplay failed:", e));
             }
           }
-        });
+        }, isPriority);
       }
       
-      // Only start loading when visible
-      if (!videoStates[id]?.isLoaded) {
-        console.log("Loading video:", id);
-        
-        // Set video attributes for improved loading
-        videoElement.preload = 'auto'; // Full preload
-        
-        // Set playback quality based on network conditions
-        if ('connection' in navigator) {
-          const connection = navigator.connection;
-          const effectiveType = connection?.effectiveType;
-          
-          // Set low quality initially to start faster (like YouTube)
-          if (videoElement.src && videoElement.src.includes('?')) {
-            if (effectiveType === 'slow-2g' || effectiveType === '2g') {
-              videoElement.src = videoElement.src.replace(/q=(high|medium|low)/i, 'q=low');
-            } else if (effectiveType === '3g') {
-              videoElement.src = videoElement.src.replace(/q=(high|low)/i, 'q=medium');
-            } else {
-              // Default to high for 4g+ connections after initial load
-              if (!videoElement.src.includes('q=low')) {
-                videoElement.src = videoElement.src.replace(/q=(medium|low)/i, 'q=high');
-              }
-            }
-          }
+      // Attempt to play the video if it's paused
+      if (videoElement.paused && !isMobile) {
+        const playPromise = videoElement.play();
+        if (playPromise !== undefined) {
+          playPromise.catch(error => {
+            console.log("Autoplay failed, normal on mobile:", error);
+          });
         }
-        
-        // Use progressive loading strategy
-        videoElement.load();
-        
-        // After the video has some initial data, start playing
-        videoElement.addEventListener('loadedmetadata', function onLoadedMetadata() {
-          // Start with a lower playback position to avoid initial buffer
-          videoElement.currentTime = 0.1;
-          videoElement.removeEventListener('loadedmetadata', onLoadedMetadata);
-        }, { once: true });
-        
-        // Set up better buffering detection
-        videoElement.addEventListener('waiting', () => {
-          setBufferStates(prev => ({
-            ...prev,
-            [id]: { ...prev[id], isBuffering: true }
-          }));
-        });
-        
-        videoElement.addEventListener('canplay', () => {
-          setBufferStates(prev => ({
-            ...prev,
-            [id]: { ...prev[id], isBuffering: false }
-          }));
-        });
-        
-        setVideoStates(prev => ({
-          ...prev,
-          [id]: { ...prev[id], isLoaded: true }
-        }));
-        
-        // Set crossOrigin to ensure service worker can cache properly
-        videoElement.crossOrigin = 'anonymous';
       }
-
-      // Skip playback if video should not autoplay (reached 15s mark) or if fullscreen is open
-      const fullscreenOpen = document.body.style.overflow === 'hidden';
-      const shouldNotAutoplay = videoStates[id]?.shouldNotAutoplay || videoStates[id]?.stopped || stoppedVideos[id];
       
-      if (!fullscreenOpen && !shouldNotAutoplay) {
-        // Setup time checker when video starts playing
-        setupVideoTimeCheck(id);
-
-      // Play video with error handling
-      const playPromise = videoElement.play();
-      if (playPromise !== undefined) {
-        playPromise.catch(error => {
-          console.log("Playback prevented:", error);
-          // Retry with muted state if autoplay was blocked
-          if (error.name === "NotAllowedError") {
-            videoElement.muted = true;
-            videoElement.play().catch(e => console.log("Couldn't play even muted:", e));
-          }
-        });
-        }
-      }
+      // Setup time checking for looping
+      setupVideoTimeCheck(id);
     } else {
       // Continue buffering in background but pause playback when not visible
       if (!videoElement.paused) {
         videoElement.pause();
       }
     }
-  }, [videoStates, stoppedVideos, startBuffering, getBufferStatus, setupVideoTimeCheck, setupAdvancedBufferDetection, throttleBufferUpdate]);
+  }, [setupAdvancedBufferDetection, setupVideoTimeCheck, visibleVideos, isMobile, throttleBufferUpdate]);
 
   // Force videos to load after a timeout regardless of visibility
   useEffect(() => {
@@ -701,6 +597,12 @@ const Portfolio = () => {
         
         // Store the video element reference
         videoRefs.current[videoId] = video;
+
+        // Update visibleVideos state based on intersection
+        setVisibleVideos(prev => ({
+          ...prev,
+          [videoId]: entry.isIntersecting
+        }));
 
         // Clean up any existing timeupdate handler for this video
         if (timeUpdateHandlers[videoId]) {
@@ -1237,16 +1139,6 @@ const Portfolio = () => {
                     }}
                   />
                   
-                  {/* Buffer indicator */}
-                  {bufferStates[item.id]?.isBuffering && !stoppedVideos[item.id] && (
-                    <div className="absolute bottom-0 left-0 right-0 h-1 bg-secondary-300/50">
-                      <div 
-                        className="h-full bg-primary-700 transition-all duration-300" 
-                        style={{ width: `${bufferStates[item.id]?.progress || 0}%` }}
-                      />
-                    </div>
-                  )}
-                  
                   {/* Sound Control Button - Shows on hover for desktop and on click for mobile */}
                   <AnimatePresence>
                     {(hoveredVideo === item.id || (isMobile && showControls[item.id])) && (
@@ -1271,7 +1163,7 @@ const Portfolio = () => {
                   
                   {/* Full Video Button - Show on hover, when clicked, or after 15 seconds */}
                   <AnimatePresence>
-                    {(hoveredVideo === item.id || showFullVideoOption[item.id] || videoStates[item.id]?.showFullOption) && (
+                    {(hoveredVideo === item.id || showFullVideoOption[item.id] || videoStates[item.id]?.showFullOption || (isMobile && showControls[item.id])) && (
                       <motion.button
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -1448,16 +1340,6 @@ const Portfolio = () => {
                       }}
                     />
                     
-                    {/* Buffer indicator */}
-                    {bufferStates[item.id]?.isBuffering && !stoppedVideos[item.id] && (
-                      <div className="absolute bottom-0 left-0 right-0 h-1 bg-secondary-300/50">
-                        <div 
-                          className="h-full bg-primary-700 transition-all duration-300" 
-                          style={{ width: `${bufferStates[item.id]?.progress || 0}%` }}
-                        />
-                      </div>
-                    )}
-                    
                     {/* Sound Control Button - Shows on hover for desktop and on click for mobile */}
                     <AnimatePresence>
                       {(hoveredVideo === item.id || (isMobile && showControls[item.id])) && (
@@ -1482,7 +1364,7 @@ const Portfolio = () => {
 
                     {/* Full Video Button - Show on hover, when clicked, or after 15 seconds */}
                     <AnimatePresence>
-                      {(hoveredVideo === item.id || showFullVideoOption[item.id] || videoStates[item.id]?.showFullOption) && (
+                      {(hoveredVideo === item.id || showFullVideoOption[item.id] || videoStates[item.id]?.showFullOption || (isMobile && showControls[item.id])) && (
                         <motion.button
                           initial={{ opacity: 0, y: 10 }}
                           animate={{ opacity: 1, y: 0 }}

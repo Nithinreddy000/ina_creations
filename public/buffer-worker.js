@@ -5,9 +5,20 @@
 const CACHE_NAME = 'video-buffer-cache-v1';
 const VIDEO_EXTENSIONS = ['.mp4', '.webm', '.mov', '.m4v', '.ogg'];
 const DEBUG = true;
+const MAX_PARALLEL_REQUESTS = 4;
+const CHUNK_SIZE = 2 * 1024 * 1024; // 2MB chunks for faster loading
 
 // Setup a Map to store video buffers for active videos
 const videoBuffers = new Map();
+
+// Default options
+let bufferOptions = {
+  aggressiveCaching: true,
+  prefetchAmount: 100, // Prefetch 100% by default for zero buffering
+  chunkSize: CHUNK_SIZE,
+  parallelRequests: MAX_PARALLEL_REQUESTS,
+  preloadMetadata: true
+};
 
 // Helper for logging with timestamps
 const log = (...args) => {
@@ -386,4 +397,321 @@ self.addEventListener('message', event => {
       });
     }
   }
-}); 
+
+  // Handle buffer options updates
+  if (type === 'SET_BUFFER_OPTIONS') {
+    log('Updating buffer options: ' + JSON.stringify(event.data.options));
+    bufferOptions = {
+      ...bufferOptions,
+      ...event.data.options
+    };
+    
+    // Respond to confirm options were set
+    if (event.source) {
+      event.source.postMessage({
+        type: 'BUFFER_OPTIONS_SET',
+        options: bufferOptions
+      });
+    }
+  }
+  
+  // Handle video buffer request
+  if (type === 'BUFFER_VIDEO') {
+    const { url, priority } = event.data;
+    log(`Received request to buffer video: ${url}`);
+    
+    // Store client to send progress updates
+    const client = event.source;
+    
+    // Start buffering immediately
+    bufferVideoWithProgress(url, client, priority);
+  }
+});
+
+// Handle range requests for videos (important for seeking)
+async function handleRangeRequest(request) {
+  log(`Handling range request: ${request.url}`);
+  
+  try {
+    // Always fetch from network for range requests, which is needed for seeking
+    const response = await fetch(request);
+    log('Not caching range response');
+    return response;
+  } catch (error) {
+    log(`Range request fetch error: ${error}`);
+    
+    // Try to get from cache as fallback
+    const cache = await caches.open(CACHE_NAME);
+    const cachedResponse = await cache.match(request);
+    
+    if (cachedResponse) {
+      log('Returning cached range response');
+      return cachedResponse;
+    }
+    
+    // If not in cache, make a non-range request to network
+    const fullRequest = new Request(request.url, {
+      method: request.method,
+      headers: new Headers(request.headers),
+      mode: request.mode,
+      credentials: request.credentials,
+      redirect: request.redirect,
+    });
+    
+    // Remove range header
+    fullRequest.headers.delete('range');
+    
+    const fullResponse = await fetch(fullRequest);
+    log('Returning full response for range request');
+    return fullResponse;
+  }
+}
+
+// Handle full video requests with our enhanced buffering
+async function handleFullVideoRequest(request) {
+  const cache = await caches.open(CACHE_NAME);
+  const cachedResponse = await cache.match(request);
+  
+  if (cachedResponse) {
+    log(`Serving video from cache: ${request.url}`);
+    // Before returning cached response, start background refresh
+    if (bufferOptions.aggressiveCaching) {
+      refreshCachedVideo(request.url, cache);
+    }
+    return cachedResponse;
+  }
+  
+  log(`Fetching video from network: ${request.url}`);
+  
+  try {
+    // Fetch the video and cache it
+    const response = await fetch(request);
+    
+    // Clone the response to cache it and return it
+    const clonedResponse = response.clone();
+    
+    // Cache the video even if not explicitly requested for buffering
+    cache.put(request, clonedResponse);
+    
+    return response;
+  } catch (error) {
+    log(`Error fetching video: ${error}`);
+    throw error;
+  }
+}
+
+// Refresh a cached video in the background
+async function refreshCachedVideo(url, cache) {
+  try {
+    log(`Background refreshing cached video: ${url}`);
+    const request = new Request(url);
+    const freshResponse = await fetch(request);
+    await cache.put(request, freshResponse);
+    log(`Successfully refreshed video cache for: ${url}`);
+  } catch (error) {
+    log(`Failed to refresh video cache: ${error}`);
+  }
+}
+
+// Buffer a video with progress reporting
+async function bufferVideoWithProgress(url, client, priority = false) {
+  log(`Starting to buffer video: ${url}`);
+  
+  try {
+    // First, get the content length with a HEAD request
+    const headRequest = new Request(url, { method: 'HEAD' });
+    const headResponse = await fetch(headRequest);
+    const contentLength = parseInt(headResponse.headers.get('content-length') || '0');
+    
+    if (contentLength) {
+      log(`Video size: ${contentLength} bytes`);
+    } else {
+      log('Could not determine video size');
+    }
+
+    // Open the cache
+    const cache = await caches.open(CACHE_NAME);
+    
+    // Check if video is already in the cache
+    const cachedResponse = await cache.match(url);
+    if (cachedResponse) {
+      // If already cached, check if fully cached
+      const cachedClone = cachedResponse.clone();
+      const cachedBlob = await cachedClone.blob();
+      
+      if (cachedBlob.size >= contentLength && contentLength > 0) {
+        log(`Video already fully cached: ${url}`);
+        
+        // Notify client of 100% buffering
+        if (client) {
+          client.postMessage({
+            type: 'BUFFER_PROGRESS',
+            url,
+            buffered: 100,
+            done: true,
+            speed: 0
+          });
+        }
+        
+        return;
+      }
+      
+      log(`Video partially cached (${cachedBlob.size}/${contentLength} bytes), continuing...`);
+    }
+    
+    // Begin buffering the video
+    log(`Aggressive buffering of video: ${url}`);
+    
+    // Number of chunks to buffer in parallel
+    const parallelRequests = priority ? 
+      bufferOptions.parallelRequests || MAX_PARALLEL_REQUESTS : 
+      Math.min(2, bufferOptions.parallelRequests || MAX_PARALLEL_REQUESTS);
+    
+    // Amount to prefetch (priority videos get full prefetch)
+    const prefetchAmount = priority ? 
+      100 : // Always buffer 100% for priority videos
+      (bufferOptions.prefetchAmount || 100);
+    
+    // Chunk size based on options
+    const chunkSize = bufferOptions.chunkSize || CHUNK_SIZE;
+    
+    // Determine the total number of chunks
+    const totalChunks = Math.ceil(contentLength / chunkSize);
+    
+    // Calculate how many chunks to prefetch based on prefetchAmount percentage
+    const chunksToFetch = Math.min(
+      totalChunks,
+      Math.ceil((prefetchAmount / 100) * totalChunks)
+    );
+    
+    // Track the buffer progress
+    let bufferedChunks = 0;
+    let bufferedBytes = 0;
+    let lastProgressUpdate = Date.now();
+    let lastBufferPercentage = 0;
+    
+    // Create a Response object to cache as we build it
+    let combinedResponse = null;
+    let combinedBlob = null;
+    
+    // Function to update buffer progress
+    const updateProgress = (newBytes, bytesPerSecond) => {
+      bufferedBytes += newBytes;
+      const percentage = Math.min(100, Math.round((bufferedBytes / contentLength) * 100));
+      
+      // Only send updates when progress increases or every 1 second
+      const now = Date.now();
+      if (percentage > lastBufferPercentage || (now - lastProgressUpdate) > 1000) {
+        if (client) {
+          client.postMessage({
+            type: 'BUFFER_PROGRESS',
+            url,
+            buffered: percentage,
+            done: percentage >= 100,
+            speed: bytesPerSecond ? (bytesPerSecond / (1024 * 1024)).toFixed(2) : 0
+          });
+        }
+        lastProgressUpdate = now;
+        lastBufferPercentage = percentage;
+      }
+    };
+    
+    // Buffer the video in chunks
+    for (let chunkIndex = 0; chunkIndex < chunksToFetch; chunkIndex += parallelRequests) {
+      // Calculate range for each parallel request
+      const chunkPromises = [];
+      
+      for (let i = 0; i < parallelRequests && (chunkIndex + i) < chunksToFetch; i++) {
+        const start = (chunkIndex + i) * chunkSize;
+        const end = Math.min(start + chunkSize - 1, contentLength - 1);
+        
+        // If we already have this chunk cached, skip it
+        if (cachedResponse && await isRangeCached(cache, url, start, end)) {
+          bufferedChunks++;
+          updateProgress(end - start + 1);
+          continue;
+        }
+        
+        // Otherwise fetch the chunk
+        const fetchStartTime = Date.now();
+        const rangeRequest = new Request(url, {
+          headers: new Headers({
+            'Range': `bytes=${start}-${end}`
+          })
+        });
+        
+        const chunkPromise = fetch(rangeRequest)
+          .then(async (response) => {
+            const fetchTime = Date.now() - fetchStartTime;
+            const chunkSize = end - start + 1;
+            const bytesPerSecond = fetchTime > 0 ? (chunkSize / (fetchTime / 1000)) : 0;
+            
+            // Cache the chunk
+            await cache.put(rangeRequest, response.clone());
+            
+            // Update progress
+            bufferedChunks++;
+            updateProgress(chunkSize, bytesPerSecond);
+            
+            return response;
+          })
+          .catch(error => {
+            log(`Error fetching chunk ${chunkIndex + i}: ${error}`);
+          });
+        
+        chunkPromises.push(chunkPromise);
+      }
+      
+      // Wait for all parallel chunks to complete
+      await Promise.all(chunkPromises);
+      
+      // If buffering was canceled, stop
+      if (client && !client.id) {
+        log(`Buffering canceled for: ${url}`);
+        break;
+      }
+    }
+    
+    // Final progress update
+    if (client) {
+      const finalPercentage = Math.min(100, Math.round((bufferedBytes / contentLength) * 100));
+      client.postMessage({
+        type: 'BUFFER_PROGRESS',
+        url,
+        buffered: finalPercentage,
+        done: finalPercentage >= 100,
+        speed: 0
+      });
+    }
+    
+    log(`Completed buffering for: ${url}`);
+  } catch (error) {
+    log(`Error during video buffering: ${error}`);
+    
+    // Notify client of error
+    if (client) {
+      client.postMessage({
+        type: 'BUFFER_ERROR',
+        url,
+        error: error.message
+      });
+    }
+  }
+}
+
+// Check if a specific range is already cached
+async function isRangeCached(cache, url, start, end) {
+  try {
+    const rangeRequest = new Request(url, {
+      headers: new Headers({
+        'Range': `bytes=${start}-${end}`
+      })
+    });
+    
+    const cachedResponse = await cache.match(rangeRequest);
+    return !!cachedResponse;
+  } catch (error) {
+    log(`Error checking range cache: ${error}`);
+    return false;
+  }
+} 
