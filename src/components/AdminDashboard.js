@@ -23,10 +23,10 @@ const AdminDashboard = () => {
 
   // Form state
   const [formData, setFormData] = useState({
-    title: '',
+    
     category: '',
     description: '',
-    video: null,
+    youtubeUrl: '',
     thumbnail: null
   });
 
@@ -97,86 +97,70 @@ const AdminDashboard = () => {
   const handleFileChange = (e) => {
     const { name, files } = e.target;
     const file = files[0];
-    
     if (file) {
       setFormData(prev => ({
         ...prev,
         [name]: file
       }));
-
-      // Create preview URL
-      const previewUrl = URL.createObjectURL(file);
-      if (name === 'video') {
-        setPreviewVideo(previewUrl);
-      } else if (name === 'thumbnail') {
+      // Only handle thumbnail preview
+      if (name === 'thumbnail') {
+        const previewUrl = URL.createObjectURL(file);
         setPreviewThumbnail(previewUrl);
+        return () => URL.revokeObjectURL(previewUrl);
       }
-
-      return () => URL.revokeObjectURL(previewUrl);
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.video) {
-      setError('Please select a video file');
-      return;
-    }
-
+    setError('');
     setIsUploading(true);
     setLoading(true);
-    setError('');
     setUploadProgress(0);
     setThumbnailProgress(0);
 
     try {
-      // Upload video to Cloudinary
-      const uploadResult = await uploadVideoToCloudinary(formData.video, (progress) => {
-        setUploadProgress(progress);
-      });
-
-      let thumbnailUrl = uploadResult.thumbnail;
-      let thumbnailPublicId = null;
-
-      // If custom thumbnail is provided, upload it
-      if (formData.thumbnail) {
-        try {
-          const thumbnailResult = await uploadThumbnailToCloudinary(formData.thumbnail, (progress) => {
-            setThumbnailProgress(progress);
-          });
-          thumbnailUrl = thumbnailResult.url;
-          thumbnailPublicId = thumbnailResult.publicId;
-        } catch (thumbnailError) {
-          console.error('Error uploading thumbnail:', thumbnailError);
-          // Continue with auto-generated thumbnail if custom thumbnail upload fails
-        }
+      // Only allow YouTube
+      const youtubeUrl = formData.youtubeUrl.trim();
+      const match = youtubeUrl.match(/[?&]v=([^&#]*)|youtu\.be\/([^&#]*)|youtube\.com\/embed\/([^&#?]*)/);
+      let videoId = '';
+      if (match) {
+        videoId = match[1] || match[2] || match[3];
       }
-
-      // Create portfolio item
+      if (!videoId) {
+        setError('Invalid YouTube URL');
+        setIsUploading(false);
+        setLoading(false);
+        return;
+      }
+      let thumbnailUrl = '';
+      let thumbnailPublicId = null;
+      if (formData.thumbnail) {
+        const thumbnailResult = await uploadThumbnailToCloudinary(formData.thumbnail, (progress) => {
+          setThumbnailProgress(progress);
+        });
+        thumbnailUrl = thumbnailResult.url;
+        thumbnailPublicId = thumbnailResult.publicId;
+      }
       const portfolioItem = {
-        title: formData.title,
-        description: formData.description,
-        category: formData.category,
-        videoUrl: uploadResult.url,
-        thumbnail: thumbnailUrl,
-        videoPublicId: uploadResult.publicId,
-        thumbnailPublicId,
-        duration: uploadResult.duration,
+        
+
+
+        videoUrl: videoId,
+        isYouTube: true,
+
+
         createdAt: new Date()
       };
-
-      // Add to Firebase
       await addPortfolioItem(portfolioItem);
-
       // Reset form
       setFormData({
-        title: '',
+        
         description: '',
         category: '',
-        video: null,
+        youtubeUrl: '',
         thumbnail: null
       });
-      setPreviewVideo(null);
       setPreviewThumbnail(null);
       setUploadProgress(0);
       setThumbnailProgress(0);
@@ -422,109 +406,46 @@ const AdminDashboard = () => {
                   >
                     <form onSubmit={handleSubmit} className="space-y-6">
                       <div className="space-y-4">
-                        <label className="block">
-                          <span className="text-gray-300 text-sm font-medium">Title</span>
+
+                        {/* YouTube Video Link Section */}
+                        <div className="space-y-4">
+                          <label className="block text-sm font-medium text-gray-300 mb-2">YouTube Video Link</label>
                           <input
                             type="text"
-                            name="title"
-                            value={formData.title}
+                            name="youtubeUrl"
+                            value={formData.youtubeUrl}
                             onChange={handleInputChange}
-                            className="mt-1 block w-full px-4 py-3 rounded-xl bg-gray-800/50 border border-gray-700/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#ff6d6d] focus:border-transparent transition-all"
-                            placeholder="Enter video title"
-                            required
+                            placeholder="Paste YouTube video link here"
+                            className="w-full px-4 py-2 rounded-lg bg-gray-700 border border-gray-600 text-gray-300 mb-4"
+                            disabled={isUploading}
                           />
-                        </label>
-
-                        <label className="block">
-                          <span className="text-gray-300 text-sm font-medium">Category</span>
-                          <select
-                            name="category"
-                            value={formData.category}
-                            onChange={handleInputChange}
-                            className="mt-1 block w-full px-4 py-3 rounded-xl bg-gray-800/50 border border-gray-700/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#ff6d6d] focus:border-transparent transition-all"
-                            required
+                          <label className="block text-sm font-medium text-gray-300 mb-2">Thumbnail (optional)</label>
+                          <input
+                            type="file"
+                            name="thumbnail"
+                            onChange={handleFileChange}
+                            accept="image/*"
+                            className="hidden"
+                            id="thumbnail-upload"
+                          />
+                          <label
+                            htmlFor="thumbnail-upload"
+                            className="block w-full p-4 rounded-xl border-2 border-dashed border-gray-700 hover:border-[#ff6d6d] transition-all cursor-pointer"
                           >
-                            <option value="">Select Category</option>
-                            <option value="Corporate">Corporate</option>
-                            <option value="Wedding">Wedding</option>
-                            <option value="Event">Event</option>
-                            <option value="Other">Other</option>
-                          </select>
-                        </label>
-
-                        <label className="block">
-                          <span className="text-gray-300 text-sm font-medium">Description</span>
-                          <textarea
-                            name="description"
-                            value={formData.description}
-                            onChange={handleInputChange}
-                            className="mt-1 block w-full px-4 py-3 rounded-xl bg-gray-800/50 border border-gray-700/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#ff6d6d] focus:border-transparent transition-all"
-                            rows="4"
-                            placeholder="Enter video description"
-                            required
-                          />
-                        </label>
-
-                        {/* File Upload Section */}
-                        <div className="space-y-4">
-                          <div className="relative">
-                            <input
-                              type="file"
-                              name="video"
-                              onChange={handleFileChange}
-                              accept="video/*"
-                              className="hidden"
-                              id="video-upload"
-                              required
+                            <div className="flex flex-col items-center justify-center">
+                              <FaImage className="text-3xl text-gray-500 mb-2" />
+                              <span className="text-gray-400">
+                                {formData.thumbnail ? formData.thumbnail.name : 'Click to upload thumbnail (optional)'}
+                              </span>
+                            </div>
+                          </label>
+                          {previewThumbnail && (
+                            <img
+                              src={previewThumbnail}
+                              alt="Thumbnail preview"
+                              className="mt-2 w-full rounded-xl"
                             />
-                            <label
-                              htmlFor="video-upload"
-                              className="block w-full p-4 rounded-xl border-2 border-dashed border-gray-700 hover:border-[#ff6d6d] transition-all cursor-pointer"
-                            >
-                              <div className="flex flex-col items-center justify-center">
-                                <FaVideo className="text-3xl text-gray-500 mb-2" />
-                                <span className="text-gray-400">
-                                  {formData.video ? formData.video.name : 'Click to upload video'}
-                                </span>
-                              </div>
-                            </label>
-                            {previewVideo && (
-                              <video
-                                src={previewVideo}
-                                className="mt-2 w-full rounded-xl"
-                                controls
-                              />
-                            )}
-                          </div>
-
-                          <div className="relative">
-                            <input
-                              type="file"
-                              name="thumbnail"
-                              onChange={handleFileChange}
-                              accept="image/*"
-                              className="hidden"
-                              id="thumbnail-upload"
-                            />
-                            <label
-                              htmlFor="thumbnail-upload"
-                              className="block w-full p-4 rounded-xl border-2 border-dashed border-gray-700 hover:border-[#ff6d6d] transition-all cursor-pointer"
-                            >
-                              <div className="flex flex-col items-center justify-center">
-                                <FaImage className="text-3xl text-gray-500 mb-2" />
-                                <span className="text-gray-400">
-                                  {formData.thumbnail ? formData.thumbnail.name : 'Click to upload thumbnail (optional)'}
-                                </span>
-                              </div>
-                            </label>
-                            {previewThumbnail && (
-                              <img
-                                src={previewThumbnail}
-                                alt="Thumbnail preview"
-                                className="mt-2 w-full rounded-xl"
-                              />
-                            )}
-                          </div>
+                          )}
                         </div>
 
                         {/* Upload Progress */}

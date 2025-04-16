@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { getPortfolioItems } from '../utils/firebase';
 import { FaExpand, FaVolumeMute, FaVolumeUp, FaChevronDown, FaChevronUp } from 'react-icons/fa';
 import OptimizedVideo from './OptimizedVideo';
+import YouTubeVideo from './YouTubeVideo';
 
 // Constants for buffer detection debounce times
 const WAITING_DEBOUNCE_TIME = 200;
@@ -106,6 +107,16 @@ const useVideoBuffer = () => {
   
   return { startBuffering, getBufferStatus };
 };
+
+// Helper to extract YouTube video ID from URL or ID string
+function extractYouTubeId(input) {
+  if (!input) return '';
+  // If already a video ID (11 chars, no special chars), return as is
+  if (/^[a-zA-Z0-9_-]{11}$/.test(input)) return input;
+  // Try to extract from various URL forms
+  const match = input.match(/[?&]v=([^&#]*)|youtu\.be\/([^&#]*)|youtube\.com\/embed\/([^&#?]*)/);
+  return match ? (match[1] || match[2] || match[3]) : '';
+}
 
 const Portfolio = () => {
   const [portfolioItems, setPortfolioItems] = useState([]);
@@ -704,7 +715,7 @@ const Portfolio = () => {
     };
   }, [portfolioItems, showAll, videoStates, stoppedVideos, handleTimeUpdate]); // Added stoppedVideos and handleTimeUpdate dependencies
 
-  const openFullscreenVideo = (e, videoUrl, id) => {
+  const openFullscreenVideo = (e, videoUrl, id, isYouTube = false) => {
     e.stopPropagation();
     
     // Show loading state with better feedback
@@ -826,15 +837,16 @@ const Portfolio = () => {
     videoWrapper.className = 'flex items-center justify-center w-full h-full touch-none overflow-hidden';
     
       // Create and configure video element with improved buffering
-    const videoElement = document.createElement('video');
-    videoElement.className = 'w-auto h-auto max-h-[90vh] max-w-[95vw] object-contain touch-none';
-    videoElement.src = videoUrl;
-    videoElement.controls = true;
-    videoElement.autoplay = true;
-    videoElement.controlsList = 'nodownload nopictureinpicture';
-    videoElement.disablePictureInPicture = true;
-    videoElement.playsInline = true;
-    videoElement.preload = 'auto';
+    const videoElement = isYouTube ? document.createElement('div') : document.createElement('video');
+    if (!isYouTube) {
+      videoElement.className = 'w-auto h-auto max-h-[90vh] max-w-[95vw] object-contain touch-none';
+      videoElement.src = videoUrl;
+      videoElement.controls = true;
+      videoElement.autoplay = true;
+      videoElement.controlsList = 'nodownload nopictureinpicture';
+      videoElement.disablePictureInPicture = true;
+      videoElement.playsInline = true;
+      videoElement.preload = 'auto';
       videoElement.crossOrigin = 'anonymous';
       
       // Add data-buffer attribute for service worker to pick up
@@ -845,32 +857,46 @@ const Portfolio = () => {
         // Skip initial frame for faster start
         videoElement.currentTime = 0.1;
       }
-
-      // Add buffer monitoring
-      const bufferHandler = () => {
-        // Check if we need to add a buffering indicator
-        if (videoElement.readyState < 3 && !videoElement.paused) {
-          // Show buffer indicator
-          if (!document.querySelector('.fullscreen-buffer-indicator')) {
-            const bufferIndicator = document.createElement('div');
-            bufferIndicator.className = 'fullscreen-buffer-indicator absolute inset-0 bg-black/50 flex items-center justify-center';
-            bufferIndicator.innerHTML = `
-              <div class="w-16 h-16 border-4 border-primary-700 border-t-transparent rounded-full animate-spin"></div>
-            `;
-            videoWrapper.appendChild(bufferIndicator);
-          }
-        } else {
-          // Remove buffer indicator if it exists
-          const indicator = document.querySelector('.fullscreen-buffer-indicator');
-          if (indicator) {
-            indicator.remove();
-          }
+    } else {
+      videoElement.innerHTML = `
+        <iframe 
+          width="100%" 
+          height="100%" 
+          src="https://www.youtube.com/embed/${videoUrl}?autoplay=1&controls=1&showinfo=0&modestbranding=1&rel=0" 
+          title="YouTube video player" 
+          frameborder="0" 
+          allowfullscreen
+        ></iframe>
+      `;
+    }
+    
+    // Add buffer monitoring
+    const bufferHandler = () => {
+      // Check if we need to add a buffering indicator
+      if (videoElement.readyState < 3 && !videoElement.paused) {
+        // Show buffer indicator
+        if (!document.querySelector('.fullscreen-buffer-indicator')) {
+          const bufferIndicator = document.createElement('div');
+          bufferIndicator.className = 'fullscreen-buffer-indicator absolute inset-0 bg-black/50 flex items-center justify-center';
+          bufferIndicator.innerHTML = `
+            <div class="w-16 h-16 border-4 border-primary-700 border-t-transparent rounded-full animate-spin"></div>
+          `;
+          videoWrapper.appendChild(bufferIndicator);
         }
-      };
-      
+      } else {
+        // Remove buffer indicator if it exists
+        const indicator = document.querySelector('.fullscreen-buffer-indicator');
+        if (indicator) {
+          indicator.remove();
+        }
+      }
+    };
+    
+    if (!isYouTube) {
       videoElement.addEventListener('waiting', bufferHandler);
       videoElement.addEventListener('playing', bufferHandler);
       videoElement.addEventListener('canplay', bufferHandler);
+    }
 
     // Handle closing with smooth animation
     const closeFullscreen = async () => {
@@ -881,9 +907,11 @@ const Portfolio = () => {
             const cleanup = () => {
                 try {
                     if (videoElement) {
-                        videoElement.pause();
-                        videoElement.removeAttribute('src');
-                        videoElement.load();
+                        if (!isYouTube) {
+                          videoElement.pause();
+                          videoElement.removeAttribute('src');
+                          videoElement.load();
+                        }
                     }
                     
                     if (container && document.body.contains(container)) {
@@ -928,7 +956,9 @@ const Portfolio = () => {
     });
     
     // Prevent right-click menu
-    videoElement.oncontextmenu = () => false;
+    if (!isYouTube) {
+      videoElement.oncontextmenu = () => false;
+    }
     
     // Assemble the components
     header.appendChild(backButton);
@@ -951,29 +981,31 @@ const Portfolio = () => {
           await new Promise(resolve => setTimeout(resolve, 100));
           
           // Try to play the video
-          const playResult = videoElement.play();
-          if (playResult !== undefined) {
-            playResult.catch(error => {
-              console.log("Fullscreen play error:", error);
-              // If autoplay fails, show a play button overlay
-              const playOverlay = document.createElement('div');
-              playOverlay.className = 'absolute inset-0 bg-black/70 flex items-center justify-center cursor-pointer';
-              playOverlay.innerHTML = `
-                <div class="w-20 h-20 rounded-full bg-primary-700 flex items-center justify-center shadow-xl">
-                  <svg class="w-10 h-10 text-white" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M8 5V19L19 12L8 5Z" fill="currentColor" />
-                  </svg>
-                </div>
-              `;
-              
-              // Play when clicked
-              playOverlay.addEventListener('click', () => {
-                videoElement.play().catch(e => console.log("Play error after click:", e));
-                playOverlay.remove();
+          if (!isYouTube) {
+            const playResult = videoElement.play();
+            if (playResult !== undefined) {
+              playResult.catch(error => {
+                console.log("Fullscreen play error:", error);
+                // If autoplay fails, show a play button overlay
+                const playOverlay = document.createElement('div');
+                playOverlay.className = 'absolute inset-0 bg-black/70 flex items-center justify-center cursor-pointer';
+                playOverlay.innerHTML = `
+                  <div class="w-20 h-20 rounded-full bg-primary-700 flex items-center justify-center shadow-xl">
+                    <svg class="w-10 h-10 text-white" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M8 5V19L19 12L8 5Z" fill="currentColor" />
+                    </svg>
+                  </div>
+                `;
+                
+                // Play when clicked
+                playOverlay.addEventListener('click', () => {
+                  videoElement.play().catch(e => console.log("Play error after click:", e));
+                  playOverlay.remove();
+                });
+                
+                videoWrapper.appendChild(playOverlay);
               });
-              
-              videoWrapper.appendChild(playOverlay);
-            });
+            }
           }
         } catch (error) {
           console.error("Error in playFullscreenVideo:", error);
@@ -1067,149 +1099,46 @@ const Portfolio = () => {
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 viewport={{ once: true, margin: "-100px" }}
                 className="group relative overflow-hidden rounded-xl shadow-lg border border-secondary-300/50 bg-secondary-200/30 backdrop-blur-sm"
-                onMouseEnter={() => {
-                  !isMobile && setHoveredVideo(item.id);
-                }}
-                onMouseLeave={() => {
-                  !isMobile && setHoveredVideo(null);
-                }}
+
                 onClick={() => handleItemClick(item.id)}
               >
                 <motion.div
                   className="relative w-full h-[300px]"
-                  whileHover={{ scale: isMobile ? 1 : 1.05 }}
                   transition={{ duration: 0.4 }}
                   data-video-container={item.id}
                 >
-                  <OptimizedVideo
-                    src={item.videoUrl}
-                    posterSrc={item.thumbnail}
-                    className="w-full h-full"
-                    priority={true}
-                    data-buffer="true"
-                    ref={el => {
-                      if (el) {
-                        videoRefs.current[item.id] = el;
-                        
-                        // Set initial attributes
-                        el.muted = true;
-                        el.playsInline = true;
-                        el.preload = "auto";
-                        el.crossOrigin = "anonymous"; // Required for service worker caching
-                        
-                        // Setup better buffering detection
-                        setupAdvancedBufferDetection(el, item.id);
-                        
-                        // Ensure any existing listener is removed first to prevent duplicates
-                        const existingHandler = () => handleTimeUpdate(item.id);
-                        el.removeEventListener('timeupdate', existingHandler);
-                        
-                        // Add timeupdate listener with proper binding
-                        const timeUpdateHandler = () => handleTimeUpdate(item.id);
-                        el.addEventListener('timeupdate', timeUpdateHandler);
-                        
-                        // Add loadeddata event to start time checking once the video loads
-                        el.addEventListener('loadeddata', () => {
-                          // Check if we need to stop right away (for videos that might have been cached)
-                          if (el.currentTime >= 15) {
-                            handleTimeUpdate(item.id);
-                          }
-                          
-                          // Setup the backup timer
-                          setupVideoTimeCheck(item.id);
-                        }, { once: true });
-                        
-                        // Use Intersection Observer
-                        const observer = new IntersectionObserver(
-                          ([entry]) => handleVideoPlayback(item.id, entry.isIntersecting),
-                          { threshold: 0.3 }
-                        );
-                        observer.observe(el.parentElement);
-                        
-                        // Cleanup on unmount
-                        return () => {
-                          el.removeEventListener('timeupdate', timeUpdateHandler);
-                          if (timeCheckIntervals.current[item.id]) {
-                            clearInterval(timeCheckIntervals.current[item.id]);
-                            timeCheckIntervals.current[item.id] = null;
-                          }
-                          observer.disconnect();
-                        };
-                      }
-                    }}
-                  />
-                  
-                  {/* Sound Control Button - Shows on hover for desktop and on click for mobile */}
-                  <AnimatePresence>
-                    {(hoveredVideo === item.id || (isMobile && showControls[item.id])) && (
-                      <motion.button
-                        initial={{ opacity: 0, y: -10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -10 }}
-                        transition={{ duration: 0.2 }}
-                        className="absolute top-4 right-4 bg-secondary-100/50 p-2.5 rounded-full text-primary-900 hover:bg-secondary-200/70 transition-all z-20 backdrop-blur-sm"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          toggleMute(e, item.id);
-                        }}
-                      >
-                        {videoRefs.current[item.id]?.muted ? 
-                          <FaVolumeMute size={20} /> : 
-                          <FaVolumeUp size={20} />
-                        }
-                      </motion.button>
-                    )}
-                  </AnimatePresence>
-                  
-                  {/* Full Video Button - Show on hover, when clicked, or after 15 seconds */}
-                  <AnimatePresence>
-                    {(hoveredVideo === item.id || showFullVideoOption[item.id] || videoStates[item.id]?.showFullOption || (isMobile && showControls[item.id])) && (
-                      <motion.button
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: 10 }}
-                        transition={{ duration: 0.2 }}
-                        className="absolute top-4 left-4 bg-primary-700/70 px-3 py-2 rounded-md text-white hover:bg-primary-800 transition-all z-20 backdrop-blur-sm flex items-center space-x-1"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          openFullscreenVideo(e, item.videoUrl, item.id);
-                        }}
-                      >
-                        <FaExpand size={16} />
-                        <span className="text-sm font-medium">Full Video</span>
-                      </motion.button>
-                    )}
-                  </AnimatePresence>
+                  {item.isYouTube ? (
+                    <div style={{position: 'relative', width: '100%', height: '100%'}}>
+                      <YouTubeVideo
+                        videoId={extractYouTubeId(item.videoUrl)}
+                        className="w-full h-full"
+                        autoPlay={true}
+                        controls={false}
+                        muted={false}
+                        showFullscreenButton={true}
+                        key={item.id}
+                      />
 
-                  {/* Stopped Video Overlay */}
-                  {(stoppedVideos[item.id] || videoStates[item.id]?.stopped) && (
-                    <motion.div
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ duration: 0.3 }}
-                      className="absolute inset-0 flex items-center justify-center bg-secondary-100/50"
-                    >
-                      <motion.button
-                        className="bg-primary-700 text-white px-6 py-3 rounded-lg flex items-center space-x-2 hover:bg-primary-800 transition-colors z-10 transform hover:scale-105"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          openFullscreenVideo(e, item.videoUrl, item.id);
-                        }}
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                      >
-                        <FaExpand className="mr-2" />
-                        View Full Video
-                      </motion.button>
-                    </motion.div>
+                    </div>
+                  ) : (
+                    <OptimizedVideo
+                      src={item.videoUrl}
+                      posterSrc={item.thumbnail}
+                      className="w-full h-full"
+                      priority={true}
+                      autoPlay={true}
+                      controls={false}
+                      muted={true}
+                    />
                   )}
-                  <motion.div
+                  
+                  {/* <motion.div
                     className={`absolute inset-0 bg-gradient-to-t from-secondary-100/90 via-secondary-100/50 to-transparent transition-all duration-300`}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: isMobile ? (showDetails[item.id] ? 1 : 0) : (hoveredVideo === item.id ? 1 : 0) }}
                     transition={{ duration: 0.3 }}
-                  >
-                    <motion.div 
+                  > */}
+                    {/* <motion.div 
                       className="absolute bottom-0 left-0 right-0 p-6"
                       initial={{ y: 20, opacity: 0 }}
                       animate={{ 
@@ -1221,8 +1150,8 @@ const Portfolio = () => {
                       <p className="text-primary-700 text-sm font-semibold mb-2">{item.category}</p>
                       <h3 className="text-xl font-bold text-primary-900 mb-2">{item.title}</h3>
                       <p className="text-primary-800">{item.description}</p>
-                    </motion.div>
-                  </motion.div>
+                    </motion.div> */}
+                  {/* </motion.div> */}
                 </motion.div>
             </motion.div>
           ))}
@@ -1268,17 +1197,11 @@ const Portfolio = () => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                   className="group relative overflow-hidden rounded-xl shadow-lg border border-secondary-300/50 bg-secondary-200/30 backdrop-blur-sm"
-                  onMouseEnter={() => {
-                    !isMobile && setHoveredVideo(item.id);
-                  }}
-                  onMouseLeave={() => {
-                    !isMobile && setHoveredVideo(null);
-                  }}
+
                   onClick={() => handleItemClick(item.id)}
                 >
                   <motion.div
                     className="relative w-full h-[300px]"
-                    whileHover={{ scale: isMobile ? 1 : 1.05 }}
                     transition={{ duration: 0.4 }}
                     data-video-container={item.id}
                   >
@@ -1338,91 +1261,18 @@ const Portfolio = () => {
                           };
                         }
                       }}
+                      autoPlay={true}
+                      controls={false}
+                      muted={true}
                     />
                     
-                    {/* Sound Control Button - Shows on hover for desktop and on click for mobile */}
-                    <AnimatePresence>
-                      {(hoveredVideo === item.id || (isMobile && showControls[item.id])) && (
-                        <motion.button
-                          initial={{ opacity: 0, y: -10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, y: -10 }}
-                          transition={{ duration: 0.2 }}
-                          className="absolute top-4 right-4 bg-secondary-100/50 p-2.5 rounded-full text-primary-900 hover:bg-secondary-200/70 transition-all z-20 backdrop-blur-sm"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            toggleMute(e, item.id);
-                          }}
-                        >
-                          {videoRefs.current[item.id]?.muted ? 
-                            <FaVolumeMute size={20} /> : 
-                            <FaVolumeUp size={20} />
-                          }
-                        </motion.button>
-                      )}
-                    </AnimatePresence>
-
-                    {/* Full Video Button - Show on hover, when clicked, or after 15 seconds */}
-                    <AnimatePresence>
-                      {(hoveredVideo === item.id || showFullVideoOption[item.id] || videoStates[item.id]?.showFullOption || (isMobile && showControls[item.id])) && (
-                        <motion.button
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, y: 10 }}
-                          transition={{ duration: 0.2 }}
-                          className="absolute top-4 left-4 bg-primary-700/70 px-3 py-2 rounded-md text-white hover:bg-primary-800 transition-all z-20 backdrop-blur-sm flex items-center space-x-1"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            openFullscreenVideo(e, item.videoUrl, item.id);
-                          }}
-                        >
-                          <FaExpand size={16} />
-                          <span className="text-sm font-medium">Full Video</span>
-                        </motion.button>
-                      )}
-                    </AnimatePresence>
-
-                    {/* Stopped Video Overlay */}
-                    {(stoppedVideos[item.id] || videoStates[item.id]?.stopped) && (
-                      <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ duration: 0.3 }}
-                        className="absolute inset-0 flex items-center justify-center bg-secondary-100/50"
-                      >
-                        <motion.button
-                          className="bg-primary-700 text-white px-6 py-3 rounded-lg flex items-center space-x-2 hover:bg-primary-800 transition-colors z-10 transform hover:scale-105"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            openFullscreenVideo(e, item.videoUrl, item.id);
-                          }}
-                          whileHover={{ scale: 1.05 }}
-                          whileTap={{ scale: 0.95 }}
-                        >
-                          <FaExpand className="mr-2" />
-                          View Full Video
-                        </motion.button>
-                      </motion.div>
-                    )}
                     <motion.div
                       className={`absolute inset-0 bg-gradient-to-t from-secondary-100/90 via-secondary-100/50 to-transparent transition-all duration-300`}
                       initial={{ opacity: 0 }}
                       animate={{ opacity: isMobile ? (showDetails[item.id] ? 1 : 0) : (hoveredVideo === item.id ? 1 : 0) }}
                       transition={{ duration: 0.3 }}
                     >
-                      <motion.div 
-                        className="absolute bottom-0 left-0 right-0 p-6"
-                        initial={{ y: 20, opacity: 0 }}
-                        animate={{ 
-                          y: isMobile ? (showDetails[item.id] ? 0 : 20) : (hoveredVideo === item.id ? 0 : 20),
-                          opacity: isMobile ? (showDetails[item.id] ? 1 : 0) : (hoveredVideo === item.id ? 1 : 0)
-                        }}
-                        transition={{ duration: 0.3, delay: 0.1 }}
-                      >
-                        <p className="text-primary-700 text-sm font-semibold mb-2">{item.category}</p>
-                        <h3 className="text-xl font-bold text-primary-900 mb-2">{item.title}</h3>
-                        <p className="text-primary-800">{item.description}</p>
-                      </motion.div>
+                      
                     </motion.div>
                   </motion.div>
                 </motion.div>
@@ -1454,15 +1304,25 @@ const Portfolio = () => {
               >
                 ×
               </button>
-              <OptimizedVideo
-                src={selectedVideo.videoUrl}
-                posterSrc={selectedVideo.thumbnail}
-                className="w-full h-full"
-                priority={true}
-                autoPlay={true}
-                controls={true}
-                muted={false}
-              />
+              {selectedVideo.isYouTube ? (
+  <YouTubeVideo
+    videoId={extractYouTubeId(selectedVideo.videoUrl)}
+    className="w-full h-full"
+    autoPlay={true}
+    controls={false}
+    muted={false}
+  />
+) : (
+  <OptimizedVideo
+    src={selectedVideo.videoUrl}
+    posterSrc={selectedVideo.thumbnail}
+    className="w-full h-full"
+    priority={true}
+    autoPlay={true}
+    controls={false}
+    muted={false}
+  />
+)}
             </motion.div>
           </motion.div>
         )}
