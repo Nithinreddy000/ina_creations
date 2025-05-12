@@ -113,7 +113,7 @@ const Footer = () => {
         <div className="border-t border-secondary-200 mt-12 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="flex space-x-6 mb-4 md:mb-0">
-              <a href="https://www.instagram.com/random_loopz/?utm_source=ig_web_button_share_sheet" 
+              <a href="https://www.instagram.com/_.ina_creations._/?utm_source=ig_web_button_share_sheet" 
                  className="text-primary-800 hover:text-primary-700 transition-colors">
                 <FaInstagram size={24} />
               </a>
